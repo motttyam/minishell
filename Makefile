@@ -1,28 +1,34 @@
 NAME = minishell
-CC = cc -Wall -Wextra -Werror -g -fsanitize=address
-LDFRAGS = -lreadline
-SRC = 	minishell.c \
-		readline.c \
-		lexer.c \
-		error.c \
-		ft_strchr.c ft_substr.c ft_strlen.c \
+CC = cc 
+CFLAGS = -Wall -Wextra -Werror
+# CFLAGS += -g -fsanitize=address
+LDFLAGS = -L$(LIBFT_DIR) -lreadline -lft
+SRC = $(wildcard *.c)
 
+LIBFT_DIR = ./libft
+LIBFT = $(LIBFT_DIR)/libft.a
+INCLUDES = -I$(LIBFT_DIR)
 OBJ = $(SRC:.c=.o)
 
 RM = rm -rf
 
-%.o:%.c
-	$(CC) -c $< -o $@ 
+$(NAME): $(OBJ) $(LIBFT)
+	$(CC) $(CFLAGS) $(OBJ) -o $(NAME) $(LDFLAGS) 
 
-$(NAME): $(OBJ)
-	$(CC) $(OBJ) -o $(NAME) $(LDFRAGS)
+$(LIBFT):
+	$(MAKE) -j4 -C $(LIBFT_DIR)
+
+%.o:%.c
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@ 
 
 all: $(NAME)
 
 clean:
-	$(RM) $(SRC:.c=.o)
+	$(RM) $(SRC:.c=.o) 
 
 fclean: clean
 	$(RM) $(NAME)
 
 re: fclean all
+
+.PHONY: all clean fclean re

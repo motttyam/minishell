@@ -6,7 +6,7 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:19:56 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/06/28 23:36:44 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/06/30 23:00:23 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@
 # include <stdlib.h>
 # include <sys/wait.h>
 # include <unistd.h>
-#include "libft.h"
 #include "lexer.h"
 #include "error.h"
+#include "libft.h"
 #define PROMPT "minshell $ "
 void recursive_readline(void);
 #endif
