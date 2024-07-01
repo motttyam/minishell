@@ -3,8 +3,9 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror
 # CFLAGS += -g -fsanitize=address
 LDFLAGS = -L$(LIBFT_DIR) -lreadline -lft
-SRC = $(wildcard *.c)
 
+SRC_DIR = srcs
+SRC = $(wildcard $(SRC_DIR)/*.c)
 LIBFT_DIR = ./libft
 LIBFT = $(LIBFT_DIR)/libft.a
 INCLUDES = -I$(LIBFT_DIR)
@@ -31,4 +32,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean reåa
