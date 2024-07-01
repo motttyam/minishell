@@ -12,47 +12,55 @@
 
 #include "../include/minishell.h"
 
-int	ft_strcmp(char *str1, char *str2)
+void	recursive_readline(void)
 {
-	size_t	i;
-	int		num;
+	char			*line;
+	t_token_lexer	lexer;
+	t_token			*l;
 
-	i = 0;
-	num = 0;
-	if (!str1 || !str2)
-		return (0);
-	while (str1[i] && str2[i])
+	rl_outstream = stderr;
+	while (1)
 	{
-		num = (unsigned char)str1[i] - (unsigned char)str2[i];
-		if (str1[i] != str2[i])
+		line = readline(PROMPT);
+		if (!line)
 			break ;
-		i++;
-	}
-	num = (unsigned char)str1[i] - (unsigned char)str2[i];
-	return (num);
-}
-
-void recursive_readline(void)
-{
-	char *line;
-	t_token_lexer lexer;
-
-	line = readline(PROMPT);
-	add_history(line);
-	lex_token(&lexer,line);
-	/*tokenの確認*/
-	t_token *l;
-	l = lexer.first;
-	while(l)
-	{
-		printf("token = %s\n",l->token);
-		l = l->next;
-	}
-	if (!ft_strcmp(line,"exit")) //終了条件はのちに修正必須(exitの実装やシグナル)
-	{
+		if (*line)
+			add_history(line);
+		lex_token(&lexer, line);
+		/*tokenの確認*/
+		l = lexer.first;
+		while (l)
+		{
+			printf("token = %s\n", l->token);
+			l = l->next;
+		}
 		free(line);
-		exit(1);
 	}
-	free(line);
-	recursive_readline();
+	exit(0);
 }
+
+// void recursive_readline(void)
+// {
+// 	char *line;
+// 	t_token_lexer lexer;
+
+// 	rl_outstream =  stderr;
+// 	line = readline(PROMPT);
+// 	add_history(line);
+// 	lex_token(&lexer,line);
+// 	/*tokenの確認*/
+// 	t_token *l;
+// 	l = lexer.first;
+// 	while(l)
+// 	{
+// 		printf("token = %s\n",l->token);
+// 		l = l->next;
+// 	}
+// 	if (!ft_strncmp(line, "exit", 4)) //終了条件はのちに修正必須(exitの実装やシグナル)
+// 	{
+// 		free(line);
+// 		exit(1);
+// 	}
+// 	free(line);
+// 	recursive_readline();
+// }
