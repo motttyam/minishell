@@ -25,10 +25,13 @@ $(LIBFT):
 all: $(NAME)
 
 clean:
-	$(RM) $(SRC:.c=.o) 
+	$(RM) $(SRC:.c=.o) cmp out
 
 fclean: clean
 	$(RM) $(NAME)
+
+test: all
+	./tests/test.sh
 
 re: fclean all
 
