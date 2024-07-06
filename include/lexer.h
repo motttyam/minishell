@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 09:26:24 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/06/29 07:21:50 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/07/04 09:42:58 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,5 +38,7 @@ typedef enum e_token_type
 	TYPE_EXPANDED,
 	TYPE_QUOTED_EXPANDED
 } token_type;
+
 void lex_token(t_token_lexer *lexer,char *line);
+
 #endif
