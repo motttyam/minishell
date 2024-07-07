@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: yoshiminaoki <yoshiminaoki@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 09:53:36 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/07 19:34:50 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/07 21:15:49 by yoshiminaok      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	init_token_lexer(t_token_lexer *lexer)
 {
 	lexer->line_i = 0;
 	lexer->token_i = 0;
-	lexer->in_quote = 0;
+	lexer->in_quote = NORMAL;
 	lexer->first = NULL;
 	lexer->current = NULL;
 }
@@ -98,45 +98,44 @@ void	make_token_list(t_token_lexer *lexer, char *line)
 {
 	while (line[lexer->line_i])
 	{
-		if (lexer->in_quote == 0 && line[lexer->line_i] == '\'')
+		if (line[lexer->line_i] == '\\' && lexer->in_quote == DOUBLE_QUOTED)
 		{
-			lexer->in_quote = 1;
 			lexer->line_i++;
 			lexer->token_i++;
 		}
-		if (lexer->in_quote == 0 && line[lexer->line_i] == '"')
-		{
-			lexer->in_quote = 2;
-			lexer->line_i++;
-			lexer->token_i++;
-		}
-		if (lexer->in_quote == 0 && ft_strchr("|\n \t", line[lexer->line_i]))
-		{
-			ft_lstadd_new_token(lexer, line);
-			lexer->current->type = WORD;
-			break ;
-		}
-		if (lexer->in_quote == 0 && ft_strchr("<>", line[lexer->line_i]))
-		{
-			//もし"2>"等に対応するなら修正必要
-			ft_lstadd_new_token(lexer, line);
-			lexer->current->type = WORD;
-			break ;
-		}
-		if ((lexer->in_quote == 1 && line[lexer->line_i] == '\'')
-				|| (lexer->in_quote == 2 && line[lexer->line_i] == '"'))
+		if ((lexer->in_quote == SINGLE_QUOTED && line[lexer->line_i] == '\'')
+				|| (lexer->in_quote == DOUBLE_QUOTED && line[lexer->line_i] == '"'))
 		{
 			lexer->line_i++;
 			lexer->token_i++;
 			// if (line[lexer->line_i] == ' ')
-			lexer->in_quote = 0;
+			lexer->in_quote = NORMAL;
 		}
+		if (lexer->in_quote == NORMAL && line[lexer->line_i] == '\'')
+			lexer->in_quote = SINGLE_QUOTED;
+		if (lexer->in_quote == NORMAL && line[lexer->line_i] == '"')
+			lexer->in_quote = DOUBLE_QUOTED;
+		if (lexer->in_quote == NORMAL && ft_strchr("|<>\n \t", line[lexer->line_i]))
+		{
+			ft_lstadd_new_token(lexer, line);
+			lexer->current->type = WORD;
+			break ;
+		}
+		// if (lexer->in_quote == NORMAL && ft_strchr("<>", line[lexer->line_i]))
+		// {
+		// 	//もし"2>"等に対応するなら修正必要
+		// 	ft_lstadd_new_token(lexer, line);
+		// 	lexer->current->type = WORD;
+		// 	break ;
+		// }
 		lexer->line_i++;
 		lexer->token_i++;
 	}
 	if (lexer->token_i > 0 && line[lexer->line_i] == '\0')
 	{
 		ft_lstadd_new_token(lexer, line);
+		if (lexer->in_quote != NORMAL)
+			quote_error();
 		lexer->current->type = WORD;
 	}
 }

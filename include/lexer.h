@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: yoshiminaoki <yoshiminaoki@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 09:26:24 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/07 19:04:19 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/07 20:14:02 by yoshiminaok      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,9 @@ typedef enum e_token_type
 
 typedef enum e_lexer_state
 {
-	LEXSTAT_NORMAL = 0xd101,
-	LEXSTAT_SINGLE_QUOTED,
-	LEXSTAT_DOUBLE_QUOTED,
+	NORMAL = 0xd101,
+	SINGLE_QUOTED,
+	DOUBLE_QUOTED,
 }	t_lexer_state;
 
 void				lex_token(t_token_lexer *lexer, char *line);
