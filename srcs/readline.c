@@ -12,12 +12,12 @@
 
 #include "../include/minishell.h"
 
-char *rl_input(void)
+char	*rl_input(void)
 {
-	char			*line;
+	char	*line;
 
 	rl_outstream = stderr;
-	line =  NULL;
+	line = NULL;
 	line = readline(PROMPT);
 	if (!line)
 		return (NULL);

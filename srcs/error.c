@@ -6,15 +6,14 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 23:12:26 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/02 00:07:01 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/07 15:18:06 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void handle_malloc_error()
+void	handle_malloc_error(void)
 {
 	perror("malloc failed");
 	exit(1);
 }
-
