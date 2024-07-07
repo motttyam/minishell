@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   error.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 23:16:28 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/06/28 23:17:23 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/07/06 18:39:17 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ERROR_H
 #define ERROR_H
+
 void	handle_malloc_error();
+
 #endif

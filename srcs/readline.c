@@ -12,33 +12,49 @@
 
 #include "../include/minishell.h"
 
-void	recursive_readline(void)
+char *rl_input(void)
 {
 	char			*line;
-	t_token_lexer	lexer;
-	t_token			*l;
 
 	rl_outstream = stderr;
-	while (1)
-	{
-		line = readline(PROMPT);
-		if (!line)
-			break ;
-		if (*line)
-			add_history(line);
-		lex_token(&lexer, line);
-		/*tokenの確認*/
-		l = lexer.first;
-		while (l)
-		{
-			printf("token = %s\n", l->token);
-			l = l->next;
-		}
-		free(line);
-	}
-	exit(0);
+	line =  NULL;
+	line = readline(PROMPT);
+	if (!line)
+		return (NULL);
+	if (*line)
+		add_history(line);
+	return (line);
 }
 
+// 元々塚本が書いてたやつ
+// void	rl_input(void)
+// {
+// 	char			*line;
+// 	// t_token_lexer	lexer;
+// 	// t_token			*l;
+
+// 	rl_outstream = stderr;
+// 	while (1)
+// 	{
+// 		line = readline(PROMPT);
+// 		if (!line)
+// 			break ;
+// 		if (*line)
+// 			add_history(line);
+// 		// lex_token(&lexer, line);
+// 		// /*tokenの確認*/
+// 		// l = lexer.first;
+// 		// while (l)
+// 		// {
+// 		// 	printf("token = %s\n", l->token);
+// 		// 	l = l->next;
+// 		// }
+// 		free(line);
+// 	}
+// 	exit(0);
+// }
+
+// 元々nyoshimiが書いてたやつ
 // void recursive_readline(void)
 // {
 // 	char *line;
