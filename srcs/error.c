@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: yoshiminaoki <yoshiminaoki@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 23:12:26 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/07 15:18:06 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/07 20:20:28 by yoshiminaok      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,5 +15,11 @@
 void	handle_malloc_error(void)
 {
 	perror("malloc failed");
+	exit(1);
+}
+
+void	quote_error(void)
+{
+	ft_putendl_fd("Quotation mark not closed.",2);
 	exit(1);
 }

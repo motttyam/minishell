@@ -3,43 +3,55 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: yoshiminaoki <yoshiminaoki@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 09:26:24 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/07 16:20:02 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/07 20:14:02 by yoshiminaok      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LEXER_H
-#define LEXER_H
+# define LEXER_H
 
 typedef struct s_token
 {
-	char	*token;
-	int		len;
-	int		type;
+	char			*token;
+	int				type;
 	struct s_token	*next;
-} 				t_token;
+}					t_token;
 
 typedef struct s_token_lexer
 {
-	t_token	*first;
-	t_token	*current;
-	int		line_i;
-	int		token_i;
-	int		quote_i;
-	int		in_quote;
-}				t_token_lexer;
+	t_token			*first;
+	t_token			*current;
+	int				line_i;
+	// substrで必要な長さ
+	int				token_i;
+	// quote内でのspaceの処理フラグ 0,1,2
+	int				in_quote;
+}					t_token_lexer;
 
 typedef enum e_token_type
 {
-	TYPE_WORD,
-	TYPE_PIPE,
-	TYPE_REDIRECT,
-	TYPE_EXPANDED,
-	TYPE_QUOTED_EXPANDED
-} token_type;
+	WORD = 0xc101,
+	WORD_EXPANDED,
+	QUOTE,
+	PIPE,
+	QUOTE_EXPANDED,
+	INPUT_REDIRECTION,
+	HEREDOCUMENT,
+	OUTPUT_REDIRECTION,
+	OUTPUT_APPENDING,
+	NEWLINE,
+}					token_type;
 
-void lex_token(t_token_lexer *lexer,char *line);
+typedef enum e_lexer_state
+{
+	NORMAL = 0xd101,
+	SINGLE_QUOTED,
+	DOUBLE_QUOTED,
+}	t_lexer_state;
+
+void				lex_token(t_token_lexer *lexer, char *line);
 
 #endif
