@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:19:56 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/04 08:55:18 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/06 19:39:40 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,11 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <sys/wait.h>
+# include <limits.h>
 # include <unistd.h>
 
 # define PROMPT "minshell $ "
 
-void	recursive_readline(void);
+char *rl_input(void);
 
 #endif
