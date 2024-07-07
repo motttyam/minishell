@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   error.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yoshiminaoki <yoshiminaoki@student.42.f    +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 23:16:28 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/07 20:24:14 by yoshiminaok      ###   ########.fr       */
+/*   Updated: 2024/07/08 00:17:47 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ERROR_H
-#define ERROR_H
+# define ERROR_H
 
-void	handle_malloc_error();
-void	quote_error();
+void	fatal_error(const char *msg) __attribute__((noreturn));
+void	handle_malloc_error(void);
+void	quote_error(void);
 #endif

@@ -6,19 +6,11 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 16:33:23 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/07/07 17:18:56 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/08 00:17:06 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-void	fatal_error(const char *msg) __attribute__((noreturn));
-
-void	fatal_error(const char *msg)
-{
-	dprintf(2, "Fatal Error: %s\n", msg);
-	exit(1);
-}
 
 int interpret (char *line)
 {
@@ -38,6 +30,6 @@ int interpret (char *line)
 	else
 	{
 		wait(&wstatus);
-		return()
+		return(WEXITSTATUS(wstatus));
 	}
 }
