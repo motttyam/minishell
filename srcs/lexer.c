@@ -6,7 +6,7 @@
 /*   By: yoshiminaoki <yoshiminaoki@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 09:53:36 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/07 21:15:49 by yoshiminaok      ###   ########.fr       */
+/*   Updated: 2024/07/09 21:44:49 by yoshiminaok      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,13 @@ void	lex_token(t_token_lexer *lexer, char *line);
 void	init_token_lexer(t_token_lexer *lexer);
 void	get_token(t_token_lexer *lexer, char *line);
 void	get_pipe_token(t_token_lexer *lexer, char *line);
+void	get_newline_token(t_token_lexer *lexer, char *line);
 void	get_redirect_token(t_token_lexer *lexer, char *line);
-void	make_token_list(t_token_lexer *lexer, char *line);
+void	get_word_token(t_token_lexer *lexer, char *line);
+void get_doublequote_token(t_token_lexer *lexer, char *line);
 char	*ft_strchr(const char *str, int c);
-void	ft_lstadd_new_token(t_token_lexer *lexer, char *line);
+void get_tokenchar(t_token_lexer *lexer, char *line, char *token);
+void	ft_lstadd_new_token(t_token_lexer *lexer);
 
 void	lex_token(t_token_lexer *lexer, char *line)
 {
@@ -44,20 +47,20 @@ void	init_token_lexer(t_token_lexer *lexer)
 
 void	get_token(t_token_lexer *lexer, char *line)
 {
+	ft_lstadd_new_token(lexer);
 	if (line[lexer->line_i] == '|')
 		get_pipe_token(lexer, line);
 	else if (line[lexer->line_i] == '<' || line[lexer->line_i] == '>')
 		get_redirect_token(lexer, line);
+	else if (line[lexer->line_i] == '\n')
+		get_newline_token(lexer, line);
 	else
-		make_token_list(lexer, line);
+		get_word_token(lexer, line);
 }
 
 void	get_pipe_token(t_token_lexer *lexer, char *line)
 {
-	lexer->line_i++;
-	lexer->token_i++;
-	// ||もここでif文を作成すると対応できそう
-	ft_lstadd_new_token(lexer, line);
+    get_tokenchar(lexer,line,lexer->current->token);
 	lexer->current->type = PIPE;
 }
 
@@ -65,62 +68,55 @@ void	get_redirect_token(t_token_lexer *lexer, char *line)
 {
 	if (line[lexer->line_i] == '>' && line[lexer->line_i + 1] != '>')
 	{
-		// 関数を作成して、簡単にする	
-		lexer->line_i++;
-		lexer->token_i++;
-		ft_lstadd_new_token(lexer, line);
+		get_tokenchar(lexer,line,lexer->current->token);
 		lexer->current->type = OUTPUT_REDIRECTION;
 	}
 	if (line[lexer->line_i] == '>' && line[lexer->line_i + 1] == '>')
 	{
-		lexer->line_i+= 2;
-		lexer->token_i+= 2;
-		ft_lstadd_new_token(lexer, line);
+		get_tokenchar(lexer,line,lexer->current->token);
+        get_tokenchar(lexer,line,lexer->current->token);
 		lexer->current->type = OUTPUT_APPENDING;
 	}
 	if (line[lexer->line_i] == '<' && line[lexer->line_i + 1] != '<')
 	{
-		lexer->line_i++;
-		lexer->token_i++;
-		ft_lstadd_new_token(lexer, line);
+		get_tokenchar(lexer,line,lexer->current->token);
 		lexer->current->type = INPUT_REDIRECTION;
 	}
 	if (line[lexer->line_i] == '<' && line[lexer->line_i + 1] == '<')
 	{
-		lexer->line_i+= 2;
-		lexer->token_i+= 2;
-		ft_lstadd_new_token(lexer, line);
+		get_tokenchar(lexer,line,lexer->current->token);
+        get_tokenchar(lexer,line,lexer->current->token);
 		lexer->current->type = HEREDOCUMENT;
 	}
 }
 
-void	make_token_list(t_token_lexer *lexer, char *line)
+void	get_newline_token(t_token_lexer *lexer, char *line)
 {
+	get_tokenchar(lexer,line,lexer->current->token);
+	lexer->current->type = NEWLINE;
+}
+
+void	get_word_token(t_token_lexer *lexer, char *line)
+{
+	lexer->current->type = WORD;
 	while (line[lexer->line_i])
 	{
-		if (line[lexer->line_i] == '\\' && lexer->in_quote == DOUBLE_QUOTED)
+		if (lexer->in_quote == SINGLE_QUOTED && line[lexer->line_i] == '\'')
 		{
 			lexer->line_i++;
-			lexer->token_i++;
-		}
-		if ((lexer->in_quote == SINGLE_QUOTED && line[lexer->line_i] == '\'')
-				|| (lexer->in_quote == DOUBLE_QUOTED && line[lexer->line_i] == '"'))
-		{
-			lexer->line_i++;
-			lexer->token_i++;
-			// if (line[lexer->line_i] == ' ')
 			lexer->in_quote = NORMAL;
 		}
-		if (lexer->in_quote == NORMAL && line[lexer->line_i] == '\'')
-			lexer->in_quote = SINGLE_QUOTED;
-		if (lexer->in_quote == NORMAL && line[lexer->line_i] == '"')
-			lexer->in_quote = DOUBLE_QUOTED;
-		if (lexer->in_quote == NORMAL && ft_strchr("|<>\n \t", line[lexer->line_i]))
+		else if (lexer->in_quote == NORMAL && line[lexer->line_i] == '\'')
 		{
-			ft_lstadd_new_token(lexer, line);
-			lexer->current->type = WORD;
-			break ;
+			lexer->line_i++;
+			lexer->in_quote = SINGLE_QUOTED;
 		}
+		else if (lexer->in_quote == NORMAL && line[lexer->line_i] == '"')
+			get_doublequote_token(lexer,line);
+		else if(lexer->in_quote == NORMAL && line[lexer->line_i] == '$')
+			lexer->current->type = WORD_EXPANDED;
+		else if (lexer->in_quote == NORMAL && ft_strchr("|<>\n \t", line[lexer->line_i]))
+			break ;
 		// if (lexer->in_quote == NORMAL && ft_strchr("<>", line[lexer->line_i]))
 		// {
 		// 	//もし"2>"等に対応するなら修正必要
@@ -128,15 +124,32 @@ void	make_token_list(t_token_lexer *lexer, char *line)
 		// 	lexer->current->type = WORD;
 		// 	break ;
 		// }
-		lexer->line_i++;
-		lexer->token_i++;
+		get_tokenchar(lexer,line,lexer->current->token);
 	}
-	if (lexer->token_i > 0 && line[lexer->line_i] == '\0')
+    if (lexer->in_quote != NORMAL)
+        quote_error();
+}
+
+void get_doublequote_token(t_token_lexer *lexer, char *line)
+{
+	lexer->in_quote = DOUBLE_QUOTED;
+	lexer->line_i++;
+	while(line[lexer->line_i])
 	{
-		ft_lstadd_new_token(lexer, line);
-		if (lexer->in_quote != NORMAL)
-			quote_error();
-		lexer->current->type = WORD;
+		if (line[lexer->line_i] == '"')
+		{
+			lexer->line_i++;
+			lexer->in_quote = NORMAL;
+		}
+		else if (line[lexer->line_i] == '\\')
+		{
+			get_tokenchar(lexer,line,lexer->current->token);
+		}
+		else if (line[lexer->line_i] == '$')
+			lexer->current->type = QUOTE_EXPANDED;
+		else if (lexer->in_quote == NORMAL && ft_strchr("|<>\n \t", line[lexer->line_i]))
+			break ;
+		get_tokenchar(lexer,line,lexer->current->token);
 	}
 }
 
@@ -156,7 +169,14 @@ char	*ft_strchr(const char *str, int c)
 	return (0);
 }
 
-void	ft_lstadd_new_token(t_token_lexer *lexer, char *line)
+void get_tokenchar(t_token_lexer *lexer, char *line, char *token)
+{
+    token[lexer->token_i] = line[lexer->line_i];
+    lexer->line_i++;
+	lexer->token_i++;
+}
+
+void	ft_lstadd_new_token(t_token_lexer *lexer)
 {
 	t_token	*new;
 
@@ -165,16 +185,12 @@ void	ft_lstadd_new_token(t_token_lexer *lexer, char *line)
 		handle_malloc_error();
 	if (lexer->first == NULL)
 	{
-		new->token = ft_substr(line, lexer->line_i - lexer->token_i,
-				lexer->token_i);
 		new->next = NULL;
 		lexer->first = new;
 		lexer->current = new;
 	}
 	else
 	{
-		new->token = ft_substr(line, lexer->line_i - lexer->token_i,
-				lexer->token_i);
 		new->next = NULL;
 		lexer->current->next = new;
 		lexer->current = new;
