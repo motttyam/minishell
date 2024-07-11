@@ -3,26 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yoshiminaoki <yoshiminaoki@student.42.f    +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 09:53:36 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/09 21:44:49 by yoshiminaok      ###   ########.fr       */
+/*   Updated: 2024/07/11 22:33:18 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-void	lex_token(t_token_lexer *lexer, char *line);
-void	init_token_lexer(t_token_lexer *lexer);
-void	get_token(t_token_lexer *lexer, char *line);
-void	get_pipe_token(t_token_lexer *lexer, char *line);
-void	get_newline_token(t_token_lexer *lexer, char *line);
-void	get_redirect_token(t_token_lexer *lexer, char *line);
-void	get_word_token(t_token_lexer *lexer, char *line);
-void get_doublequote_token(t_token_lexer *lexer, char *line);
-char	*ft_strchr(const char *str, int c);
-void get_tokenchar(t_token_lexer *lexer, char *line, char *token);
-void	ft_lstadd_new_token(t_token_lexer *lexer);
 
 void	lex_token(t_token_lexer *lexer, char *line)
 {
@@ -56,11 +44,12 @@ void	get_token(t_token_lexer *lexer, char *line)
 		get_newline_token(lexer, line);
 	else
 		get_word_token(lexer, line);
+	lexer->current->token[lexer->token_i] = '\0';
 }
 
 void	get_pipe_token(t_token_lexer *lexer, char *line)
 {
-    get_tokenchar(lexer,line,lexer->current->token);
+	get_tokenchar(lexer, line, lexer->current->token);
 	lexer->current->type = PIPE;
 }
 
@@ -68,31 +57,31 @@ void	get_redirect_token(t_token_lexer *lexer, char *line)
 {
 	if (line[lexer->line_i] == '>' && line[lexer->line_i + 1] != '>')
 	{
-		get_tokenchar(lexer,line,lexer->current->token);
+		get_tokenchar(lexer, line, lexer->current->token);
 		lexer->current->type = OUTPUT_REDIRECTION;
 	}
 	if (line[lexer->line_i] == '>' && line[lexer->line_i + 1] == '>')
 	{
-		get_tokenchar(lexer,line,lexer->current->token);
-        get_tokenchar(lexer,line,lexer->current->token);
+		get_tokenchar(lexer, line, lexer->current->token);
+		get_tokenchar(lexer, line, lexer->current->token);
 		lexer->current->type = OUTPUT_APPENDING;
 	}
 	if (line[lexer->line_i] == '<' && line[lexer->line_i + 1] != '<')
 	{
-		get_tokenchar(lexer,line,lexer->current->token);
+		get_tokenchar(lexer, line, lexer->current->token);
 		lexer->current->type = INPUT_REDIRECTION;
 	}
 	if (line[lexer->line_i] == '<' && line[lexer->line_i + 1] == '<')
 	{
-		get_tokenchar(lexer,line,lexer->current->token);
-        get_tokenchar(lexer,line,lexer->current->token);
+		get_tokenchar(lexer, line, lexer->current->token);
+		get_tokenchar(lexer, line, lexer->current->token);
 		lexer->current->type = HEREDOCUMENT;
 	}
 }
 
 void	get_newline_token(t_token_lexer *lexer, char *line)
 {
-	get_tokenchar(lexer,line,lexer->current->token);
+	get_tokenchar(lexer, line, lexer->current->token);
 	lexer->current->type = NEWLINE;
 }
 
@@ -112,29 +101,30 @@ void	get_word_token(t_token_lexer *lexer, char *line)
 			lexer->in_quote = SINGLE_QUOTED;
 		}
 		else if (lexer->in_quote == NORMAL && line[lexer->line_i] == '"')
-			get_doublequote_token(lexer,line);
-		else if(lexer->in_quote == NORMAL && line[lexer->line_i] == '$')
+			get_doublequote_token(lexer, line);
+		else if (lexer->in_quote == NORMAL && line[lexer->line_i] == '$')
 			lexer->current->type = WORD_EXPANDED;
-		else if (lexer->in_quote == NORMAL && ft_strchr("|<>\n \t", line[lexer->line_i]))
+		else if (lexer->in_quote == NORMAL && ft_strchr("<>", line[lexer->line_i]))
+		{
+			get_redirect_fd_token(lexer, line);
 			break ;
-		// if (lexer->in_quote == NORMAL && ft_strchr("<>", line[lexer->line_i]))
-		// {
-		// 	//もし"2>"等に対応するなら修正必要
-		// 	ft_lstadd_new_token(lexer, line);
-		// 	lexer->current->type = WORD;
-		// 	break ;
-		// }
-		get_tokenchar(lexer,line,lexer->current->token);
+		}
+		else if (lexer->in_quote == NORMAL && ft_strchr("|\n \t", line[lexer->line_i]))
+		{
+			// lexer->current->token[lexer->token_i] = '\0';
+			break ;
+		}
+		get_tokenchar(lexer, line, lexer->current->token);
 	}
-    if (lexer->in_quote != NORMAL)
-        quote_error();
+	if (lexer->in_quote != NORMAL)
+		quote_error();
 }
 
-void get_doublequote_token(t_token_lexer *lexer, char *line)
+void	get_doublequote_token(t_token_lexer *lexer, char *line)
 {
 	lexer->in_quote = DOUBLE_QUOTED;
 	lexer->line_i++;
-	while(line[lexer->line_i])
+	while (line[lexer->line_i])
 	{
 		if (line[lexer->line_i] == '"')
 		{
@@ -143,14 +133,29 @@ void get_doublequote_token(t_token_lexer *lexer, char *line)
 		}
 		else if (line[lexer->line_i] == '\\')
 		{
-			get_tokenchar(lexer,line,lexer->current->token);
+			get_tokenchar(lexer, line, lexer->current->token);
 		}
 		else if (line[lexer->line_i] == '$')
 			lexer->current->type = QUOTE_EXPANDED;
-		else if (lexer->in_quote == NORMAL && ft_strchr("|<>\n \t", line[lexer->line_i]))
+		else if (lexer->in_quote == NORMAL && ft_strchr("|<>\n \t",
+				line[lexer->line_i]))
 			break ;
-		get_tokenchar(lexer,line,lexer->current->token);
+		get_tokenchar(lexer, line, lexer->current->token);
 	}
+}
+
+void	get_redirect_fd_token(t_token_lexer *lexer, char *line)
+{
+	int i;
+
+	i = 0;
+	while (i < lexer->token_i)
+	{
+		if (!ft_isdigit(lexer->current->token[i]))
+			return ;
+		i++;
+	}
+	get_redirect_token(lexer, line);
 }
 
 char	*ft_strchr(const char *str, int c)
@@ -169,10 +174,10 @@ char	*ft_strchr(const char *str, int c)
 	return (0);
 }
 
-void get_tokenchar(t_token_lexer *lexer, char *line, char *token)
+void	get_tokenchar(t_token_lexer *lexer, char *line, char *token)
 {
-    token[lexer->token_i] = line[lexer->line_i];
-    lexer->line_i++;
+	token[lexer->token_i] = line[lexer->line_i];
+	lexer->line_i++;
 	lexer->token_i++;
 }
 

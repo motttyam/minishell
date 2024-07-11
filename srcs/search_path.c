@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 00:10:48 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/07/08 00:19:24 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/11 22:51:20 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,16 @@ char *search_path(const char *line)
             dup = strdup(path);
             if (dup == NULL)
                 fatal_error("strdup");
+            // free(line);
             return (dup);
         }
         if (end == NULL)
+        {
+            // free(line);
             return (NULL);
+        }
         value = end + 1;
     }
+    // free(line);
     return (NULL);
 }

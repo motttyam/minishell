@@ -47,6 +47,10 @@
 *.cmd
 .tmp_versions/
 modules.order
-Module.symvers
+Module.symverss
 Mkfile.old
 dkms.conf
+
+# それ以外
+sample.c
+tmp

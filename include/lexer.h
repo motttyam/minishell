@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yoshiminaoki <yoshiminaoki@student.42.f    +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 09:26:24 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/09 18:10:18 by yoshiminaok      ###   ########.fr       */
+/*   Updated: 2024/07/11 22:30:32 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LEXER_H
 # define LEXER_H
 
-#define ARGMAX 2097152
+# define ARGMAX 2097152
 
 typedef struct s_token
 {
@@ -58,8 +58,22 @@ typedef enum e_lexer_state
 	//$のフラグ
 	NOT_EXPANDED,
 	EXPANDED
-}	t_lexer_state;
+}					t_lexer_state;
 
 void				lex_token(t_token_lexer *lexer, char *line);
+void				parse_token(t_token *lexer);
+void				lex_token(t_token_lexer *lexer, char *line);
+void				init_token_lexer(t_token_lexer *lexer);
+void				get_token(t_token_lexer *lexer, char *line);
+void				get_pipe_token(t_token_lexer *lexer, char *line);
+void				get_newline_token(t_token_lexer *lexer, char *line);
+void				get_redirect_token(t_token_lexer *lexer, char *line);
+void				get_word_token(t_token_lexer *lexer, char *line);
+void				get_doublequote_token(t_token_lexer *lexer, char *line);
+void				get_redirect_fd_token(t_token_lexer *lexer, char *line);
+char				*ft_strchr(const char *str, int c);
+void				get_tokenchar(t_token_lexer *lexer, char *line,
+						char *token);
+void				ft_lstadd_new_token(t_token_lexer *lexer);
 
 #endif
