@@ -6,7 +6,7 @@
 /*   By: yoshiminaoki <yoshiminaoki@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 09:53:36 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/09 21:44:49 by yoshiminaok      ###   ########.fr       */
+/*   Updated: 2024/07/11 14:13:47 by yoshiminaok      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,10 @@ void	get_word_token(t_token_lexer *lexer, char *line)
 		else if(lexer->in_quote == NORMAL && line[lexer->line_i] == '$')
 			lexer->current->type = WORD_EXPANDED;
 		else if (lexer->in_quote == NORMAL && ft_strchr("|<>\n \t", line[lexer->line_i]))
+		{
+			lexer->current->token[lexer->line_i] = '\0';
 			break ;
+		}
 		// if (lexer->in_quote == NORMAL && ft_strchr("<>", line[lexer->line_i]))
 		// {
 		// 	//もし"2>"等に対応するなら修正必要
@@ -126,6 +129,7 @@ void	get_word_token(t_token_lexer *lexer, char *line)
 		// }
 		get_tokenchar(lexer,line,lexer->current->token);
 	}
+	lexer->current->token[lexer->token_i] = '\0';
     if (lexer->in_quote != NORMAL)
         quote_error();
 }

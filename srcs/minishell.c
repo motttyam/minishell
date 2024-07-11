@@ -6,7 +6,7 @@
 /*   By: yoshiminaoki <yoshiminaoki@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:06:27 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/08 09:11:33 by yoshiminaok      ###   ########.fr       */
+/*   Updated: 2024/07/11 15:05:37 by yoshiminaok      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	main(void)
 	char			*input;
 	t_token_lexer	lexer;
 
-	t_token *l; // テスト用である理解をしている
+	// t_token *l; // テスト用である理解をしている
 	while (1)
 	{
 		input = NULL;
@@ -27,15 +27,16 @@ int	main(void)
 		// input = search_path((const char *)input);
 		// interpret(input);
 		lex_token(&lexer, input);
+		parse_token(lexer.first);
 		/*tokenの確認*/
-		l = lexer.first;
-		int i = 1;
-		while (l)
-		{
-			printf("token%d = {%s,type%d}\n",i, l->token, l->type);
-			l = l->next;
-			i++;
-		}
+		// l = lexer.first;
+		// int i = 1;
+		// while (l)
+		// {
+		// 	printf("token%d = {%s,type%d}\n",i, l->token, l->type);
+		// 	l = l->next;
+		// 	i++;
+		// }
 	}
 	ft_putendl_fd("exit", 2);
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: yoshiminaoki <yoshiminaoki@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 09:26:24 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/09 18:10:18 by yoshiminaok      ###   ########.fr       */
+/*   Updated: 2024/07/11 13:15:55 by yoshiminaok      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,5 +61,5 @@ typedef enum e_lexer_state
 }	t_lexer_state;
 
 void				lex_token(t_token_lexer *lexer, char *line);
-
+void parse_token(t_token *lexer);
 #endif
