@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execpath.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yoshiminaoki <yoshiminaoki@student.42.f    +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 16:33:23 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/07/11 15:07:17 by yoshiminaok      ###   ########.fr       */
+/*   Updated: 2024/07/11 22:48:28 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ int interpret (char **argv)
 	extern char **environ;
 	pid_t pid;
 	int wstatus;
-
+	if (ft_strchr(argv[0], '/') == NULL)
+		argv[0] = search_path(argv[0]); 
 	pid = fork();
 	if (pid < 0)
 		fatal_error("fork");

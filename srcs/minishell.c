@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yoshiminaoki <yoshiminaoki@student.42.f    +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:06:27 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/11 15:05:37 by yoshiminaok      ###   ########.fr       */
+/*   Updated: 2024/07/11 22:51:00 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,9 @@ int	main(void)
 		if (!input)
 			break ;
 		// input = search_path((const char *)input);
-		// interpret(input);
 		lex_token(&lexer, input);
 		parse_token(lexer.first);
-		/*tokenの確認*/
+		// /*tokenの確認*/
 		// l = lexer.first;
 		// int i = 1;
 		// while (l)
