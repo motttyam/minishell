@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yoshiminaoki <yoshiminaoki@student.42.f    +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:06:27 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/12 11:15:32 by yoshiminaok      ###   ########.fr       */
+/*   Updated: 2024/07/12 22:30:16 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,9 @@ int	main(void)
 {
 	char			*input;
 	t_token_lexer	lexer;
+	int				saved_stdin;
 
+	saved_stdin = dup(STDIN_FILENO);
 	// t_token *l; // テスト用である理解をしている
 	while (1)
 	{
@@ -27,6 +29,8 @@ int	main(void)
 		// input = search_path((const char *)input);
 		lex_token(&lexer, input);
 		parse_token(lexer.first);
+		dup2(saved_stdin, STDIN_FILENO);
+		close(saved_stdin);
 		// /*tokenの確認*/
 		// l = lexer.first;
 		// int i = 1;
