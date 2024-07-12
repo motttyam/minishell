@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: yoshiminaoki <yoshiminaoki@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 09:53:36 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/11 22:33:18 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/12 11:11:31 by yoshiminaok      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,10 @@ void	get_word_token(t_token_lexer *lexer, char *line)
 			lexer->in_quote = SINGLE_QUOTED;
 		}
 		else if (lexer->in_quote == NORMAL && line[lexer->line_i] == '"')
+		{
 			get_doublequote_token(lexer, line);
+			break ;
+		}
 		else if (lexer->in_quote == NORMAL && line[lexer->line_i] == '$')
 			lexer->current->type = WORD_EXPANDED;
 		else if (lexer->in_quote == NORMAL && ft_strchr("<>", line[lexer->line_i]))
@@ -137,7 +140,7 @@ void	get_doublequote_token(t_token_lexer *lexer, char *line)
 		}
 		else if (line[lexer->line_i] == '$')
 			lexer->current->type = QUOTE_EXPANDED;
-		else if (lexer->in_quote == NORMAL && ft_strchr("|<>\n \t",
+		if (lexer->in_quote == NORMAL && ft_strchr("|<>\n \t",
 				line[lexer->line_i]))
 			break ;
 		get_tokenchar(lexer, line, lexer->current->token);
