@@ -6,7 +6,7 @@
 /*   By: yoshiminaoki <yoshiminaoki@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:19:56 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/11 13:24:32 by yoshiminaok      ###   ########.fr       */
+/*   Updated: 2024/07/12 13:24:50 by yoshiminaok      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MINISHELL_H
 # include "error.h"
 # include "lexer.h"
+# include "parser.h"
 # include "libft.h"
 # include <errno.h>
 # include <fcntl.h>
@@ -27,9 +28,11 @@
 
 # define PROMPT "minshell $ "
 
+extern char **environ;
 char	*rl_input(void);
 char	*search_path(const char *line);
 // int		interpret(char *line);
 int		interpret(char **cmd);
+void pipe_and_execute(char  **cmd);
 
 #endif

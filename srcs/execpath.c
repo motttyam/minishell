@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execpath.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: yoshiminaoki <yoshiminaoki@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 16:33:23 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/07/11 22:48:28 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/12 21:48:28 by yoshiminaok      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,9 @@
 //parserのテスト用に書き換えて使ってます
 int interpret (char **argv)
 {
-	extern char **environ;
+	// extern char **environ;
 	pid_t pid;
-	int wstatus;
+	// int wstatus;
 	if (ft_strchr(argv[0], '/') == NULL)
 		argv[0] = search_path(argv[0]); 
 	pid = fork();
@@ -52,7 +52,7 @@ int interpret (char **argv)
 	}
 	else
 	{
-		wait(&wstatus);
-		return(WEXITSTATUS(wstatus));
+		waitpid(-1,NULL,0);
+		return(0);
 	}
 }
