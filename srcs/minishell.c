@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:06:27 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/12 22:30:16 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/14 16:33:01 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ int	main(void)
 		lex_token(&lexer, input);
 		parse_token(lexer.first);
 		dup2(saved_stdin, STDIN_FILENO);
-		close(saved_stdin);
 		// /*tokenの確認*/
 		// l = lexer.first;
 		// int i = 1;
@@ -41,6 +40,7 @@ int	main(void)
 		// 	i++;
 		// }
 	}
+	close(saved_stdin);
 	ft_putendl_fd("exit", 2);
 	return (0);
 }

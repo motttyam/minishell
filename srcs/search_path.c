@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 00:10:48 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/07/11 22:51:20 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/14 16:25:51 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@ char *search_path(const char *line)
         if (end)
             strncpy(path, value, end - value);
         else
-            strlcpy(path, value, PATH_MAX);
-        strlcat(path, "/", PATH_MAX);
-        strlcat(path, line, PATH_MAX);
+            bzero(path, PATH_MAX);
+        ft_strlcat(path, "/", PATH_MAX);
+        ft_strlcat(path, line, PATH_MAX);
         if (access(path, X_OK) == 0)
         {
             char *dup;
