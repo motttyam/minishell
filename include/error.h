@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 23:16:28 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/08 00:17:47 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/14 20:00:29 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,4 +16,6 @@
 void	fatal_error(const char *msg) __attribute__((noreturn));
 void	handle_malloc_error(void);
 void	quote_error(void);
+void	put_error_message(char *argv, int flag);
+
 #endif

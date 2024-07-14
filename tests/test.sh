@@ -36,6 +36,5 @@ assert() {
 }
 
 #Empty line(EOF)
-assert ''
-assert 'echo hello'
-assert 'pwd'
+# assert 'cat Makefile > tmp | cat aaa'
+assert 'cat < Makefile | cat -e'
