@@ -1,26 +1,31 @@
-#bin/bash
-
-assert()
-{
+assert() {
     # 引数 $1 をダブルクォートで囲んで表示
-    # memo: %-30s は文字列を左寄せ30文字幅で表示するフォーマット
     printf '%-30s:' "\"$1\""
 
     # bashの出力をcmpに保存
-    # -n オプションは echo 出力の最後に改行を追加しない。
-    # -e オプションはエスケープシーケンスを解釈する。
-    # 2>&- は標準エラー出力を閉じるための記法(エラーメッセージを無視)
-    echo -n -e "$1" | bash > cmp 2>&-
+    printf "$1\n" | bash > cmp_output.txt 2> cmp_error.txt
+    expected=$?
 
-    # 直前に実行したコマンド（bash）の終了ステータスを expected 変数に代入
-    expected=$? 
-
-    echo -n -e "$1" | ./../minishell >out 2>&-
+    # minishellの出力をoutに保存
+    printf "$1\n" | ./minishell > out_output.txt 2> out_error.txt
     actual=$?
 
-    # >/dev/null は、コマンドの出力を破棄するためのリダイレクト
-    # /dev/null は「ブラックホール」とも呼ばれ、そこに送られたデータはすべて消えてしまいます。
-    diff cmp out >/dev/null && echo -n 'diff OK' || echo -n 'diff NG'
+    # 出力の差分を確認
+    if diff cmp_output.txt out_output.txt >/dev/null; then
+        printf "diff OK\n"
+        echo
+        echo
+    else
+        printf "diff NG\n"
+        # エラーメッセージの内容を表示
+        echo " - Output mismatch:"
+        echo "---- bash output ----"
+        cat cmp_output.txt
+        echo "---- minishell output ----"
+        cat out_output.txt
+        echo
+        echo
+    fi
 
     # まだ使わなさそうだから一旦封印
     # if ["$actual" = "$expected"]; then
@@ -28,8 +33,9 @@ assert()
     # else
     #     echo -n "status NG, expected $expected but got $actual"
     # fi
-    echo
 }
 
 #Empty line(EOF)
 assert ''
+assert 'echo hello'
+assert 'pwd'
