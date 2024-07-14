@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yoshiminaoki <yoshiminaoki@student.42.f    +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:19:56 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/12 13:24:50 by yoshiminaok      ###   ########.fr       */
+/*   Updated: 2024/07/14 16:20:17 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <sys/wait.h>
+#include <string.h>
 # include <unistd.h>
 
 # define PROMPT "minshell $ "
