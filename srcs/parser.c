@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 08:53:11 by yoshiminaok       #+#    #+#             */
-/*   Updated: 2024/07/15 16:00:45 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/15 20:18:36 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,13 @@ void	parse_token(t_token *ptr, t_fd saved_fd)
 		return ;
 	cmd.argv = NULL;
 	cmd.count = 0;
-	cmd.redirect_flag = 0;
+	cmd.redirect_flag = PIPE_AND_EXECVE;
 	cmd.fd = saved_fd;
 	parse_newline(&ptr, &cmd);
 	if (ptr == NULL && cmd.argv)
 	{
-		if (cmd.redirect_flag == 0)
+		if (cmd.redirect_flag != FILE_ERROR)
 		{
-			// fprintf(stderr, "command:%s\n", cmd.argv[0]);
 			interpret(cmd.argv);
 		}
 		free_cmd(cmd.argv);
@@ -71,15 +70,20 @@ void	parse_pipe(t_token **ptr, t_command *cmd)
 	{
 		if ((*ptr)->type == PIPE)
 		{
-			if (cmd->redirect_flag == 0)
+			if (cmd->redirect_flag == PIPE_AND_EXECVE)
 			{
 				pipe_and_execute(cmd->argv);
 				//  wait関数のためにカウント
-				// reinit_fd(cmd->fd);
 				cmd->count++;
 			}
-			else
-				cmd->redirect_flag = 0;
+			else if (cmd->redirect_flag == EXECVE_ONLY)
+			{
+				interpret(cmd->argv);
+				cmd->redirect_flag = PIPE_AND_EXECVE;
+				reinit_fd(cmd->fd);
+			}
+			else if (cmd->redirect_flag == FILE_ERROR)
+				cmd->redirect_flag = PIPE_AND_EXECVE;
 			free_cmd(cmd->argv);
 			*ptr = (*ptr)->next;
 			parse_command(ptr, cmd);
@@ -114,10 +118,13 @@ void	parse_command(t_token **ptr, t_command *cmd)
 			i++;
 			(*ptr) = (*ptr)->next;
 		}
-		while (((*ptr) && ((*ptr)->type == INPUT_REDIRECTION || (*ptr)->type == HEREDOCUMENT
-				|| (*ptr)->type == OUTPUT_REDIRECTION
-				|| (*ptr)->type == OUTPUT_APPENDING)))
+		while (((*ptr) && ((*ptr)->type == INPUT_REDIRECTION
+					|| (*ptr)->type == HEREDOCUMENT
+					|| (*ptr)->type == OUTPUT_REDIRECTION
+					|| (*ptr)->type == OUTPUT_APPENDING)))
 		{
+			if ((*ptr)->type == HEREDOCUMENT)
+				reinit_fd(cmd->fd);
 			cmd->redirect_flag = redirect(ptr);
 		}
 	}
