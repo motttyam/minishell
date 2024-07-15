@@ -1,33 +1,14 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.h                                           :+:      :+:    :+:   */
+/*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/12 13:04:47 by yoshiminaok       #+#    #+#             */
-/*   Updated: 2024/07/15 19:14:31 by ktsukamo         ###   ########.fr       */
+/*   Created: 2024/07/15 17:08:28 by ktsukamo          #+#    #+#             */
+/*   Updated: 2024/07/15 17:08:55 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSER_H
-# define PARSER_H
+#include "../include/minishell.h"
 
-typedef struct s_command
-{
-	char	**argv;
-	int		count;
-	int		redirect_flag;
-	t_fd	fd;
-}			t_command;
-
-typedef enum e_parser_state
-{
-	PIPE_AND_EXECVE = 0xe101,
-	EXECVE_ONLY,
-	FILE_ERROR,
-}			t_parser_state;
-
-int			redirect(t_token **ptr);
-
-#endif

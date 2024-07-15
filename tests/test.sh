@@ -166,41 +166,92 @@ clear
 # =====================================================================
 # Redirection tests: >>
 # =====================================================================
-cmd 'echo "test" > tmpfile100'          # 新しいファイルに書き込み
-cmd 'echo "another line" >> tmpfile100' # 追記
-cmd 'cat tmpfile100'                    # 内容を表示
+# cmd 'echo "test" > tmpfile100'          # 新しいファイルに書き込み
+# cmd 'echo "another line" >> tmpfile100' # 追記
+# cmd 'cat tmpfile100'                    # 内容を表示
 
-# 追加のテスト項目
-cmd 'echo "Line 1" > tmpfile101'        # 新しいファイルに書き込み
-cmd 'echo "Line 2" >> tmpfile101'       # 追記
-cmd 'echo "Line 3" >> tmpfile101'       # さらに追記
-cmd 'cat tmpfile101'                    # 内容を表示
+# # 追加のテスト項目
+# cmd 'echo "Line 1" > tmpfile101'        # 新しいファイルに書き込み
+# cmd 'echo "Line 2" >> tmpfile101'       # 追記
+# cmd 'echo "Line 3" >> tmpfile101'       # さらに追記
+# cmd 'cat tmpfile101'                    # 内容を表示
 
-cmd 'date >> tmpfile102'                # 現在の日付と時刻を追記
-cmd 'echo "Adding more lines" >> tmpfile102' # 文字列を追記
-cmd 'cat tmpfile102'                    # 内容を表示
+# cmd 'date >> tmpfile102'                # 現在の日付と時刻を追記
+# cmd 'echo "Adding more lines" >> tmpfile102' # 文字列を追記
+# cmd 'cat tmpfile102'                    # 内容を表示
 
-cmd 'ls -l >> tmpfile103'               # ディレクトリリストを追記
-cmd 'df -h >> tmpfile103'               # ディスク使用量を追記
-cmd 'cat tmpfile103'                    # 内容を表示
+# cmd 'ls -l >> tmpfile103'               # ディレクトリリストを追記
+# cmd 'df -h >> tmpfile103'               # ディスク使用量を追記
+# cmd 'cat tmpfile103'                    # 内容を表示
 
-cmd 'ps aux >> tmpfile104'              # プロセス情報を追記
-cmd 'who >> tmpfile104'                 # ログインユーザー情報を追記
-cmd 'cat tmpfile104'                    # 内容を表示
+# cmd 'ps aux >> tmpfile104'              # プロセス情報を追記
+# cmd 'who >> tmpfile104'                 # ログインユーザー情報を追記
+# cmd 'cat tmpfile104'                    # 内容を表示
 
-cmd 'echo "First append test" >> tmpfile105'  # 初回の追記
-cmd 'echo "Second append test" >> tmpfile105' # 二回目の追記
-cmd 'echo "Third append test" >> tmpfile105'  # 三回目の追記
-cmd 'cat tmpfile105'                          # 内容を表示
+# cmd 'echo "First append test" >> tmpfile105'  # 初回の追記
+# cmd 'echo "Second append test" >> tmpfile105' # 二回目の追記
+# cmd 'echo "Third append test" >> tmpfile105'  # 三回目の追記
+# cmd 'cat tmpfile105'                          # 内容を表示
 
-# # =====================================================================
-# # Redirection tests: <<　未開放
-# # =====================================================================
+# # # =====================================================================
+# # # Redirection tests: <<
+# # # =====================================================================
 # cmd 'cat <<EOF > tmpfile4
 # line 1
 # line 2
 # EOF'                                  # ヒアドキュメントを使用してファイルに書き込み
 # cmd 'cat tmpfile4'                    # 内容を表示
+
+# =====================================================================
+# Pipe and Redirection tests: <
+# =====================================================================
+# cmd 'cat < README.md | grep "one"'      # ファイルから読み込み、grepでフィルタリング
+# cmd 'tr "a-z" "A-Z" < README.md | grep "ONE"'  # 小文字を大文字に変換してgrep
+# cmd 'head -n 10 < README.md | tail -n 5'    # 最初の10行から最後の5行を表示
+# cmd 'grep "one" < README.md | wc -l'    # 特定のパターンを含む行数をカウント
+# cmd 'sed "s/old/new/g" < README.md | grep "new"'  # 文字列を置換してgrep
+# cmd 'cut -d" " -f1 < README.md | sort | uniq'  # スペースで区切られた最初のフィールドを抽出してソートし、重複行を削除
+
+# =====================================================================
+# Pipe and Redirection tests: >
+# =====================================================================
+# cmd 'cat README.md > tmpfile1000 | ls'
+# cmd 'cat README.md > tmpfile1000 | pwd | cat -e'
+# cmd 'echo "test line" | cat > tmpfile1'      # パイプの出力をファイルに書き込み
+# cmd 'ls -l | grep "README" > tmpfile2'       # ディレクトリリストのフィルタリング結果をファイルに書き込み
+# cmd 'date | awk "{print \$1}" > tmpfile3'    # 日付の最初のフィールドをファイルに書き込み
+# cmd 'uname -a | cut -d" " -f1 > tmpfile4'    # システム情報の最初のフィールドをファイルに書き込み
+# cmd 'ps aux | head -n 5 > tmpfile5'          # プロセスリストの最初の5行をファイルに書き込み
+# cmd 'df -h | grep "/dev/sda1" > tmpfile6'    # ディスク使用量情報をファイルに書き込み
+# cmd 'who | sort > tmpfile7'                  # ログインユーザー情報をソートしてファイルに書き込み
+# cmd 'cat /etc/passwd | awk -F: "{print \$1}" > tmpfile8'  # ユーザー名を抽出してファイルに書き込み
+# cmd 'echo "Start of file" > tmpfile9'        # テキストを新規ファイルに書き込み
+# cmd 'echo "Another line" > tmpfile9'         # 上書き
+# cmd 'dmesg | tail -n 10 > tmpfile10'         # カーネルメッセージの最後の10行をファイルに書き込み
+# cmd 'cat /etc/hosts | grep "localhost" > tmpfile12'  # /etc/hosts ファイルから localhost エントリをファイルに書き込み
+
+
+# # =====================================================================
+# # Pipe and Redirection tests: >>
+# # =====================================================================
+# cmd 'cat README.md >> tmpfile1001 | uname >>tmpfile1001 -a | ls'
+# cmd 'cat README.md >> tmpfile1002 | pwd | cat -e'
+# cmd 'echo "appending line" | cat >> tmpfile1'  # パイプの出力をファイルに追記
+# cmd 'ls -a | grep "hidden" >> tmpfile3'        # ディレクトリリストのフィルタリング結果をファイルに追記
+
+# # =====================================================================
+# # Pipe and Redirection tests: <<
+# # =====================================================================
+# cmd 'cat <<EOF | grep "pattern" > tmpfile4
+# line 1
+# pattern line
+# EOF'                                          # ヒアドキュメントから読み込み、grepでフィルタリングしてファイルに書き込み
+
+# cmd 'cat <<EOF | sort > tmpfile5
+# banana
+# apple
+# cherry
+# EOF'                                          # ヒアドキュメントから読み込み、ソートしてファイルに書き込み
 
 # =====================================================================
 # # Built-in command tests　 未開放

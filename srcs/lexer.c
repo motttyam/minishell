@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yoshiminaoki <yoshiminaoki@student.42.f    +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 09:53:36 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/12 11:11:31 by yoshiminaok      ###   ########.fr       */
+/*   Updated: 2024/07/15 20:05:44 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,10 @@ void	get_word_token(t_token_lexer *lexer, char *line)
 			get_redirect_fd_token(lexer, line);
 			break ;
 		}
+		else if (lexer->in_quote == NORMAL && line[lexer->line_i] == '\\')
+		{
+			lexer->line_i++;
+		}
 		else if (lexer->in_quote == NORMAL && ft_strchr("|\n \t", line[lexer->line_i]))
 		{
 			// lexer->current->token[lexer->token_i] = '\0';
@@ -136,7 +140,8 @@ void	get_doublequote_token(t_token_lexer *lexer, char *line)
 		}
 		else if (line[lexer->line_i] == '\\')
 		{
-			get_tokenchar(lexer, line, lexer->current->token);
+			if (ft_strchr("\\`$",line[lexer->line_i + 1]))
+				lexer->line_i++;
 		}
 		else if (line[lexer->line_i] == '$')
 			lexer->current->type = QUOTE_EXPANDED;
