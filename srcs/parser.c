@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 08:53:11 by yoshiminaok       #+#    #+#             */
-/*   Updated: 2024/07/14 22:19:13 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/15 16:00:45 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,21 +31,21 @@ void	parse_token(t_token *ptr, t_fd saved_fd)
 	cmd.redirect_flag = 0;
 	cmd.fd = saved_fd;
 	parse_newline(&ptr, &cmd);
-	if (ptr->next == NULL && cmd.argv)
+	if (ptr == NULL && cmd.argv)
 	{
 		if (cmd.redirect_flag == 0)
 		{
-			fprintf(stderr, "command:%s\n", cmd.argv[0]);
+			// fprintf(stderr, "command:%s\n", cmd.argv[0]);
 			interpret(cmd.argv);
-			free_cmd(cmd.argv);
 		}
+		free_cmd(cmd.argv);
 	}
 }
 
 void	parse_newline(t_token **ptr, t_command *cmd)
 {
 	parse_pipe(ptr, cmd);
-	while (1)
+	while (*ptr)
 	{
 		if ((*ptr)->type == NEWLINE)
 		{
@@ -67,7 +67,7 @@ void	parse_newline(t_token **ptr, t_command *cmd)
 void	parse_pipe(t_token **ptr, t_command *cmd)
 {
 	parse_command(ptr, cmd);
-	while (1)
+	while (*ptr)
 	{
 		if ((*ptr)->type == PIPE)
 		{
@@ -104,26 +104,22 @@ void	parse_command(t_token **ptr, t_command *cmd)
 		handle_malloc_error();
 	while (i < size)
 	{
-		if (((*ptr)->type == INPUT_REDIRECTION || (*ptr)->type == HEREDOCUMENT
+		if (((*ptr)->type != INPUT_REDIRECTION && (*ptr)->type != HEREDOCUMENT
+				&& (*ptr)->type != OUTPUT_REDIRECTION
+				&& (*ptr)->type != OUTPUT_APPENDING))
+		{
+			cmd->argv[i] = ft_strdup((*ptr)->token);
+			if (!cmd->argv[i])
+				handle_malloc_error();
+			i++;
+			(*ptr) = (*ptr)->next;
+		}
+		while (((*ptr) && ((*ptr)->type == INPUT_REDIRECTION || (*ptr)->type == HEREDOCUMENT
 				|| (*ptr)->type == OUTPUT_REDIRECTION
-				|| (*ptr)->type == OUTPUT_APPENDING))
+				|| (*ptr)->type == OUTPUT_APPENDING)))
 		{
 			cmd->redirect_flag = redirect(ptr);
 		}
-		cmd->argv[i] = ft_strdup((*ptr)->token);
-		if (!cmd->argv[i])
-			handle_malloc_error();
-		i++;
-		if ((*ptr)->next)
-			(*ptr) = (*ptr)->next;
-	}
-	// printf("token:%s\ntype:%d\n", (*ptr)->token, (*ptr)->type);
-	if (((*ptr)->type == INPUT_REDIRECTION || (*ptr)->type == HEREDOCUMENT
-			|| (*ptr)->type == OUTPUT_REDIRECTION
-			|| (*ptr)->type == OUTPUT_APPENDING))
-	{
-		cmd->redirect_flag = redirect(ptr);
-		fprintf(stderr, "flag3: %d", cmd->redirect_flag);
 	}
 	cmd->argv[i] = NULL;
 }
@@ -140,6 +136,7 @@ int	get_argsize(t_token *ptr)
 		if (l->type == INPUT_REDIRECTION || l->type == HEREDOCUMENT
 			|| l->type == OUTPUT_REDIRECTION || l->type == OUTPUT_APPENDING)
 		{
+			// 後でValidateする別関数を作る
 			if (l->next == NULL)
 				fatal_error("is NULL after Redirect");
 			l = l->next;
@@ -154,7 +151,6 @@ int	get_argsize(t_token *ptr)
 			size++;
 		if (l->next == NULL)
 			break ;
-		// printf("hello\n");
 		l = l->next;
 	}
 	return (size);

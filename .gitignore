@@ -54,3 +54,4 @@ dkms.conf
 # それ以外
 sample.c
 tmp
+*.txt

@@ -25,14 +25,20 @@ $(LIBFT):
 all: $(NAME)
 
 clean:
-	$(RM) $(SRC:.c=.o) cmp out
+	$(RM) $(SRC:.c=.o) cmp out *.txt tmp*
 
 fclean: clean
 	$(RM) $(NAME)
 
 test: all
-	./tests/test.sh
+	./tests/test.sh assert
+
+mini: all
+	./tests/test.sh minishell
+
+bash: all
+	./tests/test.sh bash
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re mini bash
