@@ -6,33 +6,49 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 16:33:23 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/07/14 20:52:27 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/17 23:41:22 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-// int interpret (char *line)
-// {
-// 	extern char **environ;
-// 	char *argv[] = {line, NULL};
-// 	pid_t pid;
-// 	int wstatus;
+char *search_path(const char *line)
+{
+    char path[PATH_MAX];
+    char *value;
+    char *end;
 
-// 	pid = fork();
-// 	if (pid < 0)
-// 		fatal_error("fork");
-// 	else if (pid == 0)
-// 	{
-// 		execve(line, argv, environ);
-// 		fatal_error("execve");
-// 	}
-// 	else
-// 	{
-// 		wait(&wstatus);
-// 		return(WEXITSTATUS(wstatus));
-// 	}
-// }
+    value = getenv("PATH");
+    while(*value)
+    {
+        bzero(path, PATH_MAX);
+        end = strchr(value, ':');
+        if (end)
+            strncpy(path, value, end - value);
+        else
+            bzero(path, PATH_MAX);
+        ft_strlcat(path, "/", PATH_MAX);
+        ft_strlcat(path, line, PATH_MAX);
+        if (access(path, X_OK) == 0)
+        {
+            char *dup;
+
+            dup = strdup(path);
+            if (dup == NULL)
+                fatal_error("strdup");
+            // free(line);
+            return (dup);
+        }
+        if (end == NULL)
+        {
+            // free(line);
+            return (NULL);
+        }
+        value = end + 1;
+    }
+    // free(line);
+    return (NULL);
+}
 
 //parserのテスト用に書き換えて使ってます
 int interpret (char **argv)
