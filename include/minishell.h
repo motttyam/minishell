@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:19:56 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/17 22:12:02 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/18 20:34:49 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,10 @@ extern char	**environ;
 char		*rl_input(void);
 char		*search_path(const char *line);
 // int		interpret(char *line);
-int			interpret(char **cmd);
-void		pipe_and_execute(char **cmd);
+void		interpret (char **argv, int *count);
+void		do_child_process(char **argv);
+void		wait_for_all_process(int count);
+void		pipe_and_execute(char **cmd,int *count);
 void		reinit_fd(t_fd saved_fd);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:06:27 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/17 23:07:15 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/18 16:23:28 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,16 +44,14 @@ void hogehoge(t_var *tmp)
 
 int	main(void)
 {
-	t_var 			**varlist;
+	t_var 			*first;
 	char			*input;
 	t_token_lexer	lexer;
 	t_fd			saved_fd;
 
 	save_fd(&saved_fd);
-	get_envlist(varlist);
-
-	// // test for varlist
-
+	first = NULL;
+	get_envlist(&first);
 	while (1)
 	{
 		input = NULL;
@@ -61,7 +59,7 @@ int	main(void)
 		if (!input)
 			break ;
 		lex_token(&lexer, input);
-		parse_token(lexer.first, saved_fd, varlist);
+		parse_token(lexer.first, saved_fd, &first);
 		reinit_fd(saved_fd);
 	}
 	close_fd(saved_fd);

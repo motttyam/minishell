@@ -3,20 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 12:15:25 by yoshiminaok       #+#    #+#             */
-/*   Updated: 2024/07/14 21:28:12 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/18 20:36:34 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	pipe_and_execute(char **cmd)
+void	pipe_and_execute(char **cmd,int *count)
 {
 	int pipefd[2];
 	pid_t pid;
 
+	(*count)++;
 	if (pipe(pipefd) == -1)
 		fatal_error("pipe");
 	pid = fork();
@@ -27,13 +28,10 @@ void	pipe_and_execute(char **cmd)
 		dup2(pipefd[1], STDOUT_FILENO);
 		close(pipefd[1]);
 		close(pipefd[0]);
-		if (ft_strchr(cmd[0], '/') == NULL)
-			cmd[0] = search_path(cmd[0]);
-		execve(cmd[0], cmd, environ);
+		do_child_process(cmd);
 	}
 	else
 	{
-		waitpid(-1, NULL, 0);
 		dup2(pipefd[0], STDIN_FILENO);
 		close(pipefd[0]);
 		close(pipefd[1]);

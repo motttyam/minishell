@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execpath.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 16:33:23 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/07/17 23:41:22 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/18 20:36:28 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ char *search_path(const char *line)
     while(*value)
     {
         bzero(path, PATH_MAX);
-        end = strchr(value, ':');
+        end = ft_strchr(value, ':');
         if (end)
             strncpy(path, value, end - value);
         else
@@ -42,33 +42,75 @@ char *search_path(const char *line)
         if (end == NULL)
         {
             // free(line);
-            return (NULL);
+            return ((char *)line);
         }
         value = end + 1;
     }
     // free(line);
-    return (NULL);
+    return ((char *)line);
 }
 
 //parserのテスト用に書き換えて使ってます
-int interpret (char **argv)
+// int interpret (char **argv)
+// {
+// 	// extern char **environ;
+// 	pid_t pid;
+// 	// int wstatus;
+// 	if (ft_strchr(argv[0], '/') == NULL)
+// 		argv[0] = search_path(argv[0]); 
+// 	pid = fork();
+// 	if (pid < 0)
+// 		fatal_error("fork");
+// 	else if (pid == 0)
+// 	{
+// 		execve(argv[0], argv, environ);
+// 		fatal_error("execve");
+// 	}
+// 	else
+// 	{
+// 		waitpid(-1,NULL,0);
+// 		return(0);
+// 	}
+// }
+
+void interpret (char **argv, int *count)
 {
-	// extern char **environ;
-	pid_t pid;
-	// int wstatus;
-	if (ft_strchr(argv[0], '/') == NULL)
-		argv[0] = search_path(argv[0]); 
+	pid_t	pid;
+	
+	(*count)++;
 	pid = fork();
 	if (pid < 0)
 		fatal_error("fork");
 	else if (pid == 0)
+		do_child_process(argv);
+}
+
+void do_child_process(char **argv)
+{
+	if (ft_strchr(argv[0], '/'))
 	{
-		execve(argv[0], argv, environ);
-		fatal_error("execve");
+		if (access(argv[0],X_OK) == -1)
+			put_error_message(argv[0],0);
+		else
+			execve(argv[0], argv, environ);
 	}
 	else
 	{
+		argv[0] = search_path(argv[0]);
+		execve(argv[0], argv, environ);
+		put_error_message(argv[0], 1);
+		exit(1);
+	}
+}
+
+void wait_for_all_process(int count)
+{
+	int	i;
+
+	i = 0;
+	while(i < count)
+	{
 		waitpid(-1,NULL,0);
-		return(0);
+		i++;
 	}
 }
