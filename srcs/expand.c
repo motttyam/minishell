@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 16:43:42 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/17 23:33:33 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/18 16:24:43 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	expand_opt_env(char **argv, char *key_name, t_var **varlist)
 	{
 		// printf("keyname = %s\n", key_name);
 		// printf("opt->key = %s\n", opt->key);
-		if (!ft_strncmp(key_name, opt->key, ft_strlen(key_name)))
+		if (!ft_strncmp(key_name, opt->key, ft_strlen(key_name) + 1))
 			break ;
 		opt = opt->next;
 	}
