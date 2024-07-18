@@ -6,55 +6,56 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 08:53:11 by yoshiminaok       #+#    #+#             */
-/*   Updated: 2024/07/15 20:18:36 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/17 23:21:00 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	parse_token(t_token *ptr, t_fd saved_fd);
-void	parse_newline(t_token **ptr, t_command *cmd);
-void	parse_pipe(t_token **ptr, t_command *cmd);
-void	parse_redirect(t_token **ptr, t_command *cmd);
-void	parse_command(t_token **ptr, t_command *cmd);
+void	parse_token(t_token *ptr, t_fd saved_fd, t_var **varlist);
+void	parse_newline(t_token **ptr, t_parser *parser);
+void	parse_pipe(t_token **ptr, t_parser *parser);
+void	parse_redirect(t_token **ptr, t_parser *parser);
+void	parse_command(t_token **ptr, t_parser *parser);
 int		get_argsize(t_token *ptr);
-void	free_cmd(char **cmd);
+void	free_argv(char **argv);
 
-void	parse_token(t_token *ptr, t_fd saved_fd)
+void	parse_token(t_token *ptr, t_fd saved_fd, t_var **varlist)
 {
-	t_command	cmd;
+	t_parser	parser;
 
 	if (ptr == NULL)
 		return ;
-	cmd.argv = NULL;
-	cmd.count = 0;
-	cmd.redirect_flag = PIPE_AND_EXECVE;
-	cmd.fd = saved_fd;
-	parse_newline(&ptr, &cmd);
-	if (ptr == NULL && cmd.argv)
+	parser.argv = NULL;
+	parser.count = 0;
+	parser.redirect_flag = PIPE_AND_EXECVE;
+	parser.fd = saved_fd;
+	parser.varlist = varlist;
+	parse_newline(&ptr, &parser);
+	if (ptr == NULL && parser.argv)
 	{
-		if (cmd.redirect_flag != FILE_ERROR)
+		if (parser.redirect_flag != FILE_ERROR)
 		{
-			interpret(cmd.argv);
+			interpret(parser.argv);
 		}
-		free_cmd(cmd.argv);
+		free_argv(parser.argv);
 	}
 }
 
-void	parse_newline(t_token **ptr, t_command *cmd)
+void	parse_newline(t_token **ptr, t_parser *parser)
 {
-	parse_pipe(ptr, cmd);
+	parse_pipe(ptr, parser);
 	while (*ptr)
 	{
 		if ((*ptr)->type == NEWLINE)
 		{
-			if (cmd->argv)
+			if (parser->argv)
 			{
-				interpret(cmd->argv);
-				free_cmd(cmd->argv);
+				interpret(parser->argv);
+				free_argv(parser->argv);
 				*ptr = (*ptr)->next;
 			}
-			parse_pipe(ptr, cmd);
+			parse_pipe(ptr, parser);
 		}
 		else
 		{
@@ -63,30 +64,30 @@ void	parse_newline(t_token **ptr, t_command *cmd)
 	}
 }
 
-void	parse_pipe(t_token **ptr, t_command *cmd)
+void	parse_pipe(t_token **ptr, t_parser *parser)
 {
-	parse_command(ptr, cmd);
+	parse_command(ptr, parser);
 	while (*ptr)
 	{
 		if ((*ptr)->type == PIPE)
 		{
-			if (cmd->redirect_flag == PIPE_AND_EXECVE)
+			if (parser->redirect_flag == PIPE_AND_EXECVE)
 			{
-				pipe_and_execute(cmd->argv);
+				pipe_and_execute(parser->argv);
 				//  wait関数のためにカウント
-				cmd->count++;
+				parser->count++;
 			}
-			else if (cmd->redirect_flag == EXECVE_ONLY)
+			else if (parser->redirect_flag == EXECVE_ONLY)
 			{
-				interpret(cmd->argv);
-				cmd->redirect_flag = PIPE_AND_EXECVE;
-				reinit_fd(cmd->fd);
+				interpret(parser->argv);
+				parser->redirect_flag = PIPE_AND_EXECVE;
+				reinit_fd(parser->fd);
 			}
-			else if (cmd->redirect_flag == FILE_ERROR)
-				cmd->redirect_flag = PIPE_AND_EXECVE;
-			free_cmd(cmd->argv);
+			else if (parser->redirect_flag == FILE_ERROR)
+				parser->redirect_flag = PIPE_AND_EXECVE;
+			free_argv(parser->argv);
 			*ptr = (*ptr)->next;
-			parse_command(ptr, cmd);
+			parse_command(ptr, parser);
 		}
 		else
 		{
@@ -95,7 +96,7 @@ void	parse_pipe(t_token **ptr, t_command *cmd)
 	}
 }
 
-void	parse_command(t_token **ptr, t_command *cmd)
+void	parse_command(t_token **ptr, t_parser *parser)
 {
 	int	size;
 	int	i;
@@ -103,8 +104,8 @@ void	parse_command(t_token **ptr, t_command *cmd)
 	size = get_argsize(*ptr);
 	// printf("size:%d\n", size);
 	i = 0;
-	cmd->argv = (char **)malloc(sizeof(char *) * (size + 1));
-	if (!cmd->argv)
+	parser->argv = (char **)malloc(sizeof(char *) * (size + 1));
+	if (!parser->argv)
 		handle_malloc_error();
 	while (i < size)
 	{
@@ -112,8 +113,16 @@ void	parse_command(t_token **ptr, t_command *cmd)
 				&& (*ptr)->type != OUTPUT_REDIRECTION
 				&& (*ptr)->type != OUTPUT_APPENDING))
 		{
-			cmd->argv[i] = ft_strdup((*ptr)->token);
-			if (!cmd->argv[i])
+			if ((*ptr)->type == WORD_EXPANDED || (*ptr)->type == QUOTE_EXPANDED)
+			{
+				parser->argv[i] = get_expanded_argv((*ptr)->token,
+						parser->varlist);
+			}
+			else
+			{
+				parser->argv[i] = ft_strdup((*ptr)->token);
+			}
+			if (!parser->argv[i])
 				handle_malloc_error();
 			i++;
 			(*ptr) = (*ptr)->next;
@@ -124,11 +133,11 @@ void	parse_command(t_token **ptr, t_command *cmd)
 					|| (*ptr)->type == OUTPUT_APPENDING)))
 		{
 			if ((*ptr)->type == HEREDOCUMENT)
-				reinit_fd(cmd->fd);
-			cmd->redirect_flag = redirect(ptr);
+				reinit_fd(parser->fd);
+			parser->redirect_flag = redirect(ptr);
 		}
 	}
-	cmd->argv[i] = NULL;
+	parser->argv[i] = NULL;
 }
 
 int	get_argsize(t_token *ptr)
@@ -163,15 +172,15 @@ int	get_argsize(t_token *ptr)
 	return (size);
 }
 
-void	free_cmd(char **cmd)
+void	free_argv(char **argv)
 {
 	int	i;
 
 	i = 0;
-	while (cmd[i])
+	while (argv[i])
 	{
-		free(cmd[i]);
+		free(argv[i]);
 		i++;
 	}
-	free(cmd);
+	free(argv);
 }

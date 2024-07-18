@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:06:27 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/14 22:05:59 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/17 23:07:15 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,27 @@ void close_fd(t_fd saved_fd)
 	close(saved_fd.saved_stderr);
 }
 
+void hogehoge(t_var *tmp)
+{
+	while (tmp)
+	{
+		fprintf(stderr, "key: %s\nvalue: %s\n\n", tmp->key,tmp->value);
+		tmp = tmp->next;
+	}
+}
+
 int	main(void)
 {
+	t_var 			**varlist;
 	char			*input;
 	t_token_lexer	lexer;
 	t_fd			saved_fd;
 
 	save_fd(&saved_fd);
+	get_envlist(varlist);
+
+	// // test for varlist
+
 	while (1)
 	{
 		input = NULL;
@@ -47,7 +61,7 @@ int	main(void)
 		if (!input)
 			break ;
 		lex_token(&lexer, input);
-		parse_token(lexer.first, saved_fd);
+		parse_token(lexer.first, saved_fd, varlist);
 		reinit_fd(saved_fd);
 	}
 	close_fd(saved_fd);
