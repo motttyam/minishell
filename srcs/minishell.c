@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:06:27 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/18 16:23:28 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/07/18 23:26:01 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+# include <readline/readline.h>
+# include <readline/history.h>
 
 void	save_fd(t_fd *saved_fd)
 {
@@ -33,12 +35,14 @@ void close_fd(t_fd saved_fd)
 	close(saved_fd.saved_stderr);
 }
 
-void hogehoge(t_var *tmp)
+void handle_signal(int signal)
 {
-	while (tmp)
+	if (signal == SIGINT)
 	{
-		fprintf(stderr, "key: %s\nvalue: %s\n\n", tmp->key,tmp->value);
-		tmp = tmp->next;
+		rl_on_new_line();
+		write(STDOUT_FILENO, "\n", 1);
+		rl_replace_line("", 0);
+		rl_redisplay();
 	}
 }
 
@@ -49,6 +53,8 @@ int	main(void)
 	t_token_lexer	lexer;
 	t_fd			saved_fd;
 
+	signal(SIGINT, handle_signal);
+	signal(SIGQUIT, SIG_IGN);
 	save_fd(&saved_fd);
 	first = NULL;
 	get_envlist(&first);
