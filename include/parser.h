@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 13:04:47 by yoshiminaok       #+#    #+#             */
-/*   Updated: 2024/07/17 23:18:28 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/20 14:43:26 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ typedef struct s_parser
 	char	**argv;
 	int		count;
 	int		redirect_flag;
-	t_var	**varlist;
+	t_var	**list;
 	t_fd	fd;
 }			t_parser;
 

@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 22:31:54 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/07/15 20:16:53 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/20 14:35:19 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,8 @@ int	heredoc(t_token **ptr)
 	while (1)
 	{
 		line = readline("> ");
-		if (!line || !ft_strncmp(line, (*ptr)->token, ft_strlen((*ptr)->token)+1))
+		if (!line || !ft_strncmp(line, (*ptr)->token, ft_strlen((*ptr)->token)
+				+ 1))
 			break ;
 		if (buf == NULL)
 		{

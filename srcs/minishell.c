@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:06:27 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/18 23:39:09 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/20 14:34:42 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,14 +70,3 @@ int	main(void)
 	ft_putendl_fd("exit", 2);
 	return (0);
 }
-
-// t_token *l; // テスト用である理解をしている
-// /*tokenの確認*/
-// l = lexer.first;
-// int i = 1;
-// while (l)
-// {
-// 	printf("token%d = {%s,type%d}\n",i, l->token, l->type);
-// 	l = l->next;
-// 	i++;
-// }

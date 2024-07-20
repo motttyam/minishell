@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 09:53:36 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/18 23:45:26 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/20 14:35:31 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,8 @@ void	get_word_token(t_token_lexer *lexer, char *line)
 		}
 		else if (lexer->in_quote == NORMAL && line[lexer->line_i] == '$')
 			lexer->current->type = WORD_EXPANDED;
-		else if (lexer->in_quote == NORMAL && ft_strchr("<>", line[lexer->line_i]))
+		else if (lexer->in_quote == NORMAL && ft_strchr("<>",
+				line[lexer->line_i]))
 		{
 			get_redirect_fd_token(lexer, line);
 			break ;
@@ -116,7 +117,8 @@ void	get_word_token(t_token_lexer *lexer, char *line)
 		{
 			lexer->line_i++;
 		}
-		else if (lexer->in_quote == NORMAL && ft_strchr("|\n \t", line[lexer->line_i]))
+		else if (lexer->in_quote == NORMAL && ft_strchr("|\n \t",
+				line[lexer->line_i]))
 		{
 			// lexer->current->token[lexer->token_i] = '\0';
 			break ;
@@ -140,7 +142,7 @@ void	get_doublequote_token(t_token_lexer *lexer, char *line)
 		}
 		else if (line[lexer->line_i] == '\\')
 		{
-			if (ft_strchr("\\`$",line[lexer->line_i + 1]))
+			if (ft_strchr("\\`$", line[lexer->line_i + 1]))
 				lexer->line_i++;
 		}
 		else if (line[lexer->line_i] == '$')
@@ -154,7 +156,7 @@ void	get_doublequote_token(t_token_lexer *lexer, char *line)
 
 void	get_redirect_fd_token(t_token_lexer *lexer, char *line)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < lexer->token_i)
