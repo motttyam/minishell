@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 16:50:06 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/07/20 17:42:57 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/20 18:46:59 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static int	ft_argvlen(char **argv)
+int	ft_argvlen(char **argv)
 {
 	int	i;
 
