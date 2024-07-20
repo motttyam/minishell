@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 16:33:23 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/07/20 16:37:14 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/20 17:46:43 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,9 @@ char	**list_to_environ(t_var **list)
 	head = *list;
 	while (head)
 	{
+		if (head->value != NULL)
+			i++;
 		head = head->next;
-		i++;
 	}
 	env = (char **)malloc(sizeof(char *) * (i + 1));
 	if (!env)
@@ -36,12 +37,15 @@ char	**list_to_environ(t_var **list)
 	head = *list;
 	while (head)
 	{
-		*env = ft_strjoin(head->key, "=");
-		tmp = *env;
-		*env = ft_strjoin(*env, head->value);
-		free(tmp);
+		if (head->value != NULL)
+		{
+			*env = ft_strjoin(head->key, "=");
+			tmp = *env;
+			*env = ft_strjoin(*env, head->value);
+			free(tmp);
+			env++;
+		}
 		head = head->next;
-		env++;
 	}
 	*env = NULL;
 	return (top);
@@ -107,16 +111,17 @@ int	exec_builtin(char **argv, t_var **list)
 	{
 		return (0);
 	}
-	else if (ft_strncmp(argv[0], "export", 7) == 0)
-	{
-		return (0);
-	}
+	// else if (ft_strncmp(argv[0], "export", 7) == 0)
+	// {
+	// 	return (0);
+	// }
 	else if (ft_strncmp(argv[0], "unset", 6) == 0)
 	{
 		return (0);
 	}
 	else if (ft_strncmp(argv[0], "env", 4) == 0)
 	{
+		exec_env(argv, list);
 		return (0);
 	}
 	else if (ft_strncmp(argv[0], "exit", 5) == 0)
@@ -138,7 +143,7 @@ void	do_child_process(char **argv, t_var **list)
 	else
 	{
 		if (exec_builtin(argv, list) != -1)
-			return ;
+			exit(1);
 		argv[0] = search_path(argv[0]);
 		execve(argv[0], argv, list_to_environ(list));
 		put_error_message(argv[0], 1);
