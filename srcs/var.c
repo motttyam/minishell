@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 23:38:42 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/07/20 15:17:32 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/20 18:47:44 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ t_var	*get_new_var(int i, char **environ)
 	t_var	*new;
 	int		j;
 	int		value_start;
-
+	
 	j = 0;
 	new = (t_var *)malloc(sizeof(t_var));
 	while (environ[i][j] != '=')

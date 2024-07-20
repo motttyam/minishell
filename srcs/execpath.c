@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 16:33:23 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/07/20 17:46:43 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/20 19:12:25 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,18 +85,6 @@ char	*search_path(const char *line)
 	return ((char *)line);
 }
 
-void	interpret(char **argv, int *count, t_var **list)
-{
-	pid_t	pid;
-
-	(*count)++;
-	pid = fork();
-	if (pid < 0)
-		fatal_error("fork");
-	else if (pid == 0)
-		do_child_process(argv, list);
-}
-
 int	exec_builtin(char **argv, t_var **list)
 {
 	if (ft_strncmp(argv[0], "echo", 5) == 0)
@@ -111,12 +99,13 @@ int	exec_builtin(char **argv, t_var **list)
 	{
 		return (0);
 	}
-	// else if (ft_strncmp(argv[0], "export", 7) == 0)
-	// {
-	// 	return (0);
-	// }
+	else if (ft_strncmp(argv[0], "export", 7) == 0)
+	{
+		return (0);
+	}
 	else if (ft_strncmp(argv[0], "unset", 6) == 0)
 	{
+		exec_unset(argv, list);
 		return (0);
 	}
 	else if (ft_strncmp(argv[0], "env", 4) == 0)
@@ -131,6 +120,21 @@ int	exec_builtin(char **argv, t_var **list)
 	return (-1);
 }
 
+void	interpret(char **argv, int *count, t_var **list)
+{
+	pid_t	pid;
+
+	(*count)++;
+	if (exec_builtin(argv, list) != -1)
+		return ;
+	pid = fork();
+	if (pid < 0)
+		fatal_error("fork");
+	else if (pid == 0)
+		do_child_process(argv, list);
+}
+
+
 void	do_child_process(char **argv, t_var **list)
 {
 	if (ft_strchr(argv[0], '/'))
@@ -142,8 +146,6 @@ void	do_child_process(char **argv, t_var **list)
 	}
 	else
 	{
-		if (exec_builtin(argv, list) != -1)
-			exit(1);
 		argv[0] = search_path(argv[0]);
 		execve(argv[0], argv, list_to_environ(list));
 		put_error_message(argv[0], 1);
