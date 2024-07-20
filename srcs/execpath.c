@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 16:33:23 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/07/20 15:16:08 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/20 15:27:51 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,13 @@ char **list_to_environ(t_var **list)
 	t_var *head;
 	int i;
 	char **env;
+	char **top;
 	char *tmp;
 
 	if(!list || !*list)
 		return (NULL);
 	i = 0;
+	
 	head = *list;
 	while (head)
 	{
@@ -31,7 +33,7 @@ char **list_to_environ(t_var **list)
 	env = (char **)malloc(sizeof(char *) * (i + 1));
 	if (!env)
 		handle_malloc_error();
-	
+	top = env;
 	head = *list;
 	while(head)
 	{
@@ -43,7 +45,7 @@ char **list_to_environ(t_var **list)
 		env++;
 	}
 	*env = NULL;
-	return (env);
+	return (top);
 }
 
 char	*search_path(const char *line)
