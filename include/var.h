@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   var.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:59:31 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/17 23:00:24 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/20 21:14:01 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,5 +28,7 @@ typedef enum s_var_state
 }					t_var_state;
 
 void	get_envlist(t_var **list);
+t_var	*get_new_var(int i, char **environ);
+void	add_last_newvar(t_var *first, t_var *new);
 
 #endif
