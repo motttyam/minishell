@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 09:53:36 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/15 20:05:44 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/18 23:45:26 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ void	get_redirect_token(t_token_lexer *lexer, char *line)
 void	get_newline_token(t_token_lexer *lexer, char *line)
 {
 	get_tokenchar(lexer, line, lexer->current->token);
-	lexer->current->type = NEWLINE;
+	lexer->current->type = TK_NEWLINE;
 }
 
 void	get_word_token(t_token_lexer *lexer, char *line)

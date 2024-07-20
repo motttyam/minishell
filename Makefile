@@ -8,7 +8,8 @@ SRC_DIR = srcs
 SRC = $(wildcard $(SRC_DIR)/*.c)
 LIBFT_DIR = ./libft
 LIBFT = $(LIBFT_DIR)/libft.a
-INCLUDES = -I$(LIBFT_DIR)
+READLINE_DIR = $(shell brew --prefix readline)
+INCLUDES = -I$(LIBFT_DIR) -L $(RLDIR)/lib -I $(RLDIR)/include
 OBJ = $(SRC:.c=.o)
 
 RM = rm -rf
