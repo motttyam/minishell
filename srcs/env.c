@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 16:50:06 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/07/20 18:46:59 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/07/20 21:34:31 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ void	exec_env(char **argv, t_var **list)
 	char	**env;
 
 	i = 1;
+
+    // permissonがないときもあるかも
 	if (ft_argvlen(argv) >= 2)
 	{
 		ft_putstr_fd("env: '", 2);
