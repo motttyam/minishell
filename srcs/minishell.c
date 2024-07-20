@@ -6,13 +6,11 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:06:27 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/18 23:26:01 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/18 23:39:09 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-# include <readline/readline.h>
-# include <readline/history.h>
 
 void	save_fd(t_fd *saved_fd)
 {
@@ -28,14 +26,14 @@ void	reinit_fd(t_fd saved_fd)
 	dup2(saved_fd.saved_stderr, STDERR_FILENO);
 }
 
-void close_fd(t_fd saved_fd)
+void	close_fd(t_fd saved_fd)
 {
 	close(saved_fd.saved_stdin);
 	close(saved_fd.saved_stdout);
 	close(saved_fd.saved_stderr);
 }
 
-void handle_signal(int signal)
+void	handle_signal(int signal)
 {
 	if (signal == SIGINT)
 	{
@@ -48,7 +46,7 @@ void handle_signal(int signal)
 
 int	main(void)
 {
-	t_var 			*first;
+	t_var			*first;
 	char			*input;
 	t_token_lexer	lexer;
 	t_fd			saved_fd;

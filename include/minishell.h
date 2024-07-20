@@ -6,12 +6,16 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:19:56 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/18 23:19:05 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/18 23:39:50 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+# include <stdio.h>
+# include <stdlib.h>
+# include <signal.h>
+# include <unistd.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "error.h"
@@ -23,13 +27,9 @@
 # include <fcntl.h>
 # include <limits.h>
 // # include <linux/limits.h>
-# include <signal.h>
-# include <stdio.h>
-# include <stdlib.h>
 # include <string.h>
 # include <sys/stat.h>
 # include <sys/wait.h>
-# include <unistd.h>
 
 # define PROMPT "minshell $ "
 

@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 09:26:24 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/17 22:08:36 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/18 23:38:08 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ typedef enum e_token_type
 	HEREDOCUMENT,
 	OUTPUT_REDIRECTION,
 	OUTPUT_APPENDING,
-	NEWLINE,
+	TK_NEWLINE,
 }					token_type;
 
 typedef enum e_lexer_state
