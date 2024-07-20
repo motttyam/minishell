@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 12:15:25 by yoshiminaok       #+#    #+#             */
-/*   Updated: 2024/07/18 20:36:34 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/07/20 14:48:03 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	pipe_and_execute(char **cmd,int *count)
+void	pipe_and_execute(char **cmd, int *count, t_var **list)
 {
 	int pipefd[2];
 	pid_t pid;
@@ -28,7 +28,7 @@ void	pipe_and_execute(char **cmd,int *count)
 		dup2(pipefd[1], STDOUT_FILENO);
 		close(pipefd[1]);
 		close(pipefd[0]);
-		do_child_process(cmd);
+		do_child_process(cmd, list);
 	}
 	else
 	{

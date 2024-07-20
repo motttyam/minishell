@@ -9,7 +9,7 @@ SRC = $(wildcard $(SRC_DIR)/*.c)
 LIBFT_DIR = ./libft
 LIBFT = $(LIBFT_DIR)/libft.a
 READLINE_DIR = $(shell brew --prefix readline)
-INCLUDES = -I$(LIBFT_DIR) -L $(RLDIR)/lib -I $(RLDIR)/include
+INCLUDES = -I$(LIBFT_DIR) -I $(RLDIR)/include
 OBJ = $(SRC:.c=.o)
 
 RM = rm -rf

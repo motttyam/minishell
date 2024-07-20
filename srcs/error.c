@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 23:12:26 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/18 19:53:13 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/07/20 14:35:39 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,11 @@ void	handle_malloc_error(void)
 
 void	quote_error(void)
 {
-	ft_putendl_fd("Quotation mark not closed.",2);
+	ft_putendl_fd("Quotation mark not closed.", 2);
 	exit(1);
 }
 
-void put_error_message(char *argv, int flag)
+void	put_error_message(char *argv, int flag)
 {
 	write(2, "minishell: ", 11);
 	write(2, argv, ft_strlen(argv));

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 16:43:42 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/18 16:24:43 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/07/20 14:35:34 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,8 @@ char	*get_keyname(char *token, int *i)
 
 void	expand_opt_env(char **argv, char *key_name, t_var **varlist)
 {
-	t_var *opt;
-	char *tmp;
+	t_var	*opt;
+	char	*tmp;
 
 	opt = *varlist;
 	while (opt)

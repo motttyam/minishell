@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 08:53:11 by yoshiminaok       #+#    #+#             */
-/*   Updated: 2024/07/18 20:35:35 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/07/20 14:47:38 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,13 @@ void	parse_token(t_token *ptr, t_fd saved_fd, t_var **varlist)
 	parser.count = 0;
 	parser.redirect_flag = PIPE_AND_EXECVE;
 	parser.fd = saved_fd;
-	parser.varlist = varlist;
+	parser.list = varlist;
 	parse_newline(&ptr, &parser);
 	if (ptr == NULL && parser.argv)
 	{
 		if (parser.redirect_flag != FILE_ERROR)
 		{
-			interpret(parser.argv,&parser.count);
+			interpret(parser.argv, &parser.count, parser.list);
 		}
 		free_argv(parser.argv);
 		wait_for_all_process(parser.count);
@@ -52,7 +52,7 @@ void	parse_newline(t_token **ptr, t_parser *parser)
 		{
 			if (parser->argv)
 			{
-				interpret(parser->argv,&parser->count);
+				interpret(parser->argv, &parser->count, parser->list);
 				free_argv(parser->argv);
 				*ptr = (*ptr)->next;
 			}
@@ -74,13 +74,13 @@ void	parse_pipe(t_token **ptr, t_parser *parser)
 		{
 			if (parser->redirect_flag == PIPE_AND_EXECVE)
 			{
-				pipe_and_execute(parser->argv,&parser->count);
+				pipe_and_execute(parser->argv, &parser->count, parser->list);
 				//  wait関数のためにカウント
 				// parser->count++;
 			}
 			else if (parser->redirect_flag == EXECVE_ONLY)
 			{
-				interpret(parser->argv,&parser->count);
+				interpret(parser->argv, &parser->count, parser->list);
 				parser->redirect_flag = PIPE_AND_EXECVE;
 				reinit_fd(parser->fd);
 			}
@@ -117,7 +117,7 @@ void	parse_command(t_token **ptr, t_parser *parser)
 			if ((*ptr)->type == WORD_EXPANDED || (*ptr)->type == QUOTE_EXPANDED)
 			{
 				parser->argv[i] = get_expanded_argv((*ptr)->token,
-						parser->varlist);
+						parser->list);
 			}
 			else
 			{
