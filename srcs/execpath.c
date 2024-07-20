@@ -6,24 +6,23 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 16:33:23 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/07/20 15:27:51 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/20 16:37:14 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-char **list_to_environ(t_var **list)
+char	**list_to_environ(t_var **list)
 {
-	t_var *head;
-	int i;
-	char **env;
-	char **top;
-	char *tmp;
+	t_var	*head;
+	int		i;
+	char	**env;
+	char	**top;
+	char	*tmp;
 
-	if(!list || !*list)
+	if (!list || !*list)
 		return (NULL);
 	i = 0;
-	
 	head = *list;
 	while (head)
 	{
@@ -35,7 +34,7 @@ char **list_to_environ(t_var **list)
 		handle_malloc_error();
 	top = env;
 	head = *list;
-	while(head)
+	while (head)
 	{
 		*env = ft_strjoin(head->key, "=");
 		tmp = *env;
@@ -94,6 +93,39 @@ void	interpret(char **argv, int *count, t_var **list)
 		do_child_process(argv, list);
 }
 
+int	exec_builtin(char **argv, t_var **list)
+{
+	if (ft_strncmp(argv[0], "echo", 5) == 0)
+	{
+		return (0);
+	}
+	else if (ft_strncmp(argv[0], "cd", 3) == 0)
+	{
+		return (0);
+	}
+	else if (ft_strncmp(argv[0], "pwd", 4) == 0)
+	{
+		return (0);
+	}
+	else if (ft_strncmp(argv[0], "export", 7) == 0)
+	{
+		return (0);
+	}
+	else if (ft_strncmp(argv[0], "unset", 6) == 0)
+	{
+		return (0);
+	}
+	else if (ft_strncmp(argv[0], "env", 4) == 0)
+	{
+		return (0);
+	}
+	else if (ft_strncmp(argv[0], "exit", 5) == 0)
+	{
+		return (0);
+	}
+	return (-1);
+}
+
 void	do_child_process(char **argv, t_var **list)
 {
 	if (ft_strchr(argv[0], '/'))
@@ -105,6 +137,8 @@ void	do_child_process(char **argv, t_var **list)
 	}
 	else
 	{
+		if (exec_builtin(argv, list) != -1)
+			return ;
 		argv[0] = search_path(argv[0]);
 		execve(argv[0], argv, list_to_environ(list));
 		put_error_message(argv[0], 1);

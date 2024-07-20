@@ -6,17 +6,18 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:19:56 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/20 15:17:52 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/20 16:39:13 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+# include "builtin.h"
 # include "error.h"
 # include "lexer.h"
 # include "libft.h"
-# include "var.h"
 # include "parser.h"
+# include "var.h"
 # include <errno.h>
 # include <fcntl.h>
 # include <limits.h>
