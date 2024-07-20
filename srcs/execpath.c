@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execpath.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 16:33:23 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/07/20 19:12:25 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/20 19:49:33 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ int	exec_builtin(char **argv, t_var **list)
 	}
 	else if (ft_strncmp(argv[0], "pwd", 4) == 0)
 	{
+		exec_pwd(list);
 		return (0);
 	}
 	else if (ft_strncmp(argv[0], "export", 7) == 0)
