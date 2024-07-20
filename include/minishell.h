@@ -6,18 +6,18 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:19:56 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/20 16:39:13 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/20 17:47:33 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
-# include "builtin.h"
 # include "error.h"
 # include "lexer.h"
 # include "libft.h"
-# include "parser.h"
 # include "var.h"
+# include "builtin.h"
+# include "parser.h"
 # include <errno.h>
 # include <fcntl.h>
 # include <limits.h>
@@ -45,6 +45,7 @@ extern t_signal_state	g_signal;
 char					*rl_input(void);
 char					*search_path(const char *line);
 // int		interpret(char *line);
+char					**list_to_environ(t_var **list);
 void					interpret(char **argv, int *count, t_var **list);
 void					do_child_process(char **argv, t_var **list);
 void					wait_for_all_process(int count);
