@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 08:53:11 by yoshiminaok       #+#    #+#             */
-/*   Updated: 2024/07/20 14:47:38 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/22 23:05:44 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	parse_newline(t_token **ptr, t_parser *parser)
 	parse_pipe(ptr, parser);
 	while (*ptr)
 	{
-		if ((*ptr)->type == NEWLINE)
+		if ((*ptr)->type == TK_NEWLINE)
 		{
 			if (parser->argv)
 			{
@@ -148,7 +148,7 @@ int	get_argsize(t_token *ptr)
 
 	l = ptr;
 	size = 0;
-	while (l->type != PIPE && l->type != NEWLINE)
+	while (l->type != PIPE && l->type != TK_NEWLINE)
 	{
 		if (l->type == INPUT_REDIRECTION || l->type == HEREDOCUMENT
 			|| l->type == OUTPUT_REDIRECTION || l->type == OUTPUT_APPENDING)
