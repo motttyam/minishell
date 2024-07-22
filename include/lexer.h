@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 09:26:24 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/18 23:38:08 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/22 22:36:12 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ typedef enum e_token_type
 {
 	WORD = 0,
 	WORD_EXPANDED,
-	QUOTE,
+	SINGLE_QUOTE,
+	DOUBLE_QUOTE,
 	QUOTE_EXPANDED,
 	PIPE,
 	INPUT_REDIRECTION,
