@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 19:38:44 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/22 19:57:22 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/07/22 23:15:45 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,12 @@ void exec_pwd(t_var    **list)
     if (dir)
         ft_putendl_fd(dir,1);
     else
-        ft_putendl_fd(getcwd(dir,PATH_MAX),1);
+    {   
+        if ((getcwd(dir, PATH_MAX) != NULL))
+            ft_putendl_fd(getcwd(dir,PATH_MAX),1);
+        else
+            perror("getcwd() error");
+    }
 }
 
 char *ft_getenv(t_var    **list,char *key_name)
