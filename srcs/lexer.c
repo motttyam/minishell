@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 09:53:36 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/20 14:35:31 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/22 22:37:36 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ void	get_word_token(t_token_lexer *lexer, char *line)
 	{
 		if (lexer->in_quote == SINGLE_QUOTED && line[lexer->line_i] == '\'')
 		{
+			lexer->current->type = SINGLE_QUOTE;
 			lexer->line_i++;
 			lexer->in_quote = NORMAL;
 		}
@@ -132,6 +133,7 @@ void	get_word_token(t_token_lexer *lexer, char *line)
 void	get_doublequote_token(t_token_lexer *lexer, char *line)
 {
 	lexer->in_quote = DOUBLE_QUOTED;
+	lexer->current->type = DOUBLE_QUOTE;
 	lexer->line_i++;
 	while (line[lexer->line_i])
 	{
