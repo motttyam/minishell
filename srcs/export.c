@@ -6,7 +6,7 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 16:31:39 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/22 16:59:21 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/07/23 23:23:20 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,12 +185,13 @@ t_var	*export_new_var(char *newkey,char *newvalue)
 {
 	t_var	*new;
 	int		j;
-	int		value_start;
 	
 	j = 0;
 	new = (t_var *)malloc(sizeof(t_var));
     if (!new)
+    {
         fatal_error("malloc");
+    }
 	new->key = newkey;
 	new->value = newvalue;
 	new->next = NULL;

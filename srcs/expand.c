@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 16:43:42 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/20 14:35:34 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/23 22:10:15 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ char	*get_expanded_argv(char *token, t_var **varlist)
 		}
 		i++;
 	}
-	printf("argv = %s", argv);
 	return (argv);
 }
 

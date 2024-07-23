@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 22:31:54 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/07/20 14:35:19 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/23 23:27:25 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 int	input_redirect(t_token **ptr);
 int	heredoc(t_token **ptr);
+int	save_heredoc(t_token *input);
 int	output_redirect(t_token **ptr);
 int	output_append(t_token **ptr);
 
@@ -28,7 +29,9 @@ int	redirect(t_token **ptr)
 	}
 	else if ((*ptr)->type == HEREDOCUMENT)
 	{
-		heredoc(ptr);
+		(*ptr) = (*ptr)->next;
+		save_heredoc((*ptr));
+		(*ptr) = (*ptr)->next;
 	}
 	else if ((*ptr)->type == OUTPUT_REDIRECTION)
 	{
@@ -61,7 +64,7 @@ int	input_redirect(t_token **ptr)
 	return (PIPE_AND_EXECVE);
 }
 
-int	save_heredoc(char *buf)
+int	save_heredoc(t_token *input)
 {
 	int		pipefd[2];
 	pid_t	pid;
@@ -75,7 +78,7 @@ int	save_heredoc(char *buf)
 	{
 		if (close(pipefd[0]) == -1)
 			fatal_error("close");
-		write(pipefd[1], buf, ft_strlen(buf));
+		write(pipefd[1], input->token, ft_strlen(input->token));
 		exit(0);
 	}
 	else
@@ -87,47 +90,8 @@ int	save_heredoc(char *buf)
 			fatal_error("dup2");
 		if (close(pipefd[0]) == -1)
 			fatal_error("close");
-		free(buf);
 	}
 	return (0);
-}
-
-int	heredoc(t_token **ptr)
-{
-	char	*buf;
-	char	*line;
-	char	*tmp;
-
-	(*ptr) = (*ptr)->next;
-	buf = NULL;
-	while (1)
-	{
-		line = readline("> ");
-		if (!line || !ft_strncmp(line, (*ptr)->token, ft_strlen((*ptr)->token)
-				+ 1))
-			break ;
-		if (buf == NULL)
-		{
-			buf = ft_strdup(line);
-			tmp = buf;
-			buf = ft_strjoin(buf, "\n");
-			free(tmp);
-		}
-		else
-		{
-			tmp = buf;
-			buf = ft_strjoin(buf, line);
-			free(tmp);
-			tmp = buf;
-			buf = ft_strjoin(buf, "\n");
-			free(tmp);
-		}
-		fprintf(stderr, "line: %s\n", line);
-		free(line);
-	}
-	save_heredoc(buf);
-	(*ptr) = (*ptr)->next;
-	return (PIPE_AND_EXECVE);
 }
 
 int	output_redirect(t_token **ptr)
@@ -148,7 +112,6 @@ int	output_redirect(t_token **ptr)
 	(*ptr) = (*ptr)->next;
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
-	fprintf(stderr, "flag: %d\n", 0);
 	return (EXECVE_ONLY);
 }
 
@@ -170,6 +133,5 @@ int	output_append(t_token **ptr)
 	(*ptr) = (*ptr)->next;
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
-	fprintf(stderr, "flag: %d\n", 0);
 	return (EXECVE_ONLY);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:19:56 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/22 23:04:15 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/23 22:11:39 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,11 @@
 # include "var.h"
 # include "builtin.h"
 # include "parser.h"
+# include "support.h"
 # include <errno.h>
 # include <fcntl.h>
 # include <limits.h>
-// # include <linux/limits.h>
+# include <linux/limits.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>
@@ -51,5 +52,6 @@ void					do_child_process(char **argv, t_var **list);
 void					wait_for_all_process(int count);
 void					pipe_and_execute(char **cmd, int *count, t_var **list);
 void					reinit_fd(t_fd saved_fd);
+void					check_heredoc_token(t_token *token, t_var **list);
 
 #endif
