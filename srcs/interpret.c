@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execpath.c                                         :+:      :+:    :+:   */
+/*   interpret.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 16:33:23 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/07/24 21:48:22 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/07/24 23:56:37 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ char	*search_path(const char *line)
 	return ((char *)line);
 }
 
-int	exec_builtin(char **argv, t_var **list,int *status)
+int	exec_builtin(char **argv, t_var **list, t_tool *tool)
 {
 	if (ft_strncmp(argv[0], "echo", 5) == 0)
 	{
@@ -94,17 +94,17 @@ int	exec_builtin(char **argv, t_var **list,int *status)
 	}
 	else if (ft_strncmp(argv[0], "cd", 3) == 0)
 	{
-		exec_cd(argv, list);
+		exec_cd(argv, list, tool);
 		return (0);
 	}
 	else if (ft_strncmp(argv[0], "pwd", 4) == 0)
 	{
-		exec_pwd(list);
+		exec_pwd(list, tool->pwd);
 		return (0);
 	}
 	else if (ft_strncmp(argv[0], "export", 7) == 0)
 	{
-		exec_export(list,argv);
+		exec_export(list, argv);
 		return (0);
 	}
 	else if (ft_strncmp(argv[0], "unset", 6) == 0)
@@ -119,18 +119,18 @@ int	exec_builtin(char **argv, t_var **list,int *status)
 	}
 	else if (ft_strncmp(argv[0], "exit", 5) == 0)
 	{
-		exec_exit(argv,status);
+		exec_exit(argv, &(tool->status));
 		return (0);
 	}
 	return (-1);
 }
 
-void	interpret(char **argv, int *count, t_var **list,int *status)
+void	interpret(char **argv, int *count, t_var **list, t_tool *tool)
 {
 	pid_t	pid;
 
 	(*count)++;
-	if (exec_builtin(argv, list,status) != -1)
+	if (exec_builtin(argv, list, tool) != -1)
 		return ;
 	pid = fork();
 	if (pid < 0)
@@ -138,7 +138,6 @@ void	interpret(char **argv, int *count, t_var **list,int *status)
 	else if (pid == 0)
 		do_child_process(argv, list);
 }
-
 
 void	do_child_process(char **argv, t_var **list)
 {
@@ -161,7 +160,7 @@ void	do_child_process(char **argv, t_var **list)
 	}
 }
 
-void	wait_for_all_process(int count,int *status)
+void	wait_for_all_process(int count, int *status)
 {
 	int i;
 

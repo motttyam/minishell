@@ -3,21 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 16:43:42 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/24 19:11:29 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/07/24 23:50:26 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
 char	*get_keyname(char *token, int *i);
-void	expand_opt_env(char **argv, char *key_name, t_var **varlist,int *status);
+void	expand_opt_env(char **argv, char *key_name, t_var **varlist,
+			int *status);
 void	not_expand(char **argv);
-void	get_status(char **argv,int *status);
+void	get_status(char **argv, int *status);
 
-char	*get_expanded_argv(char *token, t_var **varlist,int *status)
+char	*get_expanded_argv(char *token, t_var **varlist, int *status)
 {
 	int		i;
 	char	*argv;
@@ -33,7 +34,7 @@ char	*get_expanded_argv(char *token, t_var **varlist,int *status)
 				argv = ft_substr(token, 0, i);
 			i++;
 			key_name = get_keyname(token, &i);
-			expand_opt_env(&argv, key_name, varlist,status);
+			expand_opt_env(&argv, key_name, varlist, status);
 			i--;
 		}
 		i++;
@@ -50,14 +51,15 @@ char	*get_keyname(char *token, int *i)
 	while (token[*i] && token[*i] != '$')
 		(*i)++;
 	if (start == *i)
-		return ((*i)++,NULL);
+		return ((*i)++, NULL);
 	key_name = ft_substr(token, start, *i - start);
 	if (!key_name)
 		fatal_error("malloc");
 	return (key_name);
 }
 
-void	expand_opt_env(char **argv, char *key_name, t_var **varlist,int *status)
+void	expand_opt_env(char **argv, char *key_name, t_var **varlist,
+		int *status)
 {
 	t_var	*opt;
 	char	*tmp;
@@ -70,7 +72,7 @@ void	expand_opt_env(char **argv, char *key_name, t_var **varlist,int *status)
 	}
 	if (key_name[0] == '?')
 	{
-		get_status(argv,status);
+		get_status(argv, status);
 		return ;
 	}
 	while (opt)
@@ -89,21 +91,23 @@ void	expand_opt_env(char **argv, char *key_name, t_var **varlist,int *status)
 }
 void	not_expand(char **argv)
 {
-	char *tmp;
-	
+	char	*tmp;
+
 	tmp = *argv;
-	*argv = ft_strjoin(*argv,"$");
+	*argv = ft_strjoin(*argv, "$");
 	if (!*argv)
 		fatal_error("malloc");
 	free(tmp);
 }
 
-void	get_status(char **argv,int *status)
+void	get_status(char **argv, int *status)
 {
 	char *tmp;
 
 	tmp = *argv;
-	*argv = ft_strjoin(*argv,ft_itoa((*status) / 256));
+	fprintf(stderr, "status: %d\n", *status);
+	ft_itoa((*status) / 256);
+	*argv = ft_strjoin(*argv, ft_itoa((*status) / 256));
 	if (!*argv)
 		fatal_error("malloc");
 	free(tmp);
