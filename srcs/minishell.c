@@ -6,7 +6,7 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:06:27 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/23 22:13:38 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/07/24 19:04:53 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,13 @@ int	main(void)
 	char			*input;
 	t_token_lexer	lexer;
 	t_fd			saved_fd;
+	int				status;
 
 	signal(SIGINT, handle_signal);
 	signal(SIGQUIT, SIG_IGN);
 	save_fd(&saved_fd);
 	first = NULL;
+	status = 0;
 	get_envlist(&first);
 	while (1)
 	{
@@ -64,7 +66,7 @@ int	main(void)
 			break ;
 		lex_token(&lexer, input);
 		check_heredoc_token(lexer.first,&first);
-		parse_token(lexer.first, saved_fd, &first);
+		parse_token(lexer.first, saved_fd, &first,&status);
 		reinit_fd(saved_fd);
 	}
 	close_fd(saved_fd);

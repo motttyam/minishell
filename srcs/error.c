@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 23:12:26 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/20 14:35:39 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/24 21:50:45 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,13 @@ void	quote_error(void)
 	exit(1);
 }
 
-void	put_error_message(char *argv, int flag)
+void	put_error_message(char *argv, char *message)
 {
-	write(2, "minishell: ", 11);
-	write(2, argv, ft_strlen(argv));
-	write(2, ": ", 2);
-	if (flag == 1)
-		write(2, "command not found\n", 19);
+	ft_putstr_fd("minishell: ",2);
+	ft_putstr_fd(argv,2);
+	ft_putstr_fd(": ",2);
+	if (message)
+		ft_putendl_fd(message,2);
 	else
 		perror("");
 }

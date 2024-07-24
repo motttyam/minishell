@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 13:04:47 by yoshiminaok       #+#    #+#             */
-/*   Updated: 2024/07/20 14:43:26 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/24 19:01:58 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ typedef enum e_parser_state
 	FILE_ERROR,
 }			t_parser_state;
 
-void		parse_token(t_token *ptr, t_fd saved_fd, t_var **varlist);
-char		*get_expanded_argv(char *token, t_var **varlist);
+void	parse_token(t_token *ptr, t_fd saved_fd, t_var **varlist,int *status);
+char	*get_expanded_argv(char *token, t_var **varlist,int *status);
 int			redirect(t_token **ptr);
 
 #endif

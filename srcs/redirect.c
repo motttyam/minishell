@@ -6,7 +6,7 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 22:31:54 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/07/23 23:27:25 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/07/24 20:23:09 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	input_redirect(t_token **ptr)
 	fd = open((*ptr)->token, O_RDONLY);
 	if (fd == -1)
 	{
-		put_error_message((*ptr)->token, 0);
+		put_error_message((*ptr)->token, NULL);
 		(*ptr) = (*ptr)->next;
 		return (FILE_ERROR);
 	}
@@ -104,7 +104,7 @@ int	output_redirect(t_token **ptr)
 	{
 		if (errno == EACCES)
 		{
-			put_error_message((*ptr)->token, 0);
+			put_error_message((*ptr)->token, NULL);
 			return (FILE_ERROR);
 		}
 		fd = open((*ptr)->token, O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR);
@@ -125,7 +125,7 @@ int	output_append(t_token **ptr)
 	{
 		if (errno == EACCES)
 		{
-			put_error_message((*ptr)->token, 0);
+			put_error_message((*ptr)->token, NULL);
 			return (FILE_ERROR);
 		}
 		fd = open((*ptr)->token, O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR);
