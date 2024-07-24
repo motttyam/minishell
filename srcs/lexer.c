@@ -6,11 +6,13 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 09:53:36 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/22 22:37:36 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/07/23 22:42:19 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+void	get_singlequote_token(t_token_lexer *lexer, char *line);
 
 void	lex_token(t_token_lexer *lexer, char *line)
 {
@@ -90,16 +92,10 @@ void	get_word_token(t_token_lexer *lexer, char *line)
 	lexer->current->type = WORD;
 	while (line[lexer->line_i])
 	{
-		if (lexer->in_quote == SINGLE_QUOTED && line[lexer->line_i] == '\'')
+		if (lexer->in_quote == NORMAL && line[lexer->line_i] == '\'')
 		{
-			lexer->current->type = SINGLE_QUOTE;
-			lexer->line_i++;
-			lexer->in_quote = NORMAL;
-		}
-		else if (lexer->in_quote == NORMAL && line[lexer->line_i] == '\'')
-		{
-			lexer->line_i++;
-			lexer->in_quote = SINGLE_QUOTED;
+			get_singlequote_token(lexer,line);
+			break ;
 		}
 		else if (lexer->in_quote == NORMAL && line[lexer->line_i] == '"')
 		{
@@ -149,6 +145,25 @@ void	get_doublequote_token(t_token_lexer *lexer, char *line)
 		}
 		else if (line[lexer->line_i] == '$')
 			lexer->current->type = QUOTE_EXPANDED;
+		if (lexer->in_quote == NORMAL && ft_strchr("|<>\n \t",
+				line[lexer->line_i]))
+			break ;
+		get_tokenchar(lexer, line, lexer->current->token);
+	}
+}
+
+void	get_singlequote_token(t_token_lexer *lexer, char *line)
+{
+	lexer->in_quote = SINGLE_QUOTED;
+	lexer->current->type = SINGLE_QUOTE;
+	lexer->line_i++;
+	while (line[lexer->line_i])
+	{
+		if (line[lexer->line_i] == '\'')
+		{
+			lexer->line_i++;
+			lexer->in_quote = NORMAL;
+		}
 		if (lexer->in_quote == NORMAL && ft_strchr("|<>\n \t",
 				line[lexer->line_i]))
 			break ;

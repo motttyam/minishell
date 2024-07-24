@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:06:27 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/22 23:04:30 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/23 22:13:38 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ int	main(void)
 		if (!input)
 			break ;
 		lex_token(&lexer, input);
+		check_heredoc_token(lexer.first,&first);
 		parse_token(lexer.first, saved_fd, &first);
 		reinit_fd(saved_fd);
 	}
