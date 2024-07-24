@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 19:33:16 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/24 21:57:52 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/07/24 22:22:52 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	ft_atol_for_status(char *num)
 		result = result*10 + (num[i] - '0');
 		i++;
 	}
-	return ((unsigned int)((symbol * result) & 256));
+	return ((unsigned int)((symbol * result) % 256));	
 }
 
 int	is_long_over_flow(int	synbol,int	result, int	next)
@@ -89,4 +89,4 @@ void	put_numeric_error(char *argv)
 	ft_putstr_fd(argv,2);
 	ft_putstr_fd(": ",2);
 	ft_putendl_fd("numeric argument required",2);
-}
+}	

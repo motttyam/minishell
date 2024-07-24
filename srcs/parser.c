@@ -3,24 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 08:53:11 by yoshiminaok       #+#    #+#             */
-/*   Updated: 2024/07/24 21:46:50 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/07/24 23:55:32 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	parse_token(t_token *ptr, t_fd saved_fd, t_var **varlist,int *status);
-void	parse_newline(t_token **ptr, t_parser *parser,int *status);
-void	parse_pipe(t_token **ptr, t_parser *parser,int *status);
+void	parse_token(t_token *ptr, t_fd saved_fd, t_var **varlist, t_tool *tool);
+void	parse_newline(t_token **ptr, t_parser *parser, t_tool *tool);
+void	parse_pipe(t_token **ptr, t_parser *parser, t_tool *tool);
 void	parse_redirect(t_token **ptr, t_parser *parser);
-void	parse_command(t_token **ptr, t_parser *parser,int *status);
+void	parse_command(t_token **ptr, t_parser *parser, t_tool *tool);
 int		get_argsize(t_token *ptr);
 void	free_argv(char **argv);
 
-void	parse_token(t_token *ptr, t_fd saved_fd, t_var **varlist,int *status)
+void	parse_token(t_token *ptr, t_fd saved_fd, t_var **varlist, t_tool *tool)
 {
 	t_parser	parser;
 
@@ -31,32 +31,32 @@ void	parse_token(t_token *ptr, t_fd saved_fd, t_var **varlist,int *status)
 	parser.redirect_flag = PIPE_AND_EXECVE;
 	parser.fd = saved_fd;
 	parser.list = varlist;
-	parse_newline(&ptr, &parser,status);
+	parse_newline(&ptr, &parser, tool);
 	if (ptr == NULL && parser.argv)
 	{
 		if (parser.redirect_flag != FILE_ERROR)
 		{
-			interpret(parser.argv, &parser.count, parser.list,status);
+			interpret(parser.argv, &parser.count, parser.list, tool);
 		}
 		free_argv(parser.argv);
-		wait_for_all_process(parser.count,status);
+		wait_for_all_process(parser.count, &(tool->status));
 	}
 }
 
-void	parse_newline(t_token **ptr, t_parser *parser,int *status)
+void	parse_newline(t_token **ptr, t_parser *parser, t_tool *tool)
 {
-	parse_pipe(ptr, parser,status);
+	parse_pipe(ptr, parser, tool);
 	while (*ptr)
 	{
 		if ((*ptr)->type == TK_NEWLINE)
 		{
 			if (parser->argv)
 			{
-				interpret(parser->argv, &parser->count, parser->list,status);
+				interpret(parser->argv, &parser->count, parser->list, tool);
 				free_argv(parser->argv);
 				*ptr = (*ptr)->next;
 			}
-			parse_pipe(ptr, parser,status);
+			parse_pipe(ptr, parser, tool);
 		}
 		else
 		{
@@ -65,22 +65,23 @@ void	parse_newline(t_token **ptr, t_parser *parser,int *status)
 	}
 }
 
-void	parse_pipe(t_token **ptr, t_parser *parser,int*status)
+void	parse_pipe(t_token **ptr, t_parser *parser, t_tool *tool)
 {
-	parse_command(ptr, parser,status);
+	parse_command(ptr, parser, tool);
 	while (*ptr)
 	{
 		if ((*ptr)->type == PIPE)
 		{
 			if (parser->redirect_flag == PIPE_AND_EXECVE)
 			{
-				pipe_and_execute(parser->argv, &parser->count, parser->list,status);
+				pipe_and_execute(parser->argv, &parser->count, parser->list,
+					tool);
 				//  wait関数のためにカウント
 				// parser->count++;
 			}
 			else if (parser->redirect_flag == EXECVE_ONLY)
 			{
-				interpret(parser->argv, &parser->count, parser->list,status);
+				interpret(parser->argv, &parser->count, parser->list, tool);
 				parser->redirect_flag = PIPE_AND_EXECVE;
 				reinit_fd(parser->fd);
 			}
@@ -88,7 +89,7 @@ void	parse_pipe(t_token **ptr, t_parser *parser,int*status)
 				parser->redirect_flag = PIPE_AND_EXECVE;
 			free_argv(parser->argv);
 			*ptr = (*ptr)->next;
-			parse_command(ptr, parser,status);
+			parse_command(ptr, parser, tool);
 		}
 		else
 		{
@@ -97,7 +98,7 @@ void	parse_pipe(t_token **ptr, t_parser *parser,int*status)
 	}
 }
 
-void	parse_command(t_token **ptr, t_parser *parser,int *status)
+void	parse_command(t_token **ptr, t_parser *parser, t_tool *tool)
 {
 	int	size;
 	int	i;
@@ -116,8 +117,8 @@ void	parse_command(t_token **ptr, t_parser *parser,int *status)
 		{
 			if ((*ptr)->type == WORD_EXPANDED || (*ptr)->type == QUOTE_EXPANDED)
 			{
-				parser->argv[i] = get_expanded_argv((*ptr)->token,
-						parser->list,status);
+				parser->argv[i] = get_expanded_argv((*ptr)->token, parser->list,
+						&(tool->status));
 			}
 			else
 			{

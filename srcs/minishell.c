@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:06:27 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/24 19:04:53 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/07/24 23:54:55 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,26 +47,27 @@ void	handle_signal(int signal)
 int	main(void)
 {
 	t_var			*first;
-	char			*input;
 	t_token_lexer	lexer;
 	t_fd			saved_fd;
-	int				status;
+	t_tool			tool;
 
 	signal(SIGINT, handle_signal);
 	signal(SIGQUIT, SIG_IGN);
 	save_fd(&saved_fd);
 	first = NULL;
-	status = 0;
+	tool.status = 0;
+	tool.home = NULL;
+	tool.pwd = NULL;
 	get_envlist(&first);
 	while (1)
 	{
-		input = NULL;
-		input = rl_input();
-		if (!input)
+		tool.input = NULL;
+		tool.input = rl_input();
+		if (!tool.input)
 			break ;
-		lex_token(&lexer, input);
-		check_heredoc_token(lexer.first,&first);
-		parse_token(lexer.first, saved_fd, &first,&status);
+		lex_token(&lexer, tool.input);
+		check_heredoc_token(lexer.first, &first, &(tool.status));
+		parse_token(lexer.first, saved_fd, &first, &tool);
 		reinit_fd(saved_fd);
 	}
 	close_fd(saved_fd);

@@ -3,41 +3,40 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 21:25:10 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/24 18:26:14 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/07/24 23:04:44 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	get_heredoc_input(t_token *delimiter, t_var **list);
+void	get_heredoc_input(t_token *delimiter, t_var **list, int *status);
 char	*get_input_noexpand(t_token *delimiter);
-char	*get_input_expand(t_token *delimiter, t_var **list);
+char	*get_input_expand(t_token *delimiter, t_var **list, int *status);
 char	*ft_strjoinendl(char const *s1, char const *s2);
 
-void    check_heredoc_token(t_token *token, t_var **list)
+void    check_heredoc_token(t_token *token, t_var **list, int *status)
 {
     while(token)
     {
         if(token->type == HEREDOCUMENT)
         {
             token = token->next;
-            get_heredoc_input(token,list);
+            get_heredoc_input(token, list, status);
         }
         token = token->next;
     }
 }
-void get_heredoc_input(t_token *delimiter, t_var **list)
+void get_heredoc_input(t_token *delimiter, t_var **list, int *status)
 {
 	char	*buf;
 
-	
     if(delimiter->type == SINGLE_QUOTE || delimiter->type == DOUBLE_QUOTE || delimiter->type == QUOTE_EXPANDED)
         buf = get_input_noexpand(delimiter);
 	else
-		buf = get_input_expand(delimiter,list);
+		buf = get_input_expand(delimiter,list, status);
 	if(!buf)
 		fatal_error("");
 	ft_bzero(delimiter->token,ft_strlen(delimiter->token));
@@ -69,7 +68,7 @@ char	*get_input_noexpand(t_token *delimiter)
 	return (buf);
 }
 
-char	*get_input_expand(t_token *delimiter, t_var **list)
+char	*get_input_expand(t_token *delimiter, t_var **list, int *status)
 {
     char    *line;
     char	*buf;
@@ -85,7 +84,7 @@ char	*get_input_expand(t_token *delimiter, t_var **list)
 		if (ft_strchr(line,'$'))
 		{
 			tmp = line;
-			line = get_expanded_argv(line,list,0);
+			line = get_expanded_argv(line,list, status);
 			free(tmp);
 		}
 		tmp = buf;
