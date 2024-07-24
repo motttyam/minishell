@@ -6,7 +6,7 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:19:56 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/23 22:11:39 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/07/24 21:48:30 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,10 @@ char					*rl_input(void);
 char					*search_path(const char *line);
 // int		interpret(char *line);
 char					**list_to_environ(t_var **list);
-void					interpret(char **argv, int *count, t_var **list);
-void					do_child_process(char **argv, t_var **list);
-void					wait_for_all_process(int count);
-void					pipe_and_execute(char **cmd, int *count, t_var **list);
+void					interpret(char **argv, int *count, t_var **list,int *status);
+void					do_child_process(char **argv, t_var **listint);
+void					wait_for_all_process(int count,int *status);
+void					pipe_and_execute(char **cmd, int *count, t_var **list,int *status);
 void					reinit_fd(t_fd saved_fd);
 void					check_heredoc_token(t_token *token, t_var **list);
 

@@ -6,7 +6,7 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 21:25:10 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/23 23:09:33 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/07/24 18:26:14 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ char	*get_input_expand(t_token *delimiter, t_var **list)
 		if (ft_strchr(line,'$'))
 		{
 			tmp = line;
-			line = get_expanded_argv(line,list);
+			line = get_expanded_argv(line,list,0);
 			free(tmp);
 		}
 		tmp = buf;

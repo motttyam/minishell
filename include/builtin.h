@@ -2,8 +2,10 @@
 # define BUILTIN_H
 
 
-int	exec_builtin(char **argv, t_var **list);
+int	exec_builtin(char **argv, t_var **list,int *status);
+void	exec_echo(char **argv);
 void	exec_env(char **argv, t_var **list);
+void	exec_exit(char **argv,int *status);
 void	exec_unset(char **argv, t_var **list);
 void	exec_pwd(t_var **list);
 void	exec_cd(char **argv, t_var **list);

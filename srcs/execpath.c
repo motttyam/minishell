@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execpath.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 16:33:23 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/07/22 23:04:00 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/24 21:48:22 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,10 +85,11 @@ char	*search_path(const char *line)
 	return ((char *)line);
 }
 
-int	exec_builtin(char **argv, t_var **list)
+int	exec_builtin(char **argv, t_var **list,int *status)
 {
 	if (ft_strncmp(argv[0], "echo", 5) == 0)
 	{
+		exec_echo(argv);
 		return (0);
 	}
 	else if (ft_strncmp(argv[0], "cd", 3) == 0)
@@ -118,17 +119,18 @@ int	exec_builtin(char **argv, t_var **list)
 	}
 	else if (ft_strncmp(argv[0], "exit", 5) == 0)
 	{
+		exec_exit(argv,status);
 		return (0);
 	}
 	return (-1);
 }
 
-void	interpret(char **argv, int *count, t_var **list)
+void	interpret(char **argv, int *count, t_var **list,int *status)
 {
 	pid_t	pid;
 
 	(*count)++;
-	if (exec_builtin(argv, list) != -1)
+	if (exec_builtin(argv, list,status) != -1)
 		return ;
 	pid = fork();
 	if (pid < 0)
@@ -143,7 +145,10 @@ void	do_child_process(char **argv, t_var **list)
 	if (ft_strchr(argv[0], '/'))
 	{
 		if (access(argv[0], X_OK) == -1)
-			put_error_message(argv[0], 0);
+		{
+			put_error_message(argv[0], NULL);
+			exit(126);
+		}
 		else
 			execve(argv[0], argv, list_to_environ(list));
 	}
@@ -151,19 +156,19 @@ void	do_child_process(char **argv, t_var **list)
 	{
 		argv[0] = search_path(argv[0]);
 		execve(argv[0], argv, list_to_environ(list));
-		put_error_message(argv[0], 1);
-		exit(1);
+		put_error_message(argv[0], "command not found");
+		exit(127);
 	}
 }
 
-void	wait_for_all_process(int count)
+void	wait_for_all_process(int count,int *status)
 {
 	int i;
 
 	i = 0;
 	while (i < count)
 	{
-		waitpid(-1, NULL, 0);
+		waitpid(-1, status, 0);
 		i++;
 	}
 }
