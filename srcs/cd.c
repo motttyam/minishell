@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 20:55:09 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/07/24 23:38:32 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/27 15:04:44 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ void	change_directory(char *argv, t_var **list, t_tool *tool)
 	current = *list;
 	tmp = NULL;
 	tmp2 = NULL;
-	// printf("%s\n", argv);
 	if (chdir(argv) == 0)
 	{
 		if (getcwd(path, sizeof(path)) == NULL)
@@ -32,9 +31,7 @@ void	change_directory(char *argv, t_var **list, t_tool *tool)
 			perror("minishell: cd:");
 			return ;
 		}
-		// PWDのリストまで進める
 		ft_getenv_node(list, "PWD", &current);
-		// PWDが存在
 		if (current != NULL)
 		{
 			tmp = current->value;
@@ -47,7 +44,6 @@ void	change_directory(char *argv, t_var **list, t_tool *tool)
 			tmp2 = tool->pwd;
 			tool->pwd = ft_strdup(path);
 		}
-		current = *list; // kesiteiikamo
 		ft_getenv_node(list, "OLDPWD", &current);
 		if (current != NULL)
 		{
@@ -55,7 +51,7 @@ void	change_directory(char *argv, t_var **list, t_tool *tool)
 			if (tmp != NULL)
 			{
 				current->value = tmp;
-				if (tmp2 != NULL)
+				if (tmp2 != NULL && tmp2 != tmp)
 					free(tmp2);
 			}
 			else
@@ -65,7 +61,7 @@ void	change_directory(char *argv, t_var **list, t_tool *tool)
 		{
 			if(tmp != NULL)
 				free(tmp);
-			if(tmp2 != NULL)
+			if(tmp2 != NULL && tmp2 != tmp)
 				free(tmp);
 		}
 	}
@@ -76,10 +72,10 @@ void	change_directory(char *argv, t_var **list, t_tool *tool)
 	}
 }
 
-// ~(チルダ)未対応
 void	exec_cd(char **argv, t_var **list, t_tool *tool)
 {
 	struct stat info;
+	char *tmp;
 
 	if (ft_argvlen(argv) >= 3)
 	{
@@ -90,6 +86,12 @@ void	exec_cd(char **argv, t_var **list, t_tool *tool)
 	{
 		change_directory(ft_getenv(list, "HOME"), list, tool);
 		return ;
+	}
+	if(argv[1][0] == '~')
+	{
+		tmp = *(argv + 1);
+		*(argv + 1) = ft_strjoin(tool->home, *(argv + 1) + 1);
+		free(tmp);
 	}
 	if (stat(argv[1], &info) == 0)
 	{

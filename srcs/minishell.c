@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:06:27 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/24 23:54:55 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/27 14:41:54 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	handle_signal(int signal)
 	{
 		rl_on_new_line();
 		write(STDOUT_FILENO, "\n", 1);
-		// rl_replace_line("", 0);
+		rl_replace_line("", 0);
 		rl_redisplay();
 	}
 }
@@ -55,10 +55,10 @@ int	main(void)
 	signal(SIGQUIT, SIG_IGN);
 	save_fd(&saved_fd);
 	first = NULL;
-	tool.status = 0;
-	tool.home = NULL;
-	tool.pwd = NULL;
 	get_envlist(&first);
+	tool.status = 0;
+	tool.home = ft_getenv(&first, "HOME");
+	tool.pwd = ft_getenv(&first, "PWD");
 	while (1)
 	{
 		tool.input = NULL;
