@@ -6,11 +6,11 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 19:38:44 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/24 23:41:36 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/27 15:15:46 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
 void	exec_pwd(t_var **list, char *pwd)
 {

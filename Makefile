@@ -5,7 +5,9 @@ CFLAGS = -Wall -Wextra -Werror
 LDFLAGS = -L$(LIBFT_DIR) -lreadline -lft
 
 SRC_DIR = srcs
+BUILTIN_DIR = srcs/builtin
 SRC = $(wildcard $(SRC_DIR)/*.c)
+SRC += $(wildcard $(BUILTIN_DIR)/*.c)
 LIBFT_DIR = ./libft
 LIBFT = $(LIBFT_DIR)/libft.a
 READLINE_DIR = $(shell brew --prefix readline)

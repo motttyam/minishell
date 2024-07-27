@@ -6,11 +6,11 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 16:50:06 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/07/20 21:34:31 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/27 15:15:37 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
 int	ft_argvlen(char **argv)
 {

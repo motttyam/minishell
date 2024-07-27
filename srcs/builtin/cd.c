@@ -6,13 +6,11 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 20:55:09 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/07/27 15:04:44 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/27 15:15:57 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
-#include <sys/stat.h>
-#include <sys/types.h>
+#include "../../include/minishell.h"
 
 void	change_directory(char *argv, t_var **list, t_tool *tool)
 {

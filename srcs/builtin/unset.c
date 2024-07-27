@@ -6,11 +6,11 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 18:47:57 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/07/20 19:15:12 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/27 15:15:49 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
 void	ft_list_remove_if(t_var **list, char *argv, int (cmp)())
 {

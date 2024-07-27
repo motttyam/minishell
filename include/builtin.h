@@ -1,6 +1,9 @@
 #ifndef BUILTIN_H
 # define BUILTIN_H
 
+#include <sys/stat.h>
+#include <sys/types.h>
+
 void	ft_getenv_node(t_var **list, char *key_name, t_var **opt);
 
 int		exec_builtin(char **argv, t_var **list, t_tool *tool);
