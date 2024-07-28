@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 21:25:10 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/24 23:04:44 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/28 11:45:47 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ char	*ft_strjoinendl(char const *s1, char const *s2);
 
 void    check_heredoc_token(t_token *token, t_var **list, int *status)
 {
-    while(token)
+    // g_signal.heredoc_interruption = 1;
+	while(token)
     {
         if(token->type == HEREDOCUMENT)
         {
@@ -28,7 +29,9 @@ void    check_heredoc_token(t_token *token, t_var **list, int *status)
         }
         token = token->next;
     }
+    // g_signal.heredoc_interruption = 0;
 }
+
 void get_heredoc_input(t_token *delimiter, t_var **list, int *status)
 {
 	char	*buf;

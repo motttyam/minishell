@@ -6,43 +6,13 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:06:27 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/27 14:41:54 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/28 13:55:21 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	save_fd(t_fd *saved_fd)
-{
-	saved_fd->saved_stdin = dup(STDIN_FILENO);
-	saved_fd->saved_stdout = dup(STDOUT_FILENO);
-	saved_fd->saved_stderr = dup(STDERR_FILENO);
-}
-
-void	reinit_fd(t_fd saved_fd)
-{
-	dup2(saved_fd.saved_stdin, STDIN_FILENO);
-	dup2(saved_fd.saved_stdout, STDOUT_FILENO);
-	dup2(saved_fd.saved_stderr, STDERR_FILENO);
-}
-
-void	close_fd(t_fd saved_fd)
-{
-	close(saved_fd.saved_stdin);
-	close(saved_fd.saved_stdout);
-	close(saved_fd.saved_stderr);
-}
-
-void	handle_signal(int signal)
-{
-	if (signal == SIGINT)
-	{
-		rl_on_new_line();
-		write(STDOUT_FILENO, "\n", 1);
-		rl_replace_line("", 0);
-		rl_redisplay();
-	}
-}
+// volatile t_signal_state g_signal = {0, 0};
 
 int	main(void)
 {
@@ -50,10 +20,9 @@ int	main(void)
 	t_token_lexer	lexer;
 	t_fd			saved_fd;
 	t_tool			tool;
-
-	signal(SIGINT, handle_signal);
-	signal(SIGQUIT, SIG_IGN);
+	
 	save_fd(&saved_fd);
+	setup_signal_handler();
 	first = NULL;
 	get_envlist(&first);
 	tool.status = 0;
