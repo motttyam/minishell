@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 08:53:11 by yoshiminaok       #+#    #+#             */
-/*   Updated: 2024/07/28 14:39:13 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/28 17:34:45 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,6 @@ void	parse_command(t_token **ptr, t_parser *parser, t_tool *tool)
 	int	i;
 
 	size = get_argsize(*ptr);
-	// printf("size:%d\n", size);
 	i = 0;
 	parser->argv = (char **)malloc(sizeof(char *) * (size + 1));
 	if (!parser->argv)
