@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:19:56 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/28 14:07:01 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/28 14:31:41 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,6 @@
 # include <errno.h>
 # include <fcntl.h>
 // # include <limits.h>
-# include "builtin.h"
-# include "lexer.h"
-# include "libft.h"
-# include "parser.h"
-# include "utils.h"
 # include <linux/limits.h>
 # include <readline/history.h>
 # include <readline/readline.h>
@@ -32,6 +27,11 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
+# include "lexer.h"
+# include "libft.h"
+# include "utils.h"
+# include "parser.h"
+# include "builtin.h"
 
 typedef struct s_signal_state
 {
@@ -41,20 +41,8 @@ typedef struct s_signal_state
 
 extern volatile t_signal_state	g_signal;
 
-typedef struct s_tool
-{
-	int							status;
-	char						*home;
-	char						*pwd;
-	char						*input;
-	char						pwd_first[PATH_MAX];
-}								t_tool;
-
 # define PROMPT "minishell $ "
 
-void							save_fd(t_fd *saved_fd);
-void							reinit_fd(t_fd saved_fd);
-void							close_fd(t_fd saved_fd);
 void							handle_signal(int signal);
 void							setup_signal_handler(void);
 char							*rl_input(void);

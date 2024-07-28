@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 09:26:24 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/28 14:06:16 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/28 14:31:10 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,13 +55,6 @@ typedef enum e_lexer_state
 	NOT_EXPANDED,
 	EXPANDED
 }					t_lexer_state;
-
-typedef struct s_fd
-{
-	int				saved_stdin;
-	int				saved_stdout;
-	int				saved_stderr;
-}					t_fd;
 
 void				lex_token(t_token_lexer *lexer, char *line);
 void				lex_token(t_token_lexer *lexer, char *line);

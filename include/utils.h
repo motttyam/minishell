@@ -6,12 +6,34 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 14:05:16 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/07/28 14:05:18 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/28 14:31:48 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef UTILS_H
 # define UTILS_H
+
+// tool
+typedef struct s_tool
+{
+	int							status;
+	char						*home;
+	char						*pwd;
+	char						*input;
+	char						pwd_first[PATH_MAX];
+}								t_tool;
+
+// fd.c
+typedef struct s_fd
+{
+	int				saved_stdin;
+	int				saved_stdout;
+	int				saved_stderr;
+}					t_fd;
+
+void							save_fd(t_fd *saved_fd);
+void							reinit_fd(t_fd saved_fd);
+void							close_fd(t_fd saved_fd);
 
 // var.h
 typedef struct s_var

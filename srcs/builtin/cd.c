@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 20:55:09 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/07/27 15:15:57 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/28 15:07:55 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	change_directory(char *argv, t_var **list, t_tool *tool)
 			if(tmp != NULL)
 				free(tmp);
 			if(tmp2 != NULL && tmp2 != tmp)
-				free(tmp);
+				free(tmp2);
 		}
 	}
 	else
@@ -89,6 +89,12 @@ void	exec_cd(char **argv, t_var **list, t_tool *tool)
 	{
 		tmp = *(argv + 1);
 		*(argv + 1) = ft_strjoin(tool->home, *(argv + 1) + 1);
+		free(tmp);
+	}
+	if(argv[1][0] == '-')
+	{
+		tmp = *(argv + 1);
+		*(argv + 1) = ft_strjoin(ft_getenv(list, "OLDPWD"), *(argv + 1) + 1);
 		free(tmp);
 	}
 	if (stat(argv[1], &info) == 0)

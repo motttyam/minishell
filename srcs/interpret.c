@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 16:33:23 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/07/28 13:57:32 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/28 14:22:29 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,7 +156,6 @@ void	do_child_process(char **argv, t_var **list)
 	else
 	{
 		argv[0] = search_path(argv[0]);
-		fprintf(stderr, "Child process: executing %s\n", argv[0]);
 		execve(argv[0], argv, list_to_environ(list));
 		put_error_message(argv[0], "command not found");
 		exit(127);
