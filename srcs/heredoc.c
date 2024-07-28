@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 21:25:10 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/28 17:21:41 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/28 22:19:05 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,51 +17,90 @@ char	*get_input_noexpand(t_token *delimiter);
 char	*get_input_expand(t_token *delimiter, t_var **list, int *status);
 char	*ft_strjoinendl(char const *s1, char const *s2);
 
-void    check_heredoc_token(t_token *token, t_var **list, int *status)
+int	is_valid_after_heredoc(int type)
 {
-    // g_signal.heredoc_interruption = 1;
-	while(token)
-    {
-        if(token->type == HEREDOCUMENT)
-        {
-            token = token->next;
-            get_heredoc_input(token, list, status);
-        }
-        token = token->next;
-    }
-    // g_signal.heredoc_interruption = 0;
+	char	*type_name;
+
+	type_name = NULL;
+	if ((type == INPUT_REDIRECTION || type == HEREDOCUMENT
+			|| type == OUTPUT_REDIRECTION || type == OUTPUT_APPENDING
+			|| type == PIPE || type == TK_NEWLINE))
+	{
+		if (type == INPUT_REDIRECTION)
+			type_name = ft_strdup(">");
+		else if (type == HEREDOCUMENT)
+			type_name = ft_strdup("<<");
+		else if (type == OUTPUT_REDIRECTION)
+			type_name = ft_strdup(">");
+		else if (type == OUTPUT_APPENDING)
+			type_name = ft_strdup(">>");
+		else if (type == PIPE)
+			type_name = ft_strdup("|");
+		else if (type == TK_NEWLINE)
+			type_name = ft_strdup("newline");
+		ft_printf_fd(2, "minishell: syntax error near unexpected token `%s'\n",
+			type_name);
+		free(type_name);
+		return (-1);
+	}
+	return (0);
 }
 
-void get_heredoc_input(t_token *delimiter, t_var **list, int *status)
+int	check_heredoc_token(t_token *token, t_var **list, int *status)
+{
+	while (token)
+	{
+		if (token->type == HEREDOCUMENT)
+		{
+			token = token->next;
+			if (is_valid_after_heredoc(token->type) == -1)
+			{
+				*status = 2;
+				return (-1);
+			}
+			get_heredoc_input(token, list, status);
+		}
+		token = token->next;
+	}
+	return (0);
+}
+
+void	get_heredoc_input(t_token *delimiter, t_var **list, int *status)
 {
 	char	*buf;
 
-    if(delimiter->type == SINGLE_QUOTE || delimiter->type == DOUBLE_QUOTE || delimiter->type == QUOTE_EXPANDED)
-        buf = get_input_noexpand(delimiter);
+	if (delimiter->type == SINGLE_QUOTE || delimiter->type == DOUBLE_QUOTE
+		|| delimiter->type == QUOTE_EXPANDED)
+		buf = get_input_noexpand(delimiter);
 	else
-		buf = get_input_expand(delimiter,list, status);
-	if(!buf)
+		buf = get_input_expand(delimiter, list, status);
+	if (!buf)
 		fatal_error("");
-	ft_bzero(delimiter->token,ft_strlen(delimiter->token));
-	ft_strlcpy(delimiter->token,buf,PATH_MAX);
+	ft_bzero(delimiter->token, ft_strlen(delimiter->token));
+	ft_strlcpy(delimiter->token, buf, PATH_MAX);
 	free(buf);
 	delimiter->type = WORD;
 }
 char	*get_input_noexpand(t_token *delimiter)
 {
-    char    *line;
-    char	*buf;
+	char	*line;
+	char	*buf;
 	char	*tmp;
-	
+
 	buf = NULL;
-    while (1)
+	while (1)
 	{
 		line = readline("> ");
-		if (!line || !ft_strncmp(line, delimiter->token, ft_strlen(delimiter->token)
-				+ 1))
+		if (!line || !ft_strncmp(line, delimiter->token,
+				ft_strlen(delimiter->token) + 1))
+		{
+			ft_printf_fd(2,
+				"bash: warning: here-document delimited by end-of-file (wanted `%s')",
+				delimiter->token);
 			break ;
+		}
 		tmp = buf;
-		buf = ft_strjoinendl(buf,line);
+		buf = ft_strjoinendl(buf, line);
 		if (!buf)
 			fatal_error("malloc");
 		if (tmp)
@@ -73,25 +112,30 @@ char	*get_input_noexpand(t_token *delimiter)
 
 char	*get_input_expand(t_token *delimiter, t_var **list, int *status)
 {
-    char    *line;
-    char	*buf;
+	char	*line;
+	char	*buf;
 	char	*tmp;
-	
+
 	buf = NULL;
-    while (1)
+	while (1)
 	{
 		line = readline("> ");
-		if (!line || !ft_strncmp(line, delimiter->token, ft_strlen(delimiter->token)
-				+ 1))
+		if (!line || !ft_strncmp(line, delimiter->token,
+				ft_strlen(delimiter->token) + 1))
+		{
+			ft_printf_fd(2,
+				"bash: warning: here-document delimited by end-of-file (wanted `%s')",
+				delimiter->token);
 			break ;
-		if (ft_strchr(line,'$'))
+		}
+		if (ft_strchr(line, '$'))
 		{
 			tmp = line;
-			line = get_expanded_argv(line,list, status);
+			line = get_expanded_argv(line, list, status);
 			free(tmp);
 		}
 		tmp = buf;
-		buf = ft_strjoinendl(buf,line);
+		buf = ft_strjoinendl(buf, line);
 		if (!buf)
 			fatal_error("malloc");
 		if (tmp)

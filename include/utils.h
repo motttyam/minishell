@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 14:05:16 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/07/28 14:31:48 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/28 21:32:37 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ typedef struct s_tool
 	char						*home;
 	char						*pwd;
 	char						*input;
+	int 						syntax_status;
 	char						pwd_first[PATH_MAX];
 }								t_tool;
 

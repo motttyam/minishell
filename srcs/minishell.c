@@ -6,13 +6,13 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:06:27 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/28 14:55:57 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/28 22:40:08 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-// volatile t_signal_state g_signal = {0, 0};
+volatile t_signal_state	g_signal = {0, 0};
 
 void	free_token_lexer(t_token *head)
 {
@@ -52,6 +52,7 @@ int	main(void)
 	first = NULL;
 	get_envlist(&first);
 	tool.status = 0;
+	tool.syntax_status = 0;
 	tool.home = ft_strdup(ft_getenv(&first, "HOME"));
 	tool.pwd = ft_strdup(ft_getenv(&first, "PWD"));
 	while (1)
@@ -61,8 +62,12 @@ int	main(void)
 		if (!tool.input)
 			break ;
 		lex_token(&lexer, tool.input);
-		check_heredoc_token(lexer.first, &first, &(tool.status));
-		parse_token(lexer.first, saved_fd, &first, &tool);
+		tool.syntax_status = check_syntaxerror(lexer.first, &(tool.status));
+		tool.syntax_status += check_heredoc_token(lexer.first, &first,
+				&(tool.status));
+		// tool.syntax_status += check_last_type(lexer.first, &(tool.status));
+		if (tool.syntax_status >= 0)
+			parse_token(lexer.first, saved_fd, &first, &tool);
 		free_token_lexer(lexer.first);
 		reinit_fd(saved_fd);
 	}

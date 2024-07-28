@@ -6,11 +6,43 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 20:55:09 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/07/28 15:07:55 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/28 19:16:05 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
+void	save_oldpwd(t_var **list, char *tmp, char *tmp2)
+{
+	t_var	*current;
+
+	ft_getenv_node(list, "OLDPWD", &current);
+	if (current != NULL)
+	{
+		free(current->value);
+		if (tmp != NULL)
+		{
+			current->value = tmp;
+			if (tmp2 != NULL && tmp2 != tmp)
+				free(tmp2);
+		}
+		else
+			current->value = tmp2;
+	}
+	else
+	{
+		if (tmp != NULL)
+			free(tmp);
+		if (tmp2 != NULL && tmp2 != tmp)
+			free(tmp2);
+	}
+}
+
+void	save_tool_pwd(t_tool *tool, char *tmp2, char *path)
+{
+	tmp2 = tool->pwd;
+	tool->pwd = ft_strdup(path);
+}
 
 void	change_directory(char *argv, t_var **list, t_tool *tool)
 {
@@ -19,99 +51,75 @@ void	change_directory(char *argv, t_var **list, t_tool *tool)
 	char	*tmp2;
 	char	path[PATH_MAX];
 
-	current = *list;
 	tmp = NULL;
 	tmp2 = NULL;
 	if (chdir(argv) == 0)
 	{
 		if (getcwd(path, sizeof(path)) == NULL)
-		{
-			perror("minishell: cd:");
-			return ;
-		}
+			return (perror("minishell: cd:"));
 		ft_getenv_node(list, "PWD", &current);
 		if (current != NULL)
 		{
 			tmp = current->value;
 			current->value = ft_strdup(path);
-			tmp2 = tool->pwd;
-			tool->pwd = ft_strdup(path);
+			save_tool_pwd(tool, tmp2, path);
 		}
 		else
-		{
-			tmp2 = tool->pwd;
-			tool->pwd = ft_strdup(path);
-		}
-		ft_getenv_node(list, "OLDPWD", &current);
-		if (current != NULL)
-		{
-			free(current->value);
-			if (tmp != NULL)
-			{
-				current->value = tmp;
-				if (tmp2 != NULL && tmp2 != tmp)
-					free(tmp2);
-			}
-			else
-				current->value = tmp2;
-		}
-		else
-		{
-			if(tmp != NULL)
-				free(tmp);
-			if(tmp2 != NULL && tmp2 != tmp)
-				free(tmp2);
-		}
+			save_tool_pwd(tool, tmp2, path);
+		save_oldpwd(list, tmp, tmp2);
 	}
 	else
-	{
-		printf("%s\n", argv);
-		perror("minishell: cd");
-	}
+		ft_printf_fd(2, "minishell: cd: %s: Permission Deined", argv);
 }
 
-void	exec_cd(char **argv, t_var **list, t_tool *tool)
+int	check_dash_tilde(char **argv, t_var **list, t_tool *tool)
 {
-	struct stat info;
-	char *tmp;
+	char	*tmp;
 
-	if (ft_argvlen(argv) >= 3)
-	{
-		ft_putstr_fd("minishell: cd: too many arguments", 2);
-		return ;
-	}
-	else if (ft_argvlen(argv) == 1)
-	{
-		change_directory(ft_getenv(list, "HOME"), list, tool);
-		return ;
-	}
-	if(argv[1][0] == '~')
+	if (argv[1][0] == '~')
 	{
 		tmp = *(argv + 1);
 		*(argv + 1) = ft_strjoin(tool->home, *(argv + 1) + 1);
 		free(tmp);
 	}
-	if(argv[1][0] == '-')
+	if (argv[1][0] == '-')
 	{
+		if (argv[1][1] != '\0')
+		{
+			ft_printf_fd(2, "bash: cd: %c%c: invalid option\n", argv[1][0],
+				argv[1][1]);
+			return (-1);
+		}
 		tmp = *(argv + 1);
 		*(argv + 1) = ft_strjoin(ft_getenv(list, "OLDPWD"), *(argv + 1) + 1);
 		free(tmp);
 	}
+	return (0);
+}
+
+void	exec_cd(char **argv, t_var **list, t_tool *tool)
+{
+	struct stat	info;
+
+	if (ft_argvlen(argv) >= 3)
+	{
+		ft_printf_fd(2, "minishell: cd: too many arguments\n");
+		return ;
+	}
+	else if (ft_argvlen(argv) == 1)
+		return (change_directory(ft_getenv(list, "HOME"), list, tool));
+	if (check_dash_tilde(argv, list, tool) != 0)
+		return ;
 	if (stat(argv[1], &info) == 0)
 	{
 		if (S_ISDIR(info.st_mode))
-		{
 			change_directory(argv[1], list, tool);
-		}
 		else
-		{
-			ft_putstr_fd("minishell: cd:", 2);
-			ft_putstr_fd(argv[1], 2);
-			ft_putendl_fd(": Not a directory", 2);
-		}
+			ft_printf_fd(2, "minishell: cd: %s: Not a directory");
 	}
 	else
 	{
-		perror("minishell: cd");
+		ft_printf_fd(2, "minishell: cd: %s: ", argv[1]);
+		perror("");
 	}
 }

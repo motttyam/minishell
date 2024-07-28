@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:19:56 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/28 14:31:41 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/28 22:18:36 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # include <unistd.h>
 # include "lexer.h"
 # include "libft.h"
+#include "ft_printf.h"
 # include "utils.h"
 # include "parser.h"
 # include "builtin.h"
@@ -43,6 +44,7 @@ extern volatile t_signal_state	g_signal;
 
 # define PROMPT "minishell $ "
 
+int								check_syntaxerror(t_token *token, int *status);
 void							handle_signal(int signal);
 void							setup_signal_handler(void);
 char							*rl_input(void);
@@ -55,7 +57,6 @@ void							pipe_and_execute(char **cmd, int *count,
 									t_var **list, t_tool *tool);
 void							reinit_fd(t_fd saved_fd);
 
-void							check_heredoc_token(t_token *token,
-									t_var **list, int *status);
+int								check_heredoc_token(t_token *token, t_var **list, int *status);
 void							wait_for_all_process(int count, int *status);
 #endif

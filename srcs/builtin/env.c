@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 16:50:06 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/07/27 15:15:37 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/28 18:27:52 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,7 @@ void	exec_env(char **argv, t_var **list)
     // permissonがないときもあるかも
 	if (ft_argvlen(argv) >= 2)
 	{
-		ft_putstr_fd("env: '", 2);
-		ft_putstr_fd(argv[1], 2);
-		ft_putendl_fd("': No such file or directory", 2);
+		ft_printf_fd(2, "env: '%s' No such file or directory\n");
         return ;
 	}
 	env = list_to_environ(list);
