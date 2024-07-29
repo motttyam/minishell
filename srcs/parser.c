@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 08:53:11 by yoshiminaok       #+#    #+#             */
-/*   Updated: 2024/07/28 17:34:45 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/30 07:58:07 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,10 @@ void	parse_token(t_token *ptr, t_fd saved_fd, t_var **varlist, t_tool *tool)
 	{
 		if (parser.redirect_flag != FILE_ERROR)
 		{
-			interpret(parser.argv, &parser.count, parser.list, tool);
+			interpret(parser.argv,parser.list, tool);
 		}
 		free_argv(parser.argv);
-		wait_for_all_process(parser.count, &(tool->status));
+		wait_for_all_process(parser.count);
 	}
 }
 
@@ -52,7 +52,7 @@ void	parse_newline(t_token **ptr, t_parser *parser, t_tool *tool)
 		{
 			if (parser->argv)
 			{
-				interpret(parser->argv, &parser->count, parser->list, tool);
+				interpret(parser->argv, parser->list, tool);
 				free_argv(parser->argv);
 				*ptr = (*ptr)->next;
 			}
@@ -81,7 +81,7 @@ void	parse_pipe(t_token **ptr, t_parser *parser, t_tool *tool)
 			}
 			else if (parser->redirect_flag == EXECVE_ONLY)
 			{
-				interpret(parser->argv, &parser->count, parser->list, tool);
+				interpret(parser->argv, parser->list, tool);
 				parser->redirect_flag = PIPE_AND_EXECVE;
 				reinit_fd(parser->fd);
 			}

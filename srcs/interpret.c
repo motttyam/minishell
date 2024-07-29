@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   interpret.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 16:33:23 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/07/28 14:22:29 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/30 07:57:45 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,11 +125,10 @@ int	exec_builtin(char **argv, t_var **list, t_tool *tool)
 	return (-1);
 }
 
-void	interpret(char **argv, int *count, t_var **list, t_tool *tool)
+void	interpret(char **argv, t_var **list, t_tool *tool)
 {
 	pid_t	pid;
 
-	(*count)++;
 	if (exec_builtin(argv, list, tool) != -1)
 		return ;
 	signal(SIGINT, SIG_IGN);
@@ -138,6 +137,11 @@ void	interpret(char **argv, int *count, t_var **list, t_tool *tool)
 		fatal_error("fork");
 	else if (pid == 0)
 		do_child_process(argv, list);
+	else
+	{
+		close(STDIN_FILENO);
+		waitpid(pid,&tool->status,0);
+	}
 }
 
 void	do_child_process(char **argv, t_var **list)
@@ -162,14 +166,14 @@ void	do_child_process(char **argv, t_var **list)
 	}
 }
 
-void	wait_for_all_process(int count, int *status)
+void	wait_for_all_process(int count)
 {
 	int i;
 
 	i = 0;
 	while (i < count)
 	{
-		waitpid(-1, status, 0);
+		waitpid(-1, NULL, 0);
 		i++;
 	}
 	setup_signal_handler();
