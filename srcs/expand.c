@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 16:43:42 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/24 23:50:26 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/28 17:31:42 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ char	*get_expanded_argv(char *token, t_var **varlist, int *status)
 			i++;
 			key_name = get_keyname(token, &i);
 			expand_opt_env(&argv, key_name, varlist, status);
+			free(key_name);
 			i--;
 		}
 		i++;

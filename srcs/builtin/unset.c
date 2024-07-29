@@ -6,11 +6,11 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 18:47:57 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/07/20 19:15:12 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/28 15:01:15 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
 void	ft_list_remove_if(t_var **list, char *argv, int (cmp)())
 {
@@ -22,6 +22,8 @@ void	ft_list_remove_if(t_var **list, char *argv, int (cmp)())
 	if (cmp(argv, current->key, ft_strlen(argv) + 1) == 0)
     {
         *list = current->next;
+		free(current->key);
+		free(current->value);
         free(current);
         ft_list_remove_if(list, argv, cmp);
     }

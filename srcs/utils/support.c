@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   support.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 21:49:17 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/23 22:14:45 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/07/28 13:53:32 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
 char	*ft_strjoinendl(char const *s1, char const *s2)
 {

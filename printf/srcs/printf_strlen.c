@@ -1,18 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   support.h                                          :+:      :+:    :+:   */
+/*   printf_strlen.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/23 21:49:43 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/23 21:51:59 by nyoshimi         ###   ########.fr       */
+/*   Created: 2024/04/24 15:04:01 by ktsukamo          #+#    #+#             */
+/*   Updated: 2024/06/23 21:59:17 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SUPPORT_H
-# define SUPPORT_H
-#include<stdlib.h>
-char	*ft_strjoinendl(char const *s1, char const *s2);
-size_t	ft_strlen_nocrash(const char *s);
-#endif
+#include "../ft_printf.h"
+
+size_t	printf_strlen(const char *s)
+{
+	size_t	length;
+
+	length = 0;
+	while (s[length] != '\0')
+	{
+		length++;
+	}
+	return (length);
+}

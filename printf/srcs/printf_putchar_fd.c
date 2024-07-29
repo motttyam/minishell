@@ -1,20 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.h                                            :+:      :+:    :+:   */
+/*   printf_putchar_fd.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/28 23:16:28 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/24 20:21:54 by nyoshimi         ###   ########.fr       */
+/*   Created: 2024/02/06 22:14:06 by ktsukamo          #+#    #+#             */
+/*   Updated: 2024/06/23 21:59:24 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ERROR_H
-# define ERROR_H
+#include "../ft_printf.h"
 
-void	fatal_error(const char *msg) __attribute__((noreturn));
-void	handle_malloc_error(void);
-void	quote_error(void);
-void	put_error_message(char *argv, char *message);
-#endif
+int	printf_putchar_fd(char c, int fd)
+{
+	return (write(fd, &c, 1));
+}

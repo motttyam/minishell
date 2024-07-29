@@ -6,11 +6,11 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 19:33:16 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/24 22:22:52 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/27 15:15:41 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
 int	ft_atol_for_status(char *num);
 int	is_long_over_flow(int	synbol,int	result, int	next);

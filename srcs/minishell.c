@@ -6,41 +6,37 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:06:27 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/24 23:54:55 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/28 22:40:08 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	save_fd(t_fd *saved_fd)
-{
-	saved_fd->saved_stdin = dup(STDIN_FILENO);
-	saved_fd->saved_stdout = dup(STDOUT_FILENO);
-	saved_fd->saved_stderr = dup(STDERR_FILENO);
-}
+volatile t_signal_state	g_signal = {0, 0};
 
-void	reinit_fd(t_fd saved_fd)
+void	free_token_lexer(t_token *head)
 {
-	dup2(saved_fd.saved_stdin, STDIN_FILENO);
-	dup2(saved_fd.saved_stdout, STDOUT_FILENO);
-	dup2(saved_fd.saved_stderr, STDERR_FILENO);
-}
+	t_token	*current;
 
-void	close_fd(t_fd saved_fd)
-{
-	close(saved_fd.saved_stdin);
-	close(saved_fd.saved_stdout);
-	close(saved_fd.saved_stderr);
-}
-
-void	handle_signal(int signal)
-{
-	if (signal == SIGINT)
+	while (head)
 	{
-		rl_on_new_line();
-		write(STDOUT_FILENO, "\n", 1);
-		// rl_replace_line("", 0);
-		rl_redisplay();
+		current = head;
+		head = head->next;
+		free(current);
+	}
+}
+
+void	free_envlist(t_var *head)
+{
+	t_var	*current;
+
+	while (head)
+	{
+		current = head;
+		head = head->next;
+		free(current->key);
+		free(current->value);
+		free(current);
 	}
 }
 
@@ -51,14 +47,14 @@ int	main(void)
 	t_fd			saved_fd;
 	t_tool			tool;
 
-	signal(SIGINT, handle_signal);
-	signal(SIGQUIT, SIG_IGN);
 	save_fd(&saved_fd);
+	setup_signal_handler();
 	first = NULL;
-	tool.status = 0;
-	tool.home = NULL;
-	tool.pwd = NULL;
 	get_envlist(&first);
+	tool.status = 0;
+	tool.syntax_status = 0;
+	tool.home = ft_strdup(ft_getenv(&first, "HOME"));
+	tool.pwd = ft_strdup(ft_getenv(&first, "PWD"));
 	while (1)
 	{
 		tool.input = NULL;
@@ -66,11 +62,19 @@ int	main(void)
 		if (!tool.input)
 			break ;
 		lex_token(&lexer, tool.input);
-		check_heredoc_token(lexer.first, &first, &(tool.status));
-		parse_token(lexer.first, saved_fd, &first, &tool);
+		tool.syntax_status = check_syntaxerror(lexer.first, &(tool.status));
+		tool.syntax_status += check_heredoc_token(lexer.first, &first,
+				&(tool.status));
+		// tool.syntax_status += check_last_type(lexer.first, &(tool.status));
+		if (tool.syntax_status >= 0)
+			parse_token(lexer.first, saved_fd, &first, &tool);
+		free_token_lexer(lexer.first);
 		reinit_fd(saved_fd);
 	}
 	close_fd(saved_fd);
+	free(tool.home);
+	free(tool.pwd);
+	free_envlist(first);
 	ft_putendl_fd("exit", 2);
 	return (0);
 }
