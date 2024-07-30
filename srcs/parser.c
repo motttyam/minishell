@@ -6,7 +6,7 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 08:53:11 by yoshiminaok       #+#    #+#             */
-/*   Updated: 2024/07/31 02:29:42 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/07/31 07:29:17 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,16 +74,15 @@ void	parse_pipe(t_token **ptr, t_parser *parser, t_tool *tool)
 		{
 			if (parser->redirect_flag == PIPE_AND_EXECVE)
 			{
-				pipe_and_execute(parser->argv, &parser->count, parser->list,
-					tool);
+				pipe_and_execute(parser->argv, &parser->count, parser,tool);
 				//  wait関数のためにカウント
 				// parser->count++;
 			}
 			else if (parser->redirect_flag == EXECVE_ONLY)
 			{
-				interpret(parser->argv,parser->list,tool,parser->fd);
+				pipe_and_execute(parser->argv, &parser->count, parser,tool);
 				parser->redirect_flag = PIPE_AND_EXECVE;
-				reinit_fd(parser->fd);
+				dup2(parser->fd.saved_stdout, STDOUT_FILENO);
 			}
 			else if (parser->redirect_flag == FILE_ERROR)
 				parser->redirect_flag = PIPE_AND_EXECVE;
@@ -138,6 +137,15 @@ void	parse_command(t_token **ptr, t_parser *parser, t_tool *tool)
 			parser->redirect_flag = redirect(ptr);
 		}
 	}
+			while (((*ptr) && ((*ptr)->type == INPUT_REDIRECTION
+					|| (*ptr)->type == HEREDOCUMENT
+					|| (*ptr)->type == OUTPUT_REDIRECTION
+					|| (*ptr)->type == OUTPUT_APPENDING)))
+		{
+			if ((*ptr)->type == HEREDOCUMENT)
+				reinit_fd(parser->fd);
+			parser->redirect_flag = redirect(ptr);
+		}
 	parser->argv[i] = NULL;
 }
 

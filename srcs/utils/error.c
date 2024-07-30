@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 23:12:26 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/28 13:53:17 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/31 06:55:17 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	fatal_error(const char *msg)
 {
-	dprintf(2, "Fatal Error: %s\n", msg);
+	ft_printf_fd(2, "Fatal Error: %s\n", msg);
 	exit(1);
 }
 
