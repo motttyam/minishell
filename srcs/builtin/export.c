@@ -6,13 +6,12 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 16:31:39 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/30 22:06:55 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/07/31 02:55:40 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	exec_export(t_var **list, char **argv);
 void	export_arg(char *arg, t_var **list);
 void	ft_getenv_node(t_var **list, char *key_name, t_var **opt);
 int		get_env_keyname(char *arg, char **key_name);
@@ -22,14 +21,14 @@ void	put_export_error(char *arg);
 void	sort_and_put_env(t_var **list);
 void	put_env(t_var *save);
 
-void	exec_export(t_var **list, char **argv)
+void	exec_export(t_var **list, char **argv, int pipeflg)
 {
 	int	i;
 
 	i = 1;
 	if (ft_argvlen(argv) == 1)
 		sort_and_put_env(list);
-	else
+	else if (!pipeflg)
 	{
 		while (argv[i])
 		{

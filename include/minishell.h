@@ -6,7 +6,7 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:19:56 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/30 07:57:36 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/07/31 02:29:22 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void							setup_signal_handler(void);
 char							*rl_input(void);
 char							*search_path(const char *line);
 char							**list_to_environ(t_var **list);
-void							interpret(char **argv, t_var **list, t_tool *tool);
+void							interpret(char **argv, t_var **list, t_tool *tool,t_fd fd);
 void							do_child_process(char **argv, t_var **listint);
 void							pipe_and_execute(char **cmd, int *count,
 									t_var **list, t_tool *tool);
