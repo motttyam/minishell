@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 14:05:16 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/07/28 21:32:37 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/30 23:11:06 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,5 +64,6 @@ void				put_error_message(char *argv, char *message);
 // support.h
 char				*ft_strjoinendl(char const *s1, char const *s2);
 size_t				ft_strlen_nocrash(const char *s);
+int					ft_isspace(int c);
 
 #endif
