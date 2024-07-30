@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 16:31:39 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/28 13:52:27 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/30 22:06:55 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void	sort_and_put_env(t_var **list)
 		}
 		if (current->next == NULL)
 		{
-			if (save_flg && ft_strncmp(save->key, "_", 2))
+			if (save_flg)
 				put_env(save);
 			else
 				return ;
@@ -76,6 +76,8 @@ void	sort_and_put_env(t_var **list)
 
 void	put_env(t_var *save)
 {
+	if (!ft_strncmp(save->key, "_", 2))
+		return ;
 	ft_putstr_fd("declare -x ", 1);
 	ft_putstr_fd(save->key, 1);
 	if (save->value)
@@ -93,23 +95,28 @@ void	export_arg(char *arg, t_var **list)
 	int		append_flg;
 	t_var	*opt;
 	char	*keyname;
+	char	*newvalue;
 	char	*tmp;
 
 	keyname = NULL;
 	opt = NULL;
 	append_flg = get_env_keyname(arg, &keyname);
 	ft_getenv_node(list, keyname, &opt);
+	newvalue = get_value(arg);
 	if (opt)
 	{
 		if (append_flg == 0)
 		{
-			free(opt->value);
-			opt->value = get_value(arg);
+			if (newvalue)
+			{
+				free(opt->value);
+				opt->value = newvalue;	
+			}
 		}
 		else
 		{
 			tmp = opt->value;
-			opt->value = ft_strjoin(opt->value, get_value(arg));
+			opt->value = ft_strjoin(opt->value, newvalue);
 			//上の書き方malloc失敗したら怪しいかも
 			if (!opt->value)
 				fatal_error("malloc");
@@ -117,7 +124,7 @@ void	export_arg(char *arg, t_var **list)
 		}
 	}
 	else
-		add_last_newvar(*list, export_new_var(keyname, get_value(arg)));
+		add_last_newvar(*list, export_new_var(keyname, newvalue));
 }
 
 void	ft_getenv_node(t_var **list, char *key_name, t_var **opt)
