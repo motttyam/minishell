@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 19:33:16 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/27 15:15:41 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/31 01:44:18 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 int	ft_atol_for_status(char *num);
 int	is_long_over_flow(int	synbol,int	result, int	next);
+void get_symbol(char c,int *symbol,int *i);
 void	put_numeric_error(char *argv);
 
 void	exec_exit(char **argv,int *status)
@@ -21,23 +22,21 @@ void	exec_exit(char **argv,int *status)
 	int	arg_status;
 
 	ft_putendl_fd("exit",1);
-	if (ft_argvlen(argv) > 2)
-		{
-			put_error_message("exit","too many arguments");
-			return;
-		}
-	else if (ft_argvlen(argv) == 1)
+	if (ft_argvlen(argv) == 1)
 		exit(*status);
 	else
 	{
 		arg_status = ft_atol_for_status(argv[1]);
-		fprintf(stderr,"stat = %d\n",arg_status);
 		if(arg_status == -1)
 			put_numeric_error(argv[1]);
+		else if (ft_argvlen(argv) > 2)
+		{
+			put_error_message("exit","too many arguments");
+			return;
+		}
 		else
 			exit (arg_status);
 	}
-	
 }
 
 int	ft_atol_for_status(char *num)
@@ -49,24 +48,34 @@ int	ft_atol_for_status(char *num)
 	result = 0;
 	i = 0;
 	symbol = 1;
-	if(num[i] == '+' || num[i] == '-')
-	{
-		if (num[i] == '-')
-			symbol = -1;
+	while(ft_isspace(num[i]))
 		i++;
-	}
+	get_symbol(num[i], &symbol, &i);
 	if(!ft_isdigit(num[i]))
 		return (-1);
-	while(num[i])
+	while(ft_isdigit(num[i]))
 	{
-		if(!ft_isdigit(num[i]) || is_long_over_flow(symbol,result,num[i] - '0'))
+		if(is_long_over_flow(symbol,result,num[i] - '0'))
 			return (-1);
 		result = result*10 + (num[i] - '0');
 		i++;
 	}
+	while(ft_isspace(num[i]))
+		i++;
+	if(num[i] != '\0')
+		return (-1);
 	return ((unsigned int)((symbol * result) % 256));	
 }
 
+void get_symbol(char c,int *symbol,int *i)
+{
+	if(c == '+' || c == '-')
+	{
+		if (c == '-')
+			*symbol = -1;
+		(*i)++;
+	}
+}
 int	is_long_over_flow(int	synbol,int	result, int	next)
 {
 	if(synbol == 1)
@@ -89,4 +98,5 @@ void	put_numeric_error(char *argv)
 	ft_putstr_fd(argv,2);
 	ft_putstr_fd(": ",2);
 	ft_putendl_fd("numeric argument required",2);
+	exit(2);
 }	

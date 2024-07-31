@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   interpret.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 16:33:23 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/07/28 14:22:29 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/31 08:51:02 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+int	check_stdin_stat(int saved_fd);
 
 char	**list_to_environ(t_var **list)
 {
@@ -85,7 +87,7 @@ char	*search_path(const char *line)
 	return ((char *)line);
 }
 
-int	exec_builtin(char **argv, t_var **list, t_tool *tool)
+int	exec_builtin(char **argv, t_var **list, t_tool *tool, int pipeflg)
 {
 	if (ft_strncmp(argv[0], "echo", 5) == 0)
 	{
@@ -94,7 +96,8 @@ int	exec_builtin(char **argv, t_var **list, t_tool *tool)
 	}
 	else if (ft_strncmp(argv[0], "cd", 3) == 0)
 	{
-		exec_cd(argv, list, tool);
+		if (!pipeflg)	
+			exec_cd(argv, list, tool);
 		return (0);
 	}
 	else if (ft_strncmp(argv[0], "pwd", 4) == 0)
@@ -104,12 +107,13 @@ int	exec_builtin(char **argv, t_var **list, t_tool *tool)
 	}
 	else if (ft_strncmp(argv[0], "export", 7) == 0)
 	{
-		exec_export(list, argv);
+		exec_export(list, argv,pipeflg);
 		return (0);
 	}
 	else if (ft_strncmp(argv[0], "unset", 6) == 0)
 	{
-		exec_unset(argv, list);
+		if (!pipeflg)
+			exec_unset(argv, list);
 		return (0);
 	}
 	else if (ft_strncmp(argv[0], "env", 4) == 0)
@@ -119,18 +123,18 @@ int	exec_builtin(char **argv, t_var **list, t_tool *tool)
 	}
 	else if (ft_strncmp(argv[0], "exit", 5) == 0)
 	{
-		exec_exit(argv, &(tool->status));
+		if (!pipeflg)
+			exec_exit(argv, &(tool->status));
 		return (0);
 	}
 	return (-1);
 }
 
-void	interpret(char **argv, int *count, t_var **list, t_tool *tool)
+void	interpret(char **argv, t_var **list, t_tool *tool,t_fd fd)
 {
 	pid_t	pid;
-
-	(*count)++;
-	if (exec_builtin(argv, list, tool) != -1)
+	
+	if (exec_builtin(argv, list, tool,check_stdin_stat(fd.saved_stdin)) != -1)
 		return ;
 	signal(SIGINT, SIG_IGN);
 	pid = fork();
@@ -138,6 +142,11 @@ void	interpret(char **argv, int *count, t_var **list, t_tool *tool)
 		fatal_error("fork");
 	else if (pid == 0)
 		do_child_process(argv, list);
+	else
+	{
+		close(STDIN_FILENO);
+		waitpid(pid,&tool->status,0);
+	}
 }
 
 void	do_child_process(char **argv, t_var **list)
@@ -155,6 +164,11 @@ void	do_child_process(char **argv, t_var **list)
 	}
 	else
 	{
+		if (argv[0][0] == '\0')
+		{
+			put_error_message(argv[0], "command not found");
+			exit(127);
+		}
 		argv[0] = search_path(argv[0]);
 		execve(argv[0], argv, list_to_environ(list));
 		put_error_message(argv[0], "command not found");
@@ -162,14 +176,29 @@ void	do_child_process(char **argv, t_var **list)
 	}
 }
 
-void	wait_for_all_process(int count, int *status)
+int	check_stdin_stat(int saved_fd)
+{
+	struct stat stdin_stat;
+	struct stat saved_stat;
+	
+	if (fstat(STDIN_FILENO, &stdin_stat) == -1)	
+		fatal_error("fstat");
+	if (fstat(saved_fd, &saved_stat) == -1)	
+		fatal_error("fstat");
+	if (stdin_stat.st_dev != saved_stat.st_dev 
+	|| stdin_stat.st_ino != saved_stat.st_ino)
+		return (1);
+	return (0);
+}
+
+void	wait_for_all_process(int count)
 {
 	int i;
 
 	i = 0;
 	while (i < count)
 	{
-		waitpid(-1, status, 0);
+		waitpid(-1, NULL, 0);
 		i++;
 	}
 	setup_signal_handler();

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:19:56 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/28 22:18:36 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/31 07:05:35 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,13 +50,11 @@ void							setup_signal_handler(void);
 char							*rl_input(void);
 char							*search_path(const char *line);
 char							**list_to_environ(t_var **list);
-void							interpret(char **argv, int *count, t_var **list,
-									t_tool *tool);
+void							interpret(char **argv, t_var **list, t_tool *tool,t_fd fd);
 void							do_child_process(char **argv, t_var **listint);
-void							pipe_and_execute(char **cmd, int *count,
-									t_var **list, t_tool *tool);
+void	pipe_and_execute(char **cmd, int *count, t_parser *parser, t_tool *tool);
 void							reinit_fd(t_fd saved_fd);
 
 int								check_heredoc_token(t_token *token, t_var **list, int *status);
-void							wait_for_all_process(int count, int *status);
+void							wait_for_all_process(int count);
 #endif
