@@ -6,7 +6,7 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 08:53:11 by yoshiminaok       #+#    #+#             */
-/*   Updated: 2024/07/31 07:29:17 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/01 04:18:59 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	parse_token(t_token *ptr, t_fd saved_fd, t_var **varlist, t_tool *tool)
 	{
 		if (parser.redirect_flag != FILE_ERROR)
 		{
-			interpret(parser.argv,parser.list,tool,parser.fd);
+			interpret(parser.argv,parser.list,tool,parser.count);
 		}
 		free_argv(parser.argv);
 		wait_for_all_process(parser.count);
@@ -52,7 +52,7 @@ void	parse_newline(t_token **ptr, t_parser *parser, t_tool *tool)
 		{
 			if (parser->argv)
 			{
-				interpret(parser->argv,parser->list,tool,parser->fd);
+				interpret(parser->argv,parser->list,tool,parser->count);
 				free_argv(parser->argv);
 				*ptr = (*ptr)->next;
 			}
