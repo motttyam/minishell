@@ -6,7 +6,7 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 16:33:23 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/07/31 02:58:01 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/07/31 08:51:02 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,6 +164,11 @@ void	do_child_process(char **argv, t_var **list)
 	}
 	else
 	{
+		if (argv[0][0] == '\0')
+		{
+			put_error_message(argv[0], "command not found");
+			exit(127);
+		}
 		argv[0] = search_path(argv[0]);
 		execve(argv[0], argv, list_to_environ(list));
 		put_error_message(argv[0], "command not found");
