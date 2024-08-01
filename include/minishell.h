@@ -6,7 +6,7 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:19:56 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/01 10:56:15 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/02 05:22:24 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void lex_and_parse(char *line,t_tool *tool,t_fd saved_fd,t_var **list);
 int								check_syntaxerror(t_token *token, int *status);
 void							handle_signal(int signal);
 void							setup_signal_handler(void);
-char							*rl_input(void);
+char	*rl_input(t_tool *tool,t_var **list);
 char							*search_path(const char *line);
 char							**list_to_environ(t_var **list);
 void	interpret(char **argv, t_var **list, t_tool *tool,t_parser *parser);
@@ -56,6 +56,6 @@ void	do_child_process(char **argv, t_var **list,t_tool *tool,t_fd saved_fd);
 void	pipe_and_execute(char **cmd, int *count, t_parser *parser, t_tool *tool);
 void							reinit_fd(t_fd saved_fd);
 
-int								check_heredoc_token(t_token *token, t_var **list, int *status);
+int								check_heredoc_token(t_token *token, t_var **list, int *status,t_tool *tool);
 void							wait_for_all_process(int count);
 #endif

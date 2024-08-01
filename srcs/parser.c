@@ -6,7 +6,7 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 08:53:11 by yoshiminaok       #+#    #+#             */
-/*   Updated: 2024/08/01 13:44:17 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/02 05:06:14 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,6 @@ void	parse_command(t_token **ptr, t_parser *parser, t_tool *tool)
 			else
 			{
 				parser->argv[i] = ft_strdup((*ptr)->token);
-				fprintf(stderr,"what = %s\n",parser->argv[i]);
 			}
 			if (!parser->argv[i])
 				handle_malloc_error();
