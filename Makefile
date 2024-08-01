@@ -1,6 +1,6 @@
 NAME = minishell
 CC = cc 
-CFLAGS = -Wall -Wextra -Werror
+# CFLAGS = -Wall -Wextra -Werror
 CFLAGS += -g -fsanitize=address
 LDFLAGS = -L$(LIBFT_DIR) -L$(PRINTF_DIR) -lreadline -lft -lftprintf
 

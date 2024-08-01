@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   interpret.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 16:33:23 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/07/31 08:51:02 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/07/31 22:39:23 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int	check_stdin_stat(int saved_fd);
+int		check_stdin_stat(int saved_fd);
 
 char	**list_to_environ(t_var **list)
 {
@@ -89,6 +89,8 @@ char	*search_path(const char *line)
 
 int	exec_builtin(char **argv, t_var **list, t_tool *tool, int pipeflg)
 {
+	if (argv[0] == NULL)
+		return (0);
 	if (ft_strncmp(argv[0], "echo", 5) == 0)
 	{
 		exec_echo(argv);
@@ -96,7 +98,7 @@ int	exec_builtin(char **argv, t_var **list, t_tool *tool, int pipeflg)
 	}
 	else if (ft_strncmp(argv[0], "cd", 3) == 0)
 	{
-		if (!pipeflg)	
+		if (!pipeflg)
 			exec_cd(argv, list, tool);
 		return (0);
 	}
@@ -107,7 +109,7 @@ int	exec_builtin(char **argv, t_var **list, t_tool *tool, int pipeflg)
 	}
 	else if (ft_strncmp(argv[0], "export", 7) == 0)
 	{
-		exec_export(list, argv,pipeflg);
+		exec_export(list, argv, pipeflg);
 		return (0);
 	}
 	else if (ft_strncmp(argv[0], "unset", 6) == 0)
@@ -130,11 +132,11 @@ int	exec_builtin(char **argv, t_var **list, t_tool *tool, int pipeflg)
 	return (-1);
 }
 
-void	interpret(char **argv, t_var **list, t_tool *tool,t_fd fd)
+void	interpret(char **argv, t_var **list, t_tool *tool, t_fd fd)
 {
 	pid_t	pid;
-	
-	if (exec_builtin(argv, list, tool,check_stdin_stat(fd.saved_stdin)) != -1)
+
+	if (exec_builtin(argv, list, tool, check_stdin_stat(fd.saved_stdin)) != -1)
 		return ;
 	signal(SIGINT, SIG_IGN);
 	pid = fork();
@@ -145,7 +147,7 @@ void	interpret(char **argv, t_var **list, t_tool *tool,t_fd fd)
 	else
 	{
 		close(STDIN_FILENO);
-		waitpid(pid,&tool->status,0);
+		waitpid(pid, &tool->status, 0);
 	}
 }
 
@@ -178,15 +180,15 @@ void	do_child_process(char **argv, t_var **list)
 
 int	check_stdin_stat(int saved_fd)
 {
-	struct stat stdin_stat;
-	struct stat saved_stat;
-	
-	if (fstat(STDIN_FILENO, &stdin_stat) == -1)	
+	struct stat	stdin_stat;
+	struct stat	saved_stat;
+
+	if (fstat(STDIN_FILENO, &stdin_stat) == -1)
 		fatal_error("fstat");
-	if (fstat(saved_fd, &saved_stat) == -1)	
+	if (fstat(saved_fd, &saved_stat) == -1)
 		fatal_error("fstat");
-	if (stdin_stat.st_dev != saved_stat.st_dev 
-	|| stdin_stat.st_ino != saved_stat.st_ino)
+	if (stdin_stat.st_dev != saved_stat.st_dev
+		|| stdin_stat.st_ino != saved_stat.st_ino)
 		return (1);
 	return (0);
 }

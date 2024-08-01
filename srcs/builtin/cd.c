@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 20:55:09 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/07/28 19:16:05 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/07/31 23:13:28 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ void	save_oldpwd(t_var **list, char *tmp, char *tmp2)
 void	save_tool_pwd(t_tool *tool, char *tmp2, char *path)
 {
 	tmp2 = tool->pwd;
+	tool->pwd = tmp2;
 	tool->pwd = ft_strdup(path);
 }
 
@@ -63,13 +64,25 @@ void	change_directory(char *argv, t_var **list, t_tool *tool)
 			tmp = current->value;
 			current->value = ft_strdup(path);
 			save_tool_pwd(tool, tmp2, path);
+			save_oldpwd(list, tmp, tmp2);
 		}
 		else
+		{
 			save_tool_pwd(tool, tmp2, path);
-		save_oldpwd(list, tmp, tmp2);
+			ft_getenv_node(list, "OLDPWD", &current);
+			if (current != NULL && current->value[0] != '\0')
+			{
+				free(current->value);
+				current->value = (char *)malloc(sizeof(char) * 1);
+				if (!current->value)
+					fatal_error("malloc");
+				current->value[0] = '\0';
+			}
+			free(tmp2);
+		}
 	}
 	else
-		ft_printf_fd(2, "minishell: cd: %s: Permission Deined", argv);
+		ft_printf_fd(2, "minishell: cd: %s: Permission Deined\n", argv);
 }
 
 int	check_dash_tilde(char **argv, t_var **list, t_tool *tool)
@@ -107,7 +120,14 @@ void	exec_cd(char **argv, t_var **list, t_tool *tool)
 		return ;
 	}
 	else if (ft_argvlen(argv) == 1)
+	{
+		if (ft_getenv(list, "HOME") == NULL)
+		{
+			ft_printf_fd(2, "bash: cd: HOME not set\n");
+			return ;
+		}
 		return (change_directory(ft_getenv(list, "HOME"), list, tool));
+	}
 	if (check_dash_tilde(argv, list, tool) != 0)
 		return ;
 	if (stat(argv[1], &info) == 0)
