@@ -6,7 +6,7 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 09:53:36 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/01 14:11:26 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/02 07:16:23 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,27 +17,27 @@ int validate_syntax(t_token_lexer *lexer,t_tool *tool);
 void	put_syntax_error(char *token,t_tool *tool);
 int	check_last_token(t_token_lexer *lexer,t_tool *tool);
 
-int	lex_token(t_token_lexer *lexer, char *line,t_tool *tool)
+int	lex_token(t_token_lexer *lexer, char *line,t_tool *tool,int apenddflg)
 {
-	init_token_lexer(lexer);
+	init_token_lexer(lexer,apenddflg);
 	while (line[lexer->line_i])
 	{
 		if (line[lexer->line_i] != ' ' && line[lexer->line_i] != '\t')
 		{
 			get_token(lexer, line);
 			if(validate_syntax(lexer,tool))
-				return (-1);
+				return (1);
 		}
 		else
 			lexer->line_i++;
 	}
 	if(check_last_token(lexer,tool))
-		return(-1);
+		return(1);
 	return(0);
 }
 int validate_syntax(t_token_lexer *lexer,t_tool *tool)
 {
-	if(lexer->current->pre != NULL &&
+	if((lexer->current->pre != NULL &&
 		(lexer->current->type == INPUT_REDIRECTION
 		|| lexer->current->type == HEREDOCUMENT
 		|| lexer->current->type == OUTPUT_REDIRECTION
@@ -46,9 +46,16 @@ int validate_syntax(t_token_lexer *lexer,t_tool *tool)
 		|| lexer->current->pre->type == HEREDOCUMENT
 		|| lexer->current->pre->type == OUTPUT_REDIRECTION
 		|| lexer->current->pre->type == OUTPUT_APPENDING))
+		||(lexer->current->type == PIPE &&
+		(lexer->current->pre == NULL 
+		|| lexer->current->pre->type == INPUT_REDIRECTION
+		|| lexer->current->pre->type == HEREDOCUMENT
+		|| lexer->current->pre->type == OUTPUT_REDIRECTION
+		|| lexer->current->pre->type == OUTPUT_APPENDING)))
 	{
 		put_syntax_error(lexer->current->token,tool);
-		lexer->current->pre->type = WORD;
+		if (lexer->current->pre != NULL )
+			lexer->current->pre->type = WORD;
 		lexer->current->type = WORD;
 		return (1);
 	}
@@ -56,6 +63,9 @@ int validate_syntax(t_token_lexer *lexer,t_tool *tool)
 }
 int	check_last_token(t_token_lexer *lexer,t_tool *tool)
 {
+	char *line;
+	int	result;
+	
 	if(lexer->current->type == INPUT_REDIRECTION
 		|| lexer->current->type == HEREDOCUMENT
 		|| lexer->current->type == OUTPUT_REDIRECTION
@@ -64,6 +74,18 @@ int	check_last_token(t_token_lexer *lexer,t_tool *tool)
 		put_syntax_error("newline",tool);
 		lexer->current->type = WORD;
 		return(1);
+	}
+	if(lexer->current->type == PIPE)
+	{
+		if(tool->ps2)
+			line = readline(tool->ps2);
+		else
+			line = readline("> ");
+		if(!line)
+			return(put_error_message("syntax error","unexpected end of file",tool),1);
+		result = lex_token(lexer,line,tool,1);
+		free(line);
+		return(result);
 	}
 	return(0);
 }
@@ -79,13 +101,16 @@ void	put_syntax_error(char *token,t_tool *tool)
 	ft_printf_fd(2,"syntax error near unexpected token `%s'\n",token);
 }
 
-void	init_token_lexer(t_token_lexer *lexer)
+void	init_token_lexer(t_token_lexer *lexer,int apendflg)
 {
 	lexer->line_i = 0;
 	lexer->token_i = 0;
 	lexer->in_quote = NORMAL;
-	lexer->first = NULL;
-	lexer->current = NULL;
+	if(!apendflg)
+	{
+		lexer->first = NULL;
+		lexer->current = NULL;
+	}
 }
 
 void	get_token(t_token_lexer *lexer, char *line)

@@ -6,7 +6,7 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 08:53:11 by yoshiminaok       #+#    #+#             */
-/*   Updated: 2024/08/02 05:06:14 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/02 07:26:13 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,11 +82,7 @@ void	parse_pipe(t_token **ptr, t_parser *parser, t_tool *tool)
 		if ((*ptr)->type == PIPE)
 		{
 			if (parser->redirect_flag == PIPE_AND_EXECVE)
-			{
 				pipe_and_execute(parser->argv, &parser->count, parser,tool);
-				//  wait関数のためにカウント
-				// parser->count++;
-			}
 			else if (parser->redirect_flag == EXECVE_ONLY)
 			{
 				pipe_and_execute(parser->argv, &parser->count, parser,tool);
@@ -170,15 +166,7 @@ int	get_argsize(t_token *ptr)
 		if (l->type == INPUT_REDIRECTION || l->type == HEREDOCUMENT
 			|| l->type == OUTPUT_REDIRECTION || l->type == OUTPUT_APPENDING)
 		{
-			if (l->next == NULL)
-				fatal_error("is NULL after Redirect");
 			l = l->next;
-			if (l->type == INPUT_REDIRECTION || l->type == HEREDOCUMENT
-				|| l->type == OUTPUT_REDIRECTION || l->type == OUTPUT_APPENDING)
-			{
-				printf("minishelsyntax error near unexpected token `%s'\n",
-					l->token);
-			}
 		}
 		else
 			size++;

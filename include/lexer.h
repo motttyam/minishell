@@ -6,7 +6,7 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 09:26:24 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/01 10:37:26 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/02 07:11:03 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,8 @@ typedef enum e_lexer_state
 	EXPANDED
 }					t_lexer_state;
 
-int					lex_token(t_token_lexer *lexer, char *line,t_tool *tool);
-void				init_token_lexer(t_token_lexer *lexer);
+int					lex_token(t_token_lexer *lexer, char *line,t_tool *tool,int apendflg);
+void				init_token_lexer(t_token_lexer *lexer,int apendflg);
 void				get_token(t_token_lexer *lexer, char *line);
 void				get_pipe_token(t_token_lexer *lexer, char *line);
 void				get_newline_token(t_token_lexer *lexer, char *line);
