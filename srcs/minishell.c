@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:06:27 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/28 22:40:08 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/01 08:15:42 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,21 @@ void	free_envlist(t_var *head)
 		free(current);
 	}
 }
+void lex_and_parse(char *line,t_tool *tool,t_fd saved_fd,t_var **list)
+{
+	t_token_lexer	lexer;
+	
+	lex_token(&lexer, line);
+	if (tool->syntax_status >= 0)
+			parse_token(lexer.first, saved_fd, list, tool);
+	free_token_lexer(lexer.first);
+	reinit_fd(saved_fd);
+}
 
 int	main(void)
 {
 	t_var			*first;
-	t_token_lexer	lexer;
+	// t_token_lexer	lexer;
 	t_fd			saved_fd;
 	t_tool			tool;
 
@@ -53,6 +63,8 @@ int	main(void)
 	get_envlist(&first);
 	tool.status = 0;
 	tool.syntax_status = 0;
+	tool.filename = NULL;
+	tool.line_count = 1;
 	tool.home = ft_strdup(ft_getenv(&first, "HOME"));
 	tool.pwd = ft_strdup(ft_getenv(&first, "PWD"));
 	while (1)
@@ -61,16 +73,18 @@ int	main(void)
 		tool.input = rl_input();
 		if (!tool.input)
 			break ;
-		lex_token(&lexer, tool.input);
-		tool.syntax_status = check_syntaxerror(lexer.first, &(tool.status));
-		tool.syntax_status += check_heredoc_token(lexer.first, &first,
-				&(tool.status));
-		// tool.syntax_status += check_last_type(lexer.first, &(tool.status));
-		if (tool.syntax_status >= 0)
-			parse_token(lexer.first, saved_fd, &first, &tool);
-		free_token_lexer(lexer.first);
-		reinit_fd(saved_fd);
+		lex_and_parse(tool.input,&tool,saved_fd,&first);
+		// lex_token(&lexer, tool.input);
+		// // tool.syntax_status = check_syntaxerror(lexer.first, &(tool.status));
+		// // tool.syntax_status += check_heredoc_token(lexer.first, &first,
+		// // 		&(tool.status));
+		// // tool.syntax_status += check_last_type(lexer.first, &(tool.status));
+		// if (tool.syntax_status >= 0)
+		// 	parse_token(lexer.first, saved_fd, &first, &tool);
+		// free_token_lexer(lexer.first);
+		// reinit_fd(saved_fd);
 	}
+	fprintf(stderr,"here\n");
 	close_fd(saved_fd);
 	free(tool.home);
 	free(tool.pwd);

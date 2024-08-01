@@ -6,7 +6,7 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 08:53:11 by yoshiminaok       #+#    #+#             */
-/*   Updated: 2024/08/01 04:18:59 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/01 09:36:34 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	parse_token(t_token *ptr, t_fd saved_fd, t_var **varlist, t_tool *tool)
 	{
 		if (parser.redirect_flag != FILE_ERROR)
 		{
-			interpret(parser.argv,parser.list,tool,parser.count);
+			interpret(parser.argv,parser.list,tool,&parser);
 		}
 		free_argv(parser.argv);
 		wait_for_all_process(parser.count);
@@ -52,11 +52,20 @@ void	parse_newline(t_token **ptr, t_parser *parser, t_tool *tool)
 		{
 			if (parser->argv)
 			{
-				interpret(parser->argv,parser->list,tool,parser->count);
-				free_argv(parser->argv);
+				if (parser->redirect_flag != FILE_ERROR)
+					interpret(parser->argv,parser->list,tool,parser);
+				reinit_fd(parser->fd);
+				wait_for_all_process(parser->count);
+				parser->count = 0;
+				tool->line_count++;
 				*ptr = (*ptr)->next;
+				free_argv(parser->argv);
+				parser->argv = NULL;
 			}
-			parse_pipe(ptr, parser, tool);
+			if((*ptr) != NULL)
+			{
+				parse_pipe(ptr, parser, tool);
+			}
 		}
 		else
 		{
@@ -134,7 +143,7 @@ void	parse_command(t_token **ptr, t_parser *parser, t_tool *tool)
 		{
 			if ((*ptr)->type == HEREDOCUMENT)
 				reinit_fd(parser->fd);
-			parser->redirect_flag = redirect(ptr);
+			parser->redirect_flag = redirect(ptr,tool);
 		}
 	}
 			while (((*ptr) && ((*ptr)->type == INPUT_REDIRECTION
@@ -144,7 +153,7 @@ void	parse_command(t_token **ptr, t_parser *parser, t_tool *tool)
 		{
 			if ((*ptr)->type == HEREDOCUMENT)
 				reinit_fd(parser->fd);
-			parser->redirect_flag = redirect(ptr);
+			parser->redirect_flag = redirect(ptr,tool);
 		}
 	parser->argv[i] = NULL;
 }

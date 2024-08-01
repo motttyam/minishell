@@ -6,7 +6,7 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 14:05:16 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/07/30 23:11:06 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/01 08:25:26 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ typedef struct s_tool
 	char						*pwd;
 	char						*input;
 	int 						syntax_status;
+	char						*filename;
+	int							line_count;
 	char						pwd_first[PATH_MAX];
 }								t_tool;
 
@@ -59,7 +61,7 @@ void				add_last_newvar(t_var *first, t_var *new);
 void				fatal_error(const char *msg) __attribute__((noreturn));
 void				handle_malloc_error(void);
 void				quote_error(void);
-void				put_error_message(char *argv, char *message);
+void				put_error_message(char *argv, char *message,t_tool *tool);
 
 // support.h
 char				*ft_strjoinendl(char const *s1, char const *s2);

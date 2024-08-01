@@ -6,7 +6,7 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 23:12:26 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/31 06:55:17 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/01 08:21:51 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,15 @@ void	quote_error(void)
 	exit(1);
 }
 
-void	put_error_message(char *argv, char *message)
+void	put_error_message(char *argv, char *message,t_tool *tool)
 {
-	ft_putstr_fd("minishell: ",2);
-	ft_putstr_fd(argv,2);
-	ft_putstr_fd(": ",2);
+	if (tool->filename)
+	{
+		ft_printf_fd(2,"%s: line %d:",tool->filename,tool->line_count);
+	}
+	else
+		ft_putstr_fd("minishell: ",2);
+	ft_printf_fd(2,"%s: ",argv);
 	if (message)
 		ft_putendl_fd(message,2);
 	else

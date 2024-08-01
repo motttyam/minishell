@@ -6,26 +6,26 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 22:31:54 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/07/24 20:23:09 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/01 08:25:00 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int	input_redirect(t_token **ptr);
+int	input_redirect(t_token **ptr,t_tool *tool);
 int	heredoc(t_token **ptr);
 int	save_heredoc(t_token *input);
-int	output_redirect(t_token **ptr);
-int	output_append(t_token **ptr);
+int	output_redirect(t_token **ptr,t_tool *tool);
+int	output_append(t_token **ptr,t_tool *tool);
 
-int	redirect(t_token **ptr)
+int	redirect(t_token **ptr,t_tool *tool)
 {
 	int	flag;
 
 	flag = 0;
 	if ((*ptr)->type == INPUT_REDIRECTION)
 	{
-		flag = input_redirect(ptr);
+		flag = input_redirect(ptr,tool);
 	}
 	else if ((*ptr)->type == HEREDOCUMENT)
 	{
@@ -35,18 +35,18 @@ int	redirect(t_token **ptr)
 	}
 	else if ((*ptr)->type == OUTPUT_REDIRECTION)
 	{
-		flag = output_redirect(ptr);
+		flag = output_redirect(ptr,tool);
 	}
 	else if ((*ptr)->type == OUTPUT_APPENDING)
 	{
-		flag = output_append(ptr);
+		flag = output_append(ptr,tool);
 	}
 	else
 		fatal_error("予期しないエラー: redirectではない");
 	return (flag);
 }
 
-int	input_redirect(t_token **ptr)
+int	input_redirect(t_token **ptr,t_tool *tool)
 {
 	int	fd;
 
@@ -54,7 +54,7 @@ int	input_redirect(t_token **ptr)
 	fd = open((*ptr)->token, O_RDONLY);
 	if (fd == -1)
 	{
-		put_error_message((*ptr)->token, NULL);
+		put_error_message((*ptr)->token, NULL,tool);
 		(*ptr) = (*ptr)->next;
 		return (FILE_ERROR);
 	}
@@ -94,7 +94,7 @@ int	save_heredoc(t_token *input)
 	return (0);
 }
 
-int	output_redirect(t_token **ptr)
+int	output_redirect(t_token **ptr,t_tool *tool)
 {
 	int	fd;
 
@@ -104,7 +104,7 @@ int	output_redirect(t_token **ptr)
 	{
 		if (errno == EACCES)
 		{
-			put_error_message((*ptr)->token, NULL);
+			put_error_message((*ptr)->token, NULL,tool);
 			return (FILE_ERROR);
 		}
 		fd = open((*ptr)->token, O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR);
@@ -115,7 +115,7 @@ int	output_redirect(t_token **ptr)
 	return (EXECVE_ONLY);
 }
 
-int	output_append(t_token **ptr)
+int	output_append(t_token **ptr,t_tool *tool)
 {
 	int	fd;
 
@@ -125,7 +125,7 @@ int	output_append(t_token **ptr)
 	{
 		if (errno == EACCES)
 		{
-			put_error_message((*ptr)->token, NULL);
+			put_error_message((*ptr)->token, NULL,tool);
 			return (FILE_ERROR);
 		}
 		fd = open((*ptr)->token, O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR);

@@ -6,7 +6,7 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 12:15:25 by yoshiminaok       #+#    #+#             */
-/*   Updated: 2024/07/31 07:30:05 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/01 06:19:33 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	pipe_and_execute(char **cmd, int *count, t_parser *parser, t_tool *tool)
 			exit (0);
 		if (exec_builtin(cmd, parser->list, tool,0) != -1)
 			exit(0);
-		do_child_process(cmd, parser->list);
+		do_child_process(cmd, parser->list,tool,parser->fd);
 	}
 	else
 	{
