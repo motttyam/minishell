@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 08:53:11 by yoshiminaok       #+#    #+#             */
-/*   Updated: 2024/07/31 22:35:25 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/01 15:24:17 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	parse_token(t_token *ptr, t_fd saved_fd, t_var **varlist, t_tool *tool)
 	{
 		if (parser.redirect_flag != FILE_ERROR)
 		{
-			interpret(parser.argv, parser.list, tool, parser.fd);
+			interpret(parser.argv,parser.list,tool,&parser);
 		}
 		free_argv(parser.argv);
 		wait_for_all_process(parser.count);
@@ -52,11 +52,20 @@ void	parse_newline(t_token **ptr, t_parser *parser, t_tool *tool)
 		{
 			if (parser->argv)
 			{
-				interpret(parser->argv, parser->list, tool, parser->fd);
-				free_argv(parser->argv);
+				if (parser->redirect_flag != FILE_ERROR)
+					interpret(parser->argv,parser->list,tool,parser);
+				reinit_fd(parser->fd);
+				wait_for_all_process(parser->count);
+				parser->count = 0;
+				tool->line_count++;
 				*ptr = (*ptr)->next;
+				free_argv(parser->argv);
+				parser->argv = NULL;
 			}
-			parse_pipe(ptr, parser, tool);
+			if((*ptr) != NULL)
+			{
+				parse_pipe(ptr, parser, tool);
+			}
 		}
 		else
 		{
@@ -121,6 +130,7 @@ void	parse_command(t_token **ptr, t_parser *parser, t_tool *tool)
 			else
 			{
 				parser->argv[i] = ft_strdup((*ptr)->token);
+				fprintf(stderr,"what = %s\n",parser->argv[i]);
 			}
 			if (!parser->argv[i])
 				handle_malloc_error();
@@ -134,18 +144,18 @@ void	parse_command(t_token **ptr, t_parser *parser, t_tool *tool)
 		{
 			if ((*ptr)->type == HEREDOCUMENT)
 				reinit_fd(parser->fd);
-			parser->redirect_flag = redirect(ptr);
+			parser->redirect_flag = redirect(ptr,tool,parser);
 		}
 	}
-	while (((*ptr) && ((*ptr)->type == INPUT_REDIRECTION
-				|| (*ptr)->type == HEREDOCUMENT
-				|| (*ptr)->type == OUTPUT_REDIRECTION
-				|| (*ptr)->type == OUTPUT_APPENDING)))
-	{
-		if ((*ptr)->type == HEREDOCUMENT)
-			reinit_fd(parser->fd);
-		parser->redirect_flag = redirect(ptr);
-	}
+			while (((*ptr) && ((*ptr)->type == INPUT_REDIRECTION
+					|| (*ptr)->type == HEREDOCUMENT
+					|| (*ptr)->type == OUTPUT_REDIRECTION
+					|| (*ptr)->type == OUTPUT_APPENDING)))
+		{
+			if ((*ptr)->type == HEREDOCUMENT)
+				reinit_fd(parser->fd);
+			parser->redirect_flag = redirect(ptr,tool,parser);
+		}
 	parser->argv[i] = NULL;
 }
 
@@ -161,7 +171,6 @@ int	get_argsize(t_token *ptr)
 		if (l->type == INPUT_REDIRECTION || l->type == HEREDOCUMENT
 			|| l->type == OUTPUT_REDIRECTION || l->type == OUTPUT_APPENDING)
 		{
-			// 後でValidateする別関数を作る
 			if (l->next == NULL)
 				fatal_error("is NULL after Redirect");
 			l = l->next;

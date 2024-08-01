@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 09:26:24 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/28 14:31:10 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/01 10:37:26 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ typedef struct s_token
 	char			token[ARGMAX];
 	int				type;
 	struct s_token	*next;
+	struct s_token	*pre;
 }					t_token;
 
 typedef struct s_token_lexer
@@ -56,8 +57,7 @@ typedef enum e_lexer_state
 	EXPANDED
 }					t_lexer_state;
 
-void				lex_token(t_token_lexer *lexer, char *line);
-void				lex_token(t_token_lexer *lexer, char *line);
+int					lex_token(t_token_lexer *lexer, char *line,t_tool *tool);
 void				init_token_lexer(t_token_lexer *lexer);
 void				get_token(t_token_lexer *lexer, char *line);
 void				get_pipe_token(t_token_lexer *lexer, char *line);

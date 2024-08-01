@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 21:25:10 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/28 22:19:05 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/01 11:45:09 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,6 @@ int	check_heredoc_token(t_token *token, t_var **list, int *status)
 		if (token->type == HEREDOCUMENT)
 		{
 			token = token->next;
-			if (is_valid_after_heredoc(token->type) == -1)
-			{
-				*status = 2;
-				return (-1);
-			}
 			get_heredoc_input(token, list, status);
 		}
 		token = token->next;
@@ -94,7 +89,8 @@ char	*get_input_noexpand(t_token *delimiter)
 		if (!line || !ft_strncmp(line, delimiter->token,
 				ft_strlen(delimiter->token) + 1))
 		{
-			ft_printf_fd(2,
+			if(!line)
+				ft_printf_fd(2,
 				"bash: warning: here-document delimited by end-of-file (wanted `%s')",
 				delimiter->token);
 			break ;
@@ -123,7 +119,8 @@ char	*get_input_expand(t_token *delimiter, t_var **list, int *status)
 		if (!line || !ft_strncmp(line, delimiter->token,
 				ft_strlen(delimiter->token) + 1))
 		{
-			ft_printf_fd(2,
+			if(!line)
+				ft_printf_fd(2,
 				"bash: warning: here-document delimited by end-of-file (wanted `%s')",
 				delimiter->token);
 			break ;

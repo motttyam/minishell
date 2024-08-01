@@ -6,26 +6,25 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 22:31:54 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/07/24 20:23:09 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/01 13:45:33 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int	input_redirect(t_token **ptr);
-int	heredoc(t_token **ptr);
+int	input_redirect(t_token **ptr,t_tool *tool,t_var **list);
 int	save_heredoc(t_token *input);
-int	output_redirect(t_token **ptr);
-int	output_append(t_token **ptr);
+int	output_redirect(t_token **ptr,t_tool *tool,t_var **list);
+int	output_append(t_token **ptr,t_tool *tool,t_var **list);
 
-int	redirect(t_token **ptr)
+int	redirect(t_token **ptr,t_tool *tool,t_parser *parser)
 {
 	int	flag;
 
 	flag = 0;
 	if ((*ptr)->type == INPUT_REDIRECTION)
 	{
-		flag = input_redirect(ptr);
+		flag = input_redirect(ptr,tool,parser->list);
 	}
 	else if ((*ptr)->type == HEREDOCUMENT)
 	{
@@ -35,26 +34,57 @@ int	redirect(t_token **ptr)
 	}
 	else if ((*ptr)->type == OUTPUT_REDIRECTION)
 	{
-		flag = output_redirect(ptr);
+		flag = output_redirect(ptr,tool,parser->list);
 	}
 	else if ((*ptr)->type == OUTPUT_APPENDING)
 	{
-		flag = output_append(ptr);
+		flag = output_append(ptr,tool,parser->list);
 	}
 	else
 		fatal_error("予期しないエラー: redirectではない");
 	return (flag);
 }
+int	expand_file(t_token **ptr,t_tool *tool,t_var **list)
+{
+	char	*file;
+	int		fd;
 
-int	input_redirect(t_token **ptr)
+	file = NULL;
+	file = get_expanded_argv((*ptr)->token,list,&tool->status);
+	if(file[0] == '\0')
+	{
+		put_error_message((*ptr)->token,"ambiguous redirect",tool);
+		(*ptr) = (*ptr)->next;
+		free(file);
+		return (FILE_ERROR);
+	}
+	fd = open(file, O_RDONLY);
+	if (fd == -1)
+	{
+		put_error_message(file, NULL,tool);
+		(*ptr) = (*ptr)->next;
+		free(file);
+		return (FILE_ERROR);
+	}
+	dup2(fd, STDIN_FILENO);
+	close(fd);
+	(*ptr) = (*ptr)->next;
+	free(file);
+	return (PIPE_AND_EXECVE);
+	
+}
+
+int	input_redirect(t_token **ptr,t_tool *tool,t_var **list)
 {
 	int	fd;
 
 	(*ptr) = (*ptr)->next;
+	if ((*ptr)->type == WORD_EXPANDED || (*ptr)->type == QUOTE_EXPANDED)
+		return(expand_file(ptr,tool,list));
 	fd = open((*ptr)->token, O_RDONLY);
 	if (fd == -1)
 	{
-		put_error_message((*ptr)->token, NULL);
+		put_error_message((*ptr)->token, NULL,tool);
 		(*ptr) = (*ptr)->next;
 		return (FILE_ERROR);
 	}
@@ -94,17 +124,19 @@ int	save_heredoc(t_token *input)
 	return (0);
 }
 
-int	output_redirect(t_token **ptr)
+int	output_redirect(t_token **ptr,t_tool *tool,t_var **list)
 {
 	int	fd;
 
 	(*ptr) = (*ptr)->next;
+	if ((*ptr)->type == WORD_EXPANDED || (*ptr)->type == QUOTE_EXPANDED)
+		return(expand_file(ptr,tool,list));
 	fd = open((*ptr)->token, O_WRONLY | O_TRUNC);
 	if (fd == -1)
 	{
 		if (errno == EACCES)
 		{
-			put_error_message((*ptr)->token, NULL);
+			put_error_message((*ptr)->token, NULL,tool);
 			return (FILE_ERROR);
 		}
 		fd = open((*ptr)->token, O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR);
@@ -115,17 +147,19 @@ int	output_redirect(t_token **ptr)
 	return (EXECVE_ONLY);
 }
 
-int	output_append(t_token **ptr)
+int	output_append(t_token **ptr,t_tool *tool,t_var **list)
 {
 	int	fd;
 
 	(*ptr) = (*ptr)->next;
+	if ((*ptr)->type == WORD_EXPANDED || (*ptr)->type == QUOTE_EXPANDED)
+		return(expand_file(ptr,tool,list));
 	fd = open((*ptr)->token, O_WRONLY | O_APPEND);
 	if (fd == -1)
 	{
 		if (errno == EACCES)
 		{
-			put_error_message((*ptr)->token, NULL);
+			put_error_message((*ptr)->token, NULL,tool);
 			return (FILE_ERROR);
 		}
 		fd = open((*ptr)->token, O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR);

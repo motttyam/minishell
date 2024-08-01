@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 16:33:23 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/07/31 22:39:23 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/01 15:24:12 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ char	*search_path(const char *line)
 	return ((char *)line);
 }
 
-int	exec_builtin(char **argv, t_var **list, t_tool *tool, int pipeflg)
+int	exec_builtin(char **argv, t_var **list, t_tool *tool, int count)
 {
 	if (argv[0] == NULL)
 		return (0);
@@ -98,7 +98,7 @@ int	exec_builtin(char **argv, t_var **list, t_tool *tool, int pipeflg)
 	}
 	else if (ft_strncmp(argv[0], "cd", 3) == 0)
 	{
-		if (!pipeflg)
+		if (!count)	
 			exec_cd(argv, list, tool);
 		return (0);
 	}
@@ -109,12 +109,12 @@ int	exec_builtin(char **argv, t_var **list, t_tool *tool, int pipeflg)
 	}
 	else if (ft_strncmp(argv[0], "export", 7) == 0)
 	{
-		exec_export(list, argv, pipeflg);
+		exec_export(list, argv,count);
 		return (0);
 	}
 	else if (ft_strncmp(argv[0], "unset", 6) == 0)
 	{
-		if (!pipeflg)
+		if (!count)
 			exec_unset(argv, list);
 		return (0);
 	}
@@ -125,72 +125,76 @@ int	exec_builtin(char **argv, t_var **list, t_tool *tool, int pipeflg)
 	}
 	else if (ft_strncmp(argv[0], "exit", 5) == 0)
 	{
-		if (!pipeflg)
-			exec_exit(argv, &(tool->status));
+		if (!count)
+			exec_exit(argv, &(tool->status),tool);
 		return (0);
 	}
 	return (-1);
 }
 
-void	interpret(char **argv, t_var **list, t_tool *tool, t_fd fd)
+void	interpret(char **argv, t_var **list, t_tool *tool,t_parser *parser)
 {
 	pid_t	pid;
-
-	if (exec_builtin(argv, list, tool, check_stdin_stat(fd.saved_stdin)) != -1)
+	
+	if (exec_builtin(argv, list, tool,parser->count) != -1)
 		return ;
 	signal(SIGINT, SIG_IGN);
 	pid = fork();
 	if (pid < 0)
 		fatal_error("fork");
 	else if (pid == 0)
-		do_child_process(argv, list);
+		do_child_process(argv, list,tool,parser->fd);
 	else
 	{
 		close(STDIN_FILENO);
 		waitpid(pid, &tool->status, 0);
 	}
 }
+void	read_file(char *file,t_tool *tool,t_fd saved_fd,t_var **list)
+{
+	char	buf[PATH_MAX];
+	int		fd;
+	int		bytes;
 
-void	do_child_process(char **argv, t_var **list)
+	fd = open(file,O_RDONLY);
+	bytes = read(fd,buf,PATH_MAX);
+	if( bytes == -1)
+		fatal_error("read");
+	buf[bytes] = '\0';
+	tool->filename = file;
+	lex_and_parse(buf,tool,saved_fd,list);
+}
+
+void	do_child_process(char **argv, t_var **list,t_tool *tool,t_fd saved_fd)
 {
 	signal(SIGINT, handle_signal);
 	if (ft_strchr(argv[0], '/'))
 	{
 		if (access(argv[0], X_OK) == -1)
 		{
-			put_error_message(argv[0], NULL);
+			put_error_message(argv[0], NULL,tool);
 			exit(126);
 		}
 		else
-			execve(argv[0], argv, list_to_environ(list));
+		{
+			execve(argv[0], argv, NULL);
+			// if(access(argv[0],X_OK))
+			read_file(argv[0], tool,saved_fd,list);
+			exit(0);
+		}
 	}
 	else
 	{
 		if (argv[0][0] == '\0')
 		{
-			put_error_message(argv[0], "command not found");
+			put_error_message(argv[0], "command not found",tool);
 			exit(127);
 		}
 		argv[0] = search_path(argv[0]);
-		execve(argv[0], argv, list_to_environ(list));
-		put_error_message(argv[0], "command not found");
+		execve(argv[0], argv, NULL);
+		put_error_message(argv[0], "command not found",tool);
 		exit(127);
 	}
-}
-
-int	check_stdin_stat(int saved_fd)
-{
-	struct stat	stdin_stat;
-	struct stat	saved_stat;
-
-	if (fstat(STDIN_FILENO, &stdin_stat) == -1)
-		fatal_error("fstat");
-	if (fstat(saved_fd, &saved_stat) == -1)
-		fatal_error("fstat");
-	if (stdin_stat.st_dev != saved_stat.st_dev
-		|| stdin_stat.st_ino != saved_stat.st_ino)
-		return (1);
-	return (0);
 }
 
 void	wait_for_all_process(int count)
