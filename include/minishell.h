@@ -6,7 +6,7 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:19:56 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/01 06:18:09 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/01 10:56:15 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,10 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
+# include "utils.h"
 # include "lexer.h"
 # include "libft.h"
 #include "ft_printf.h"
-# include "utils.h"
 # include "parser.h"
 # include "builtin.h"
 

@@ -6,7 +6,7 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 13:04:47 by yoshiminaok       #+#    #+#             */
-/*   Updated: 2024/08/01 08:24:39 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/01 13:03:48 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,6 @@ typedef enum e_parser_state
 void		parse_token(t_token *ptr, t_fd saved_fd, t_var **varlist,
 				t_tool *tool);
 char		*get_expanded_argv(char *token, t_var **varlist, int *status);
-int			redirect(t_token **ptr,t_tool *tool);
+int	redirect(t_token **ptr,t_tool *tool,t_parser *parser);
 
 #endif

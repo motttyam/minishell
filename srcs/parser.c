@@ -6,7 +6,7 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 08:53:11 by yoshiminaok       #+#    #+#             */
-/*   Updated: 2024/08/01 09:36:34 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/01 13:44:17 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,7 @@ void	parse_command(t_token **ptr, t_parser *parser, t_tool *tool)
 			else
 			{
 				parser->argv[i] = ft_strdup((*ptr)->token);
+				fprintf(stderr,"what = %s\n",parser->argv[i]);
 			}
 			if (!parser->argv[i])
 				handle_malloc_error();
@@ -143,7 +144,7 @@ void	parse_command(t_token **ptr, t_parser *parser, t_tool *tool)
 		{
 			if ((*ptr)->type == HEREDOCUMENT)
 				reinit_fd(parser->fd);
-			parser->redirect_flag = redirect(ptr,tool);
+			parser->redirect_flag = redirect(ptr,tool,parser);
 		}
 	}
 			while (((*ptr) && ((*ptr)->type == INPUT_REDIRECTION
@@ -153,7 +154,7 @@ void	parse_command(t_token **ptr, t_parser *parser, t_tool *tool)
 		{
 			if ((*ptr)->type == HEREDOCUMENT)
 				reinit_fd(parser->fd);
-			parser->redirect_flag = redirect(ptr,tool);
+			parser->redirect_flag = redirect(ptr,tool,parser);
 		}
 	parser->argv[i] = NULL;
 }
@@ -170,7 +171,6 @@ int	get_argsize(t_token *ptr)
 		if (l->type == INPUT_REDIRECTION || l->type == HEREDOCUMENT
 			|| l->type == OUTPUT_REDIRECTION || l->type == OUTPUT_APPENDING)
 		{
-			// 後でValidateする別関数を作る
 			if (l->next == NULL)
 				fatal_error("is NULL after Redirect");
 			l = l->next;

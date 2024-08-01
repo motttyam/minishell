@@ -6,7 +6,7 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:06:27 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/01 08:15:42 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/01 13:32:44 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,12 @@ void lex_and_parse(char *line,t_tool *tool,t_fd saved_fd,t_var **list)
 {
 	t_token_lexer	lexer;
 	
-	lex_token(&lexer, line);
+	if(lex_token(&lexer, line,tool) == -1)
+	{
+		check_heredoc_token(lexer.first,list,&tool->status);
+		return ;
+	}
+	check_heredoc_token(lexer.first,list,&tool->status);
 	if (tool->syntax_status >= 0)
 			parse_token(lexer.first, saved_fd, list, tool);
 	free_token_lexer(lexer.first);
@@ -84,7 +89,6 @@ int	main(void)
 		// free_token_lexer(lexer.first);
 		// reinit_fd(saved_fd);
 	}
-	fprintf(stderr,"here\n");
 	close_fd(saved_fd);
 	free(tool.home);
 	free(tool.pwd);
