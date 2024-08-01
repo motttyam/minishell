@@ -6,7 +6,7 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:19:56 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/31 07:05:35 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/01 10:56:15 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,10 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
+# include "utils.h"
 # include "lexer.h"
 # include "libft.h"
 #include "ft_printf.h"
-# include "utils.h"
 # include "parser.h"
 # include "builtin.h"
 
@@ -44,14 +44,15 @@ extern volatile t_signal_state	g_signal;
 
 # define PROMPT "minishell $ "
 
+void lex_and_parse(char *line,t_tool *tool,t_fd saved_fd,t_var **list);
 int								check_syntaxerror(t_token *token, int *status);
 void							handle_signal(int signal);
 void							setup_signal_handler(void);
 char							*rl_input(void);
 char							*search_path(const char *line);
 char							**list_to_environ(t_var **list);
-void							interpret(char **argv, t_var **list, t_tool *tool,t_fd fd);
-void							do_child_process(char **argv, t_var **listint);
+void	interpret(char **argv, t_var **list, t_tool *tool,t_parser *parser);
+void	do_child_process(char **argv, t_var **list,t_tool *tool,t_fd saved_fd);
 void	pipe_and_execute(char **cmd, int *count, t_parser *parser, t_tool *tool);
 void							reinit_fd(t_fd saved_fd);
 

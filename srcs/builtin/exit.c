@@ -6,7 +6,7 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 19:33:16 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/31 01:44:18 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/01 08:30:22 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	is_long_over_flow(int	synbol,int	result, int	next);
 void get_symbol(char c,int *symbol,int *i);
 void	put_numeric_error(char *argv);
 
-void	exec_exit(char **argv,int *status)
+void	exec_exit(char **argv,int *status,t_tool *tool)
 {
 	int	arg_status;
 
@@ -31,7 +31,7 @@ void	exec_exit(char **argv,int *status)
 			put_numeric_error(argv[1]);
 		else if (ft_argvlen(argv) > 2)
 		{
-			put_error_message("exit","too many arguments");
+			put_error_message("exit","too many arguments",tool);
 			return;
 		}
 		else

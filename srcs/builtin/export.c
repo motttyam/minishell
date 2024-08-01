@@ -6,7 +6,7 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 16:31:39 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/31 02:55:40 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/01 04:17:52 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,14 @@ void	put_export_error(char *arg);
 void	sort_and_put_env(t_var **list);
 void	put_env(t_var *save);
 
-void	exec_export(t_var **list, char **argv, int pipeflg)
+void	exec_export(t_var **list, char **argv, int count)
 {
 	int	i;
 
 	i = 1;
 	if (ft_argvlen(argv) == 1)
 		sort_and_put_env(list);
-	else if (!pipeflg)
+	else if (!count)
 	{
 		while (argv[i])
 		{
