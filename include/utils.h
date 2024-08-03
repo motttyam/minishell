@@ -6,7 +6,7 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 14:05:16 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/01 08:25:26 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/02 05:35:29 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,10 @@ typedef struct s_tool
 	char						*home;
 	char						*pwd;
 	char						*input;
-	int 						syntax_status;
 	char						*filename;
 	int							line_count;
+	char						*ps1;
+	char						*ps2;
 	char						pwd_first[PATH_MAX];
 }								t_tool;
 
@@ -64,7 +65,7 @@ void				quote_error(void);
 void				put_error_message(char *argv, char *message,t_tool *tool);
 
 // support.h
-char				*ft_strjoinendl(char const *s1, char const *s2);
+char				*ft_strjoinendl(char *s1, char const *s2);
 size_t				ft_strlen_nocrash(const char *s);
 int					ft_isspace(int c);
 

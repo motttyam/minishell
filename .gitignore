@@ -55,3 +55,4 @@ dkms.conf
 sample.c
 tmp
 *.txt
+.vscode
