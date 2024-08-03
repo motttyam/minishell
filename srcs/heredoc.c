@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 21:25:10 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/01 11:45:09 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/03 14:04:42 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,43 +17,22 @@ char	*get_input_noexpand(t_token *delimiter);
 char	*get_input_expand(t_token *delimiter, t_var **list, int *status);
 char	*ft_strjoinendl(char const *s1, char const *s2);
 
-int	is_valid_after_heredoc(int type)
-{
-	char	*type_name;
-
-	type_name = NULL;
-	if ((type == INPUT_REDIRECTION || type == HEREDOCUMENT
-			|| type == OUTPUT_REDIRECTION || type == OUTPUT_APPENDING
-			|| type == PIPE || type == TK_NEWLINE))
-	{
-		if (type == INPUT_REDIRECTION)
-			type_name = ft_strdup(">");
-		else if (type == HEREDOCUMENT)
-			type_name = ft_strdup("<<");
-		else if (type == OUTPUT_REDIRECTION)
-			type_name = ft_strdup(">");
-		else if (type == OUTPUT_APPENDING)
-			type_name = ft_strdup(">>");
-		else if (type == PIPE)
-			type_name = ft_strdup("|");
-		else if (type == TK_NEWLINE)
-			type_name = ft_strdup("newline");
-		ft_printf_fd(2, "minishell: syntax error near unexpected token `%s'\n",
-			type_name);
-		free(type_name);
-		return (-1);
-	}
-	return (0);
-}
-
 int	check_heredoc_token(t_token *token, t_var **list, int *status)
 {
+	
 	while (token)
 	{
 		if (token->type == HEREDOCUMENT)
 		{
 			token = token->next;
+			g_signal.is_heredoc = 1;
 			get_heredoc_input(token, list, status);
+			if(g_signal.is_heredoc == 2)
+			{
+				*status = 130;	
+				return (-1);
+			}
+			g_signal.is_heredoc = 0;
 		}
 		token = token->next;
 	}
@@ -69,13 +48,20 @@ void	get_heredoc_input(t_token *delimiter, t_var **list, int *status)
 		buf = get_input_noexpand(delimiter);
 	else
 		buf = get_input_expand(delimiter, list, status);
-	if (!buf)
+	if (g_signal.is_heredoc == 2)
+	{
+		if(buf)
+			free(buf);
+		return ;
+	}
+	else if (!buf)
 		fatal_error("");
 	ft_bzero(delimiter->token, ft_strlen(delimiter->token));
 	ft_strlcpy(delimiter->token, buf, PATH_MAX);
 	free(buf);
 	delimiter->type = WORD;
 }
+
 char	*get_input_noexpand(t_token *delimiter)
 {
 	char	*line;
@@ -89,10 +75,10 @@ char	*get_input_noexpand(t_token *delimiter)
 		if (!line || !ft_strncmp(line, delimiter->token,
 				ft_strlen(delimiter->token) + 1))
 		{
-			if(!line)
+			if (!line && g_signal.is_heredoc == 1)
 				ft_printf_fd(2,
-				"bash: warning: here-document delimited by end-of-file (wanted `%s')",
-				delimiter->token);
+					"bash: warning: here-document delimited by end-of-file (wanted `%s')\n",
+					delimiter->token);
 			break ;
 		}
 		tmp = buf;
@@ -119,10 +105,10 @@ char	*get_input_expand(t_token *delimiter, t_var **list, int *status)
 		if (!line || !ft_strncmp(line, delimiter->token,
 				ft_strlen(delimiter->token) + 1))
 		{
-			if(!line)
+			if (!line && g_signal.is_heredoc == 1)
 				ft_printf_fd(2,
-				"bash: warning: here-document delimited by end-of-file (wanted `%s')",
-				delimiter->token);
+					"bash: warning: here-document delimited by end-of-file (wanted `%s')",
+					delimiter->token);
 			break ;
 		}
 		if (ft_strchr(line, '$'))
