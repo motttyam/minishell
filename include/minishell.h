@@ -6,7 +6,7 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:19:56 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/02 05:22:24 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/03 18:21:23 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,4 +58,6 @@ void							reinit_fd(t_fd saved_fd);
 
 int								check_heredoc_token(t_token *token, t_var **list, int *status,t_tool *tool);
 void							wait_for_all_process(int count);
+
+void	free_argv(char **argv);
 #endif

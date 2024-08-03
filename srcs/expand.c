@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 16:43:42 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/28 17:31:42 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/03 18:23:51 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,12 +103,13 @@ void	not_expand(char **argv)
 
 void	get_status(char **argv, int *status)
 {
-	char *tmp;
+	char	*tmp;
+	char	*status_str;
 
 	tmp = *argv;
-	fprintf(stderr, "status: %d\n", *status);
-	ft_itoa((*status) / 256);
-	*argv = ft_strjoin(*argv, ft_itoa((*status) / 256));
+	status_str = ft_itoa(*status / 256);
+	*argv = ft_strjoin(*argv, status_str);
+	free(status_str);
 	if (!*argv)
 		fatal_error("malloc");
 	free(tmp);
