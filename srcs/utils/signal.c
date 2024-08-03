@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 13:46:01 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/07/28 20:11:10 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/03 15:50:19 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,19 @@
 
 void	handle_signal(int signal)
 {
-	if (signal == SIGINT)
+	if (signal == SIGINT && g_signal.is_heredoc == 1)
+	{
+		write(STDOUT_FILENO, "\n", 1);
+		close(STDIN_FILENO);
+		g_signal.is_heredoc = 2;
+	}
+	else if (signal == SIGINT)
 	{
 		rl_on_new_line();
 		write(STDOUT_FILENO, "\n", 1);
 		rl_replace_line("", 0);
 		rl_redisplay();
 	}
-	// if (signal == SIGINT && )
 }
 
 void setup_signal_handler()

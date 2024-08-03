@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:06:27 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/02 07:11:14 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/03 14:48:55 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,26 +39,26 @@ void	free_envlist(t_var *head)
 		free(current);
 	}
 }
-void lex_and_parse(char *line,t_tool *tool,t_fd saved_fd,t_var **list)
+void	lex_and_parse(char *line, t_tool *tool, t_fd saved_fd, t_var **list)
 {
 	t_token_lexer	lexer;
-	
-	if(lex_token(&lexer, line,tool,0))
+
+	if (lex_token(&lexer, line, tool, 0))
 	{
-		check_heredoc_token(lexer.first,list,&tool->status,tool);
+		check_heredoc_token(lexer.first, list, &tool->status, tool);
 		return ;
 	}
-	check_heredoc_token(lexer.first,list,&tool->status,tool);
-	parse_token(lexer.first, saved_fd, list, tool);
+	if (check_heredoc_token(lexer.first, list, &tool->status, tool) != -1)
+		parse_token(lexer.first, saved_fd, list, tool);
 	free_token_lexer(lexer.first);
 	reinit_fd(saved_fd);
 }
 
 int	main(void)
 {
-	t_var			*first;
-	t_fd			saved_fd;
-	t_tool			tool;
+	t_var	*first;
+	t_fd	saved_fd;
+	t_tool	tool;
 
 	save_fd(&saved_fd);
 	setup_signal_handler();
@@ -74,10 +74,10 @@ int	main(void)
 	while (1)
 	{
 		tool.input = NULL;
-		tool.input = rl_input(&tool,&first);
+		tool.input = rl_input(&tool, &first);
 		if (!tool.input)
 			break ;
-		lex_and_parse(tool.input,&tool,saved_fd,&first);
+		lex_and_parse(tool.input, &tool, saved_fd, &first);
 	}
 	close_fd(saved_fd);
 	free(tool.home);

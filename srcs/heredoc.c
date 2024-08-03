@@ -3,51 +3,69 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 21:25:10 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/02 06:06:27 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/03 15:48:29 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	get_heredoc_input(t_token *delimiter, t_var **list, int *status,t_tool *tool);
-char	*get_input_noexpand(t_token *delimiter,t_tool *tool);
-char	*get_input_expand(t_token *delimiter, t_var **list, int *status,t_tool *tool);
-void	put_heredoc_error(char *delimiter,t_tool *tool);
+void	get_heredoc_input(t_token *delimiter, t_var **list, int *status,
+			t_tool *tool);
+char	*get_input_noexpand(t_token *delimiter, t_tool *tool);
+char	*get_input_expand(t_token *delimiter, t_var **list, int *status,
+			t_tool *tool);
+void	put_heredoc_error(char *delimiter, t_tool *tool);
 
-int	check_heredoc_token(t_token *token, t_var **list, int *status,t_tool *tool)
+int	check_heredoc_token(t_token *token, t_var **list, int *status, t_tool *tool)
 {
 	while (token)
 	{
 		if (token->type == HEREDOCUMENT)
 		{
 			token = token->next;
-			get_heredoc_input(token, list, status,tool);
+			g_signal.is_heredoc = 1;
+			get_heredoc_input(token, list, status, tool);
+			if (g_signal.is_heredoc == 2)
+			{
+				g_signal.is_child = 0;
+				*status = 130;
+				return (-1);
+			}
+			g_signal.is_heredoc = 0;
 		}
 		token = token->next;
 	}
 	return (0);
 }
 
-void	get_heredoc_input(t_token *delimiter, t_var **list, int *status,t_tool *tool)
+void	get_heredoc_input(t_token *delimiter, t_var **list, int *status,
+		t_tool *tool)
 {
 	char	*buf;
 
 	if (delimiter->type == SINGLE_QUOTE || delimiter->type == DOUBLE_QUOTE
 		|| delimiter->type == QUOTE_EXPANDED)
-		buf = get_input_noexpand(delimiter,tool);
+		buf = get_input_noexpand(delimiter, tool);
 	else
-		buf = get_input_expand(delimiter, list, status,tool);
+		buf = get_input_expand(delimiter, list, status, tool);
 	ft_bzero(delimiter->token, ft_strlen(delimiter->token));
 	delimiter->type = WORD;
-	if (!buf)
+	if (g_signal.is_heredoc == 2)
+	{
+		if (buf)
+			free(buf);
+		return ;
+	}
+	else if (!buf)
 		return ;
 	ft_strlcpy(delimiter->token, buf, PATH_MAX);
 	free(buf);
 }
-char	*get_input_noexpand(t_token *delimiter,t_tool *tool)
+
+char	*get_input_noexpand(t_token *delimiter, t_tool *tool)
 {
 	char	*line;
 	char	*buf;
@@ -59,9 +77,12 @@ char	*get_input_noexpand(t_token *delimiter,t_tool *tool)
 			line = readline(tool->ps2);
 		else
 			line = readline("> ");
-		if (!line)
-			return (put_heredoc_error(delimiter->token,tool),buf);
-		if (!ft_strncmp(line, delimiter->token,ft_strlen(delimiter->token)+1))
+		if (g_signal.is_heredoc == 2)
+			return (buf);
+		else if (!line)
+			return (put_heredoc_error(delimiter->token, tool), buf);
+		if (!ft_strncmp(line, delimiter->token, ft_strlen(delimiter->token)
+				+ 1))
 			break ;
 		buf = ft_strjoinendl(buf, line);
 		free(line);
@@ -69,7 +90,8 @@ char	*get_input_noexpand(t_token *delimiter,t_tool *tool)
 	return (buf);
 }
 
-char	*get_input_expand(t_token *delimiter, t_var **list, int *status,t_tool *tool)
+char	*get_input_expand(t_token *delimiter, t_var **list, int *status,
+		t_tool *tool)
 {
 	char	*line;
 	char	*buf;
@@ -82,9 +104,12 @@ char	*get_input_expand(t_token *delimiter, t_var **list, int *status,t_tool *too
 			line = readline(tool->ps2);
 		else
 			line = readline("> ");
-		if (!line)
-			return (put_heredoc_error(delimiter->token,tool),buf);
-		if (!ft_strncmp(line, delimiter->token,ft_strlen(delimiter->token)+1))
+		if (g_signal.is_heredoc == 2)
+			return (buf);
+		else if (!line)
+			return (put_heredoc_error(delimiter->token, tool), buf);
+		if (!ft_strncmp(line, delimiter->token, ft_strlen(delimiter->token)
+				+ 1))
 			break ;
 		if (ft_strchr(line, '$'))
 		{
@@ -97,13 +122,14 @@ char	*get_input_expand(t_token *delimiter, t_var **list, int *status,t_tool *too
 	}
 	return (buf);
 }
-void	put_heredoc_error(char *delimiter,t_tool *tool)
+void	put_heredoc_error(char *delimiter, t_tool *tool)
 {
-		if (tool->filename)
+	if (tool->filename)
 	{
-		ft_printf_fd(2,"%s: line %d:",tool->filename,tool->line_count);
+		ft_printf_fd(2, "%s: line %d:", tool->filename, tool->line_count);
 	}
-	else
-		ft_putstr_fd("minishell: ",2);
-	ft_printf_fd(2,"warning: here-document delimited by end-of-file (wanted `%s')\n",delimiter);
+	else ft_putstr_fd("minishell: ", 2);
+	ft_printf_fd(2,
+		"warning: here-document delimited by end-of-file (wanted `%s')\n",
+		delimiter);
 }
