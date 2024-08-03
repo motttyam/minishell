@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   interpret.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 16:33:23 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/01 08:47:36 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/03 16:35:06 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int	check_stdin_stat(int saved_fd);
+int		check_stdin_stat(int saved_fd);
 
 char	**list_to_environ(t_var **list)
 {
@@ -96,7 +96,7 @@ int	exec_builtin(char **argv, t_var **list, t_tool *tool, int count)
 	}
 	else if (ft_strncmp(argv[0], "cd", 3) == 0)
 	{
-		if (!count)	
+		if (!count)
 			exec_cd(argv, list, tool);
 		return (0);
 	}
@@ -107,7 +107,7 @@ int	exec_builtin(char **argv, t_var **list, t_tool *tool, int count)
 	}
 	else if (ft_strncmp(argv[0], "export", 7) == 0)
 	{
-		exec_export(list, argv,count);
+		exec_export(list, argv, count);
 		return (0);
 	}
 	else if (ft_strncmp(argv[0], "unset", 6) == 0)
@@ -124,60 +124,60 @@ int	exec_builtin(char **argv, t_var **list, t_tool *tool, int count)
 	else if (ft_strncmp(argv[0], "exit", 5) == 0)
 	{
 		if (!count)
-			exec_exit(argv, &(tool->status),tool);
+			exec_exit(argv, &(tool->status), tool);
 		return (0);
 	}
 	return (-1);
 }
 
-void	interpret(char **argv, t_var **list, t_tool *tool,t_parser *parser)
+void	interpret(char **argv, t_var **list, t_tool *tool, t_parser *parser)
 {
 	pid_t	pid;
-	
-	if (exec_builtin(argv, list, tool,parser->count) != -1)
+
+	if (exec_builtin(argv, list, tool, parser->count) != -1)
 		return ;
 	signal(SIGINT, SIG_IGN);
 	pid = fork();
 	if (pid < 0)
 		fatal_error("fork");
 	else if (pid == 0)
-		do_child_process(argv, list,tool,parser->fd);
+		do_child_process(argv, list, tool, parser->fd);
 	else
 	{
 		close(STDIN_FILENO);
-		waitpid(pid,&tool->status,0);
+		waitpid(pid, &tool->status, 0);
 	}
 }
-void	read_file(char *file,t_tool *tool,t_fd saved_fd,t_var **list)
+void	read_file(char *file, t_tool *tool, t_fd saved_fd, t_var **list)
 {
 	char	buf[PATH_MAX];
 	int		fd;
 	int		bytes;
 
-	fd = open(file,O_RDONLY);
-	bytes = read(fd,buf,PATH_MAX);
-	if( bytes == -1)
+	fd = open(file, O_RDONLY);
+	bytes = read(fd, buf, PATH_MAX);
+	if (bytes == -1)
 		fatal_error("read");
 	buf[bytes] = '\0';
 	tool->filename = file;
-	lex_and_parse(buf,tool,saved_fd,list);
+	lex_and_parse(buf, tool, saved_fd, list);
 }
 
-void	do_child_process(char **argv, t_var **list,t_tool *tool,t_fd saved_fd)
+void	do_child_process(char **argv, t_var **list, t_tool *tool, t_fd saved_fd)
 {
 	signal(SIGINT, handle_signal);
 	if (ft_strchr(argv[0], '/'))
 	{
 		if (access(argv[0], X_OK) == -1)
 		{
-			put_error_message(argv[0], NULL,tool);
+			put_error_message(argv[0], NULL, tool);
 			exit(126);
 		}
 		else
 		{
-			execve(argv[0], argv, NULL);
+			execve(argv[0], argv, list_to_environ(list));
 			// if(access(argv[0],X_OK))
-			read_file(argv[0], tool,saved_fd,list);
+			read_file(argv[0], tool, saved_fd, list);
 			exit(0);
 		}
 	}
@@ -185,12 +185,12 @@ void	do_child_process(char **argv, t_var **list,t_tool *tool,t_fd saved_fd)
 	{
 		if (argv[0][0] == '\0')
 		{
-			put_error_message(argv[0], "command not found",tool);
+			put_error_message(argv[0], "command not found", tool);
 			exit(127);
 		}
 		argv[0] = search_path(argv[0]);
-		execve(argv[0], argv, NULL);
-		put_error_message(argv[0], "command not found",tool);
+		execve(argv[0], argv, list_to_environ(list));
+		put_error_message(argv[0], "command not found", tool);
 		exit(127);
 	}
 }
