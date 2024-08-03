@@ -6,13 +6,13 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 20:55:09 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/03 16:36:24 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/03 18:06:06 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	save_oldpwd(t_var **list, char *tmp, char *tmp2)
+void	save_oldpwd(t_var **list, char *tmp)
 {
 	t_var	*current;
 
@@ -21,19 +21,7 @@ void	save_oldpwd(t_var **list, char *tmp, char *tmp2)
 	{
 		free(current->value);
 		if (tmp != NULL)
-		{
 			current->value = tmp;
-			free(tmp2);
-		}
-		else
-			current->value = tmp2;
-	}
-	else
-	{
-		if (tmp != NULL)
-			free(tmp);
-		if (tmp2 != NULL && tmp2 != tmp)
-			free(tmp2);
 	}
 }
 
@@ -43,6 +31,7 @@ void	save_tool_pwd(t_tool *tool, char *tmp2, char *path)
 	tool->pwd = ft_strdup(path);
 	if(!tool->pwd)
 		fatal_error("malloc");
+	free(tmp2);
 }
 
 void	change_directory(char *argv, t_var **list, t_tool *tool)
@@ -66,7 +55,7 @@ void	change_directory(char *argv, t_var **list, t_tool *tool)
 			if(!current->value)
 				fatal_error("malloc");
 			save_tool_pwd(tool, tmp2, path);
-			save_oldpwd(list, tmp, tmp2);
+			save_oldpwd(list, tmp);
 		}
 		else
 		{
