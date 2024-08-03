@@ -6,7 +6,7 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 09:53:36 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/02 07:39:33 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/03 18:27:52 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,6 +191,7 @@ void	get_word_token(t_token_lexer *lexer, char *line)
 		else if (lexer->in_quote == NORMAL && line[lexer->line_i] == '\\')
 		{
 			lexer->line_i++;
+			continue;
 		}
 		else if (lexer->in_quote == NORMAL && ft_strchr("|\n \t",
 				line[lexer->line_i]))

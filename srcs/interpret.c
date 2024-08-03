@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   interpret.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 16:33:23 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/03 16:35:06 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/03 18:21:41 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,6 +165,7 @@ void	read_file(char *file, t_tool *tool, t_fd saved_fd, t_var **list)
 
 void	do_child_process(char **argv, t_var **list, t_tool *tool, t_fd saved_fd)
 {
+	char **env;
 	signal(SIGINT, handle_signal);
 	if (ft_strchr(argv[0], '/'))
 	{
@@ -175,8 +176,9 @@ void	do_child_process(char **argv, t_var **list, t_tool *tool, t_fd saved_fd)
 		}
 		else
 		{
-			execve(argv[0], argv, list_to_environ(list));
-			// if(access(argv[0],X_OK))
+			env = list_to_environ(list);
+			execve(argv[0], argv, env);
+			free_argv(env);
 			read_file(argv[0], tool, saved_fd, list);
 			exit(0);
 		}
@@ -189,7 +191,9 @@ void	do_child_process(char **argv, t_var **list, t_tool *tool, t_fd saved_fd)
 			exit(127);
 		}
 		argv[0] = search_path(argv[0]);
-		execve(argv[0], argv, list_to_environ(list));
+		env = list_to_environ(list);
+		execve(argv[0], argv, env);
+		free_argv(env);
 		put_error_message(argv[0], "command not found", tool);
 		exit(127);
 	}
