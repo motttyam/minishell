@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 19:38:44 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/07/27 15:15:46 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/03 19:15:56 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,13 @@ void	exec_pwd(t_var **list, char *pwd)
 		ft_putendl_fd(dir, 1);
 	else
 	{
-        ft_putendl_fd(pwd, 1);
+		ft_putendl_fd(pwd, 1);
 	}
 }
 
 char	*ft_getenv(t_var **list, char *key_name)
 {
-	t_var *current;
+	t_var	*current;
 
 	current = *list;
 	while (current)

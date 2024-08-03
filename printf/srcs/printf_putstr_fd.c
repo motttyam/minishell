@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   printf_putstr_fd.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 17:11:19 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/06/23 22:01:49 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/03 21:39:33 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	printf_putstr_fd(char *s, int fd)
 
 	if (!s)
 	{
-		write(fd, "(null)" , 6);
+		write(fd, "(null)", 6);
 		return (6);
 	}
 	length = printf_strlen(s);

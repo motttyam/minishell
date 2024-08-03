@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 21:22:38 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/07/28 18:01:13 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/03 21:38:53 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ int	ft_puthex_uns(unsigned long int num, int fd)
 
 void	ft_puthex_uns_recursive(unsigned long int num, int *count, int fd)
 {
-	char c;
+	char	c;
+
 	if (num >= 16)
 	{
 		ft_puthex_uns_recursive(num / 16, count, fd);

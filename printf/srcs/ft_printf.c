@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/29 23:44:58 by motttyam          #+#    #+#             */
-/*   Updated: 2024/07/28 18:03:08 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/03 21:38:33 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	ft_printf_fd(int fd, const char *format, ...)
 {
 	va_list		args;
 	int			count_format;
-	
+
 	va_start(args, format);
 	count_format = ft_count_format(fd, &args, format);
 	va_end(args);

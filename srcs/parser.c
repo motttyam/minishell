@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 08:53:11 by yoshiminaok       #+#    #+#             */
-/*   Updated: 2024/08/02 07:26:13 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/03 21:03:53 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ void	parse_pipe(t_token **ptr, t_parser *parser, t_tool *tool);
 void	parse_redirect(t_token **ptr, t_parser *parser);
 void	parse_command(t_token **ptr, t_parser *parser, t_tool *tool);
 int		get_argsize(t_token *ptr);
-void	free_argv(char **argv);
 
 void	parse_token(t_token *ptr, t_fd saved_fd, t_var **varlist, t_tool *tool)
 {
@@ -36,7 +35,7 @@ void	parse_token(t_token *ptr, t_fd saved_fd, t_var **varlist, t_tool *tool)
 	{
 		if (parser.redirect_flag != FILE_ERROR)
 		{
-			interpret(parser.argv,parser.list,tool,&parser);
+			interpret(parser.argv, parser.list, tool, &parser);
 		}
 		free_argv(parser.argv);
 		wait_for_all_process(parser.count);
@@ -53,7 +52,7 @@ void	parse_newline(t_token **ptr, t_parser *parser, t_tool *tool)
 			if (parser->argv)
 			{
 				if (parser->redirect_flag != FILE_ERROR)
-					interpret(parser->argv,parser->list,tool,parser);
+					interpret(parser->argv, parser->list, tool, parser);
 				reinit_fd(parser->fd);
 				wait_for_all_process(parser->count);
 				parser->count = 0;
@@ -62,7 +61,7 @@ void	parse_newline(t_token **ptr, t_parser *parser, t_tool *tool)
 				free_argv(parser->argv);
 				parser->argv = NULL;
 			}
-			if((*ptr) != NULL)
+			if ((*ptr) != NULL)
 			{
 				parse_pipe(ptr, parser, tool);
 			}
@@ -82,10 +81,10 @@ void	parse_pipe(t_token **ptr, t_parser *parser, t_tool *tool)
 		if ((*ptr)->type == PIPE)
 		{
 			if (parser->redirect_flag == PIPE_AND_EXECVE)
-				pipe_and_execute(parser->argv, &parser->count, parser,tool);
+				pipe_and_execute(parser->argv, &parser->count, parser, tool);
 			else if (parser->redirect_flag == EXECVE_ONLY)
 			{
-				pipe_and_execute(parser->argv, &parser->count, parser,tool);
+				pipe_and_execute(parser->argv, &parser->count, parser, tool);
 				parser->redirect_flag = PIPE_AND_EXECVE;
 				dup2(parser->fd.saved_stdout, STDOUT_FILENO);
 			}
@@ -139,18 +138,18 @@ void	parse_command(t_token **ptr, t_parser *parser, t_tool *tool)
 		{
 			if ((*ptr)->type == HEREDOCUMENT)
 				reinit_fd(parser->fd);
-			parser->redirect_flag = redirect(ptr,tool,parser);
+			parser->redirect_flag = redirect(ptr, tool, parser);
 		}
 	}
-			while (((*ptr) && ((*ptr)->type == INPUT_REDIRECTION
-					|| (*ptr)->type == HEREDOCUMENT
-					|| (*ptr)->type == OUTPUT_REDIRECTION
-					|| (*ptr)->type == OUTPUT_APPENDING)))
-		{
-			if ((*ptr)->type == HEREDOCUMENT)
-				reinit_fd(parser->fd);
-			parser->redirect_flag = redirect(ptr,tool,parser);
-		}
+	while (((*ptr) && ((*ptr)->type == INPUT_REDIRECTION
+				|| (*ptr)->type == HEREDOCUMENT
+				|| (*ptr)->type == OUTPUT_REDIRECTION
+				|| (*ptr)->type == OUTPUT_APPENDING)))
+	{
+		if ((*ptr)->type == HEREDOCUMENT)
+			reinit_fd(parser->fd);
+		parser->redirect_flag = redirect(ptr, tool, parser);
+	}
 	parser->argv[i] = NULL;
 }
 
@@ -175,17 +174,4 @@ int	get_argsize(t_token *ptr)
 		l = l->next;
 	}
 	return (size);
-}
-
-void	free_argv(char **argv)
-{
-	int	i;
-
-	i = 0;
-	while (argv[i])
-	{
-		free(argv[i]);
-		i++;
-	}
-	free(argv);
 }

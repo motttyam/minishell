@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 13:04:47 by yoshiminaok       #+#    #+#             */
-/*   Updated: 2024/08/01 13:03:48 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/03 20:55:26 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,19 @@ typedef enum e_parser_state
 void		parse_token(t_token *ptr, t_fd saved_fd, t_var **varlist,
 				t_tool *tool);
 char		*get_expanded_argv(char *token, t_var **varlist, int *status);
-int	redirect(t_token **ptr,t_tool *tool,t_parser *parser);
+
+// redirect
+int			redirect(t_token **ptr, t_tool *tool, t_parser *parser);
+int			input_redirect(t_token **ptr, t_tool *tool, t_var **list);
+int			save_heredoc(t_token *input);
+int			output_redirect(t_token **ptr, t_tool *tool, t_var **list);
+int			output_append(t_token **ptr, t_tool *tool, t_var **list);
+void		redirect_close_and_dup(int *pipefd);
+int			expand_file(t_token **ptr, t_tool *tool, t_var **list);
+
+// pipe
+void		pipe_close_and_dup(int *pipefd);
+void		pipe_and_execute(char **cmd, int *count, t_parser *parser,
+				t_tool *tool);
 
 #endif

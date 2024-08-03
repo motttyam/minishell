@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 12:15:25 by yoshiminaok       #+#    #+#             */
-/*   Updated: 2024/08/01 06:19:33 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/03 21:02:07 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void	pipe_and_execute(char **cmd, int *count, t_parser *parser, t_tool *tool)
 {
-	int pipefd[2];
-	pid_t pid;
+	int		pipefd[2];
+	pid_t	pid;
 
 	(*count)++;
 	if (pipe(pipefd) == -1)
@@ -30,15 +30,21 @@ void	pipe_and_execute(char **cmd, int *count, t_parser *parser, t_tool *tool)
 		close(pipefd[1]);
 		close(pipefd[0]);
 		if (!cmd[0])
-			exit (0);
-		if (exec_builtin(cmd, parser->list, tool,0) != -1)
 			exit(0);
-		do_child_process(cmd, parser->list,tool,parser->fd);
+		if (exec_builtin(cmd, parser->list, tool, 0) != -1)
+			exit(0);
+		do_child_process(cmd, parser->list, tool, parser->fd);
 	}
 	else
-	{
-		dup2(pipefd[0], STDIN_FILENO);
-		close(pipefd[0]);
-		close(pipefd[1]);
-	}
+		pipe_close_and_dup(pipefd);
+}
+
+void	pipe_close_and_dup(int *pipefd)
+{
+	if (dup2(pipefd[0], STDIN_FILENO) == -1)
+		fatal_error("dup2");
+	if (close(pipefd[0]) == -1)
+		fatal_error("close");
+	if (close(pipefd[1]) == -1)
+		fatal_error("close");
 }

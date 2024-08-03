@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   support.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 21:49:17 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/02 05:36:30 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/03 21:24:10 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,15 +33,16 @@ char	*ft_strjoinendl(char *s1, char const *s2)
 	while (s2[i])
 		*dest++ = s2[i++];
 	*dest = '\n';
-	*(dest + 1)= '\0';
+	*(dest + 1) = '\0';
 	free(s1);
 	return (temp);
 }
+
 size_t	ft_strlen_nocrash(const char *s)
 {
 	size_t	length;
 
-	if(!s)
+	if (!s)
 		return (0);
 	length = 0;
 	while (s[length] != '\0')
@@ -53,8 +54,25 @@ size_t	ft_strlen_nocrash(const char *s)
 
 int	ft_isspace(int c)
 {
-	if (c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\f' || c == '\r')
+	if (c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\f'
+		|| c == '\r')
 		return (1);
 	else
 		return (0);
+}
+
+char	*ft_strchr(const char *str, int c)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if ((unsigned char)str[i] == (unsigned char)c)
+			return ((char *)&str[i]);
+		i++;
+	}
+	if ((char)c == '\0')
+		return ((char *)&str[i]);
+	return (0);
 }

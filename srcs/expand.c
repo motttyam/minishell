@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 16:43:42 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/03 18:23:51 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/03 20:12:22 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,15 +67,9 @@ void	expand_opt_env(char **argv, char *key_name, t_var **varlist,
 
 	opt = *varlist;
 	if (key_name == NULL)
-	{
-		not_expand(argv);
-		return ;
-	}
+		return (not_expand(argv));
 	if (key_name[0] == '?')
-	{
-		get_status(argv, status);
-		return ;
-	}
+		return (get_status(argv, status));
 	while (opt)
 	{
 		if (!ft_strncmp(key_name, opt->key, ft_strlen(key_name) + 1))
@@ -90,6 +84,7 @@ void	expand_opt_env(char **argv, char *key_name, t_var **varlist,
 		fatal_error("malloc");
 	free(tmp);
 }
+
 void	not_expand(char **argv)
 {
 	char	*tmp;
@@ -107,9 +102,14 @@ void	get_status(char **argv, int *status)
 	char	*status_str;
 
 	tmp = *argv;
-	status_str = ft_itoa(*status / 256);
-	*argv = ft_strjoin(*argv, status_str);
-	free(status_str);
+	if (g_signal.sigint != 1)
+	{
+		status_str = ft_itoa(*status / 256);
+		*argv = ft_strjoin(*argv, status_str);
+		free(status_str);
+	}
+	else
+		*argv = ft_strjoin(*argv, "130");
 	if (!*argv)
 		fatal_error("malloc");
 	free(tmp);
