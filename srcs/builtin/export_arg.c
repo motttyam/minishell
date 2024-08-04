@@ -6,13 +6,13 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 16:41:29 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/04 18:39:52 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/04 20:50:55 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	export_arg(char *arg, t_var **list)
+void	export_arg(char *arg, t_var **list,t_tool *tool)
 {
 	int		append_flg;
 	t_var	*opt;
@@ -21,7 +21,7 @@ void	export_arg(char *arg, t_var **list)
 
 	keyname = NULL;
 	opt = NULL;
-	append_flg = get_env_keyname(arg, &keyname);
+	append_flg = get_env_keyname(arg, &keyname,tool);
 	ft_getenv_node(list, keyname, &opt);
 	newvalue = get_value(arg);
 	if (opt)
@@ -56,7 +56,7 @@ void	update_env_var(t_var *opt, int append_flg, char *newvalue)
 	}
 }
 
-int	get_env_keyname(char *arg, char **key_name)
+int	get_env_keyname(char *arg, char **key_name,t_tool *tool)
 {
 	int	i;
 	int	append_flg;
@@ -66,9 +66,9 @@ int	get_env_keyname(char *arg, char **key_name)
 	while (arg[i] != '=' && arg[i] != '+' && arg[i])
 	{
 		if (i == 0 && ft_isdigit(arg[i]))
-			put_export_error(arg);
+			put_export_error(arg,tool);
 		if (!ft_isalnum(arg[i]) && arg[i] != '_')
-			put_export_error(arg);
+			put_export_error(arg,tool);
 		i++;
 	}
 	*key_name = ft_substr(arg, 0, i);
@@ -78,7 +78,7 @@ int	get_env_keyname(char *arg, char **key_name)
 	{
 		i++;
 		if (arg[i] != '=')
-			put_export_error(arg);
+			put_export_error(arg,tool);
 		append_flg = 1;
 	}
 	return (append_flg);
