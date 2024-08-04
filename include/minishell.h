@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:19:56 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/04 14:57:03 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/04 15:22:13 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,8 @@ void							interpret(char **argv, t_var **list,
 									t_tool *tool, t_parser *parser);
 void							do_child_process(char **argv, t_var **list,
 									t_tool *tool, t_fd saved_fd);
-void 							do_path_command(char **argv, t_var **list, t_tool *tool, t_fd saved_fd);
+void							do_path_command(char **argv, t_var **list,
+									t_tool *tool, t_fd saved_fd);
 void							pipe_and_execute(char **cmd, int *count,
 									t_parser *parser, t_tool *tool);
 void							reinit_fd(t_fd saved_fd);

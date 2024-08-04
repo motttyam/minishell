@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 20:55:09 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/04 15:13:18 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/04 15:23:22 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ int	check_dash_tilde(char **argv, t_var **list, t_tool *tool)
 {
 	char	*tmp;
 
-	if ((argv[1][0] == '~' && argv[1][1] == '\0') 
-		|| (argv[1][0] == '~' && argv[1][1] == '/'))
+	if ((argv[1][0] == '~' && argv[1][1] == '\0') || (argv[1][0] == '~'
+			&& argv[1][1] == '/'))
 	{
 		tmp = *(argv + 1);
 		*(argv + 1) = ft_strjoin(tool->home, *(argv + 1) + 1);

@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 14:31:29 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/04 15:05:35 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/04 15:25:00 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,4 +65,17 @@ void	parse_command_redirect(t_token **ptr, t_parser *parser, t_tool *tool)
 			reinit_fd(parser->fd);
 		parser->redirect_flag = redirect(ptr, tool, parser);
 	}
+}
+
+void	wait_for_all_process(int count)
+{
+	int	i;
+
+	i = 0;
+	while (i < count)
+	{
+		waitpid(-1, NULL, 0);
+		i++;
+	}
+	setup_signal_handler();
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   support.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 21:49:17 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/04 13:29:19 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/04 15:25:30 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ char	*ft_strchr(const char *str, int c)
 	return (0);
 }
 
-void	dup_and_put_error(char **dup,char *src)
+void	dup_and_put_error(char **dup, char *src)
 {
 	*dup = ft_strdup(src);
 	if (!(*dup))
