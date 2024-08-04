@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 16:50:06 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/03 19:17:44 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/04 14:56:43 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,4 +52,47 @@ void	exec_env(char **argv, t_var **list)
 		free(env[i++]);
 	free(env);
 	return ;
+}
+
+char	**list_to_environ(t_var **list)
+{
+	t_var	*head;
+	char	**env;
+	char	**top;
+	char	*tmp;
+
+	allocate_env(&env,list);
+	top = env;
+	head = *list;
+	while (head)
+	{
+		if (head->value != NULL)
+		{
+			*env = ft_strjoin(head->key, "=");
+			tmp = *env;
+			*env = ft_strjoin(*env, head->value);
+			free(tmp);
+			env++;
+		}
+		head = head->next;
+	}
+	*env = NULL;
+	return (top);
+}
+void allocate_env(char ***env,t_var **list)
+{
+	t_var	*head;
+	int		i;
+
+	i = 0;
+	head = *list;
+	while (head)
+	{
+		if (head->value != NULL)
+			i++;
+		head = head->next;
+	}
+	*env = (char **)malloc(sizeof(char *) * (i + 1));
+	if (!env)
+		fatal_error("malloc");
 }

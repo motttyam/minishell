@@ -6,7 +6,7 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 14:05:38 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/04 12:50:06 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/04 14:57:28 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ void	exec_unset(char **argv, t_var **list);
 void	exec_pwd(t_var **list, char *pwd);
 void	exec_cd(char **argv, t_var **list, t_tool *tool);
 void	exec_export(t_var **list, char **argv, int count);
+char	**list_to_environ(t_var **list);
+void	allocate_env(char ***env,t_var **list);
 char	*ft_getenv(t_var **list, char *key_name);
 int		ft_argvlen(char **argv);
 void	save_oldpwd(t_var **list, char *tmp);
