@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 13:04:47 by yoshiminaok       #+#    #+#             */
-/*   Updated: 2024/08/03 20:55:26 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/04 15:04:53 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,26 @@ typedef enum e_parser_state
 	FILE_ERROR,
 }			t_parser_state;
 
+// parser
 void		parse_token(t_token *ptr, t_fd saved_fd, t_var **varlist,
 				t_tool *tool);
+void		parse_newline(t_token **ptr, t_parser *parser, t_tool *tool);
+void		parse_pipe(t_token **ptr, t_parser *parser, t_tool *tool);
+void		parse_redirect(t_token **ptr, t_parser *parser);
+void		parse_command(t_token **ptr, t_parser *parser, t_tool *tool);
+void		parse_command_without_redirect(t_token **ptr, t_parser *parser,
+				t_tool *tool, int *i);
+void		parse_command_redirect(t_token **ptr, t_parser *parser,
+				t_tool *tool);
+int			get_argsize(t_token *ptr);
+
+// expand
 char		*get_expanded_argv(char *token, t_var **varlist, int *status);
+char		*get_keyname(char *token, int *i);
+void		expand_opt_env(char **argv, char *key_name, t_var **varlist,
+				int *status);
+void		not_expand(char **argv);
+void		get_status(char **argv, int *status);
 
 // redirect
 int			redirect(t_token **ptr, t_tool *tool, t_parser *parser);
