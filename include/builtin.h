@@ -6,7 +6,7 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 14:05:38 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/04 20:50:48 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/04 21:16:31 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,8 @@ int		ft_argvlen(char **argv);
 void	exec_cd(char **argv, t_var **list, t_tool *tool);
 
 // unset
-void	exec_unset(char **argv, t_var **list, t_tool *tool);
 void	ft_list_remove_if(t_var **list, char *argv, int (cmp)());
-
+void	exec_unset(char **argv, t_var **list, t_tool *tool);
 
 // env
 void	exec_env(char **argv, t_var **list, t_tool *tool);
