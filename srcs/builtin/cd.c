@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 20:55:09 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/04 21:09:27 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/04 21:28:20 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	change_directory(char *argv, t_var **list, t_tool *tool)
 		{
 			tmp = current->value;
 			current->value = ft_strdup(path);
-			fatal_error(current->value);
+			fatal_error_strdup(current->value);
 			return (save_tool_pwd(tool, tmp2, path), save_oldpwd(list, tmp));
 		}
 		else
@@ -95,7 +95,7 @@ void	exec_cd(char **argv, t_var **list, t_tool *tool)
 		if (S_ISDIR(info.st_mode))
 			change_directory(argv[1], list, tool);
 		else
-			ft_printf_fd(2, "minishell: cd: %s: Not a directory\n");
+			ft_printf_fd(2, "minishell: cd: %s: Not a directory\n", argv[1]);
 	}
 	else
 	{
