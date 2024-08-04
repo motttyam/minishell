@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 18:47:57 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/03 19:15:30 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/04 20:35:45 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	ft_list_remove_if(t_var **list, char *argv, int (cmp)())
 	}
 }
 
-void	exec_unset(char **argv, t_var **list)
+void	exec_unset(char **argv, t_var **list, t_tool *tool)
 {
 	int	i;
 

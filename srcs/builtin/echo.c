@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 00:15:41 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/03 19:16:44 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/04 20:36:32 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int		check_option(char *argv);
 
-void	exec_echo(char **argv)
+void	exec_echo(char **argv, t_tool *tool)
 {
 	int	i;
 	int	option_flg;

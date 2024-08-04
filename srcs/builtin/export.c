@@ -6,13 +6,13 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 16:31:39 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/04 16:47:40 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/04 20:34:50 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	exec_export(t_var **list, char **argv, int count)
+void	exec_export(t_var **list, char **argv, int count, t_tool *tool)
 {
 	int	i;
 
