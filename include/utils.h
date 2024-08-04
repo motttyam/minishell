@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 14:05:16 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/04 15:22:44 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/04 16:41:15 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,12 @@ typedef enum s_var_state
 	ENV,
 }		t_var_state;
 
+// fd.c
 void	save_fd(t_fd *saved_fd);
 void	reinit_fd(t_fd saved_fd);
 void	close_fd(t_fd saved_fd);
+
+// env.c
 void	get_envlist(t_var **list);
 t_var	*get_new_var(int i, char **environ);
 void	add_last_newvar(t_var *first, t_var *new);
