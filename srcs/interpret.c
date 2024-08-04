@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 16:33:23 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/04 16:42:55 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/04 18:52:49 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,24 @@ void	interpret(char **argv, t_var **list, t_tool *tool, t_parser *parser)
 		waitpid(pid, &tool->status, 0);
 	}
 }
+void	validate_path(char **argv, t_var **list, t_tool *tool)
+{
+	char	*value;
+	char	**env;
+
+	value = ft_getenv(list, "PATH");
+	if (!value)
+	{
+		env = list_to_environ(list);
+		if (execve(argv[0], argv, env) == -1)
+		{
+			free_argv(env);
+			put_error_message(argv[0], NULL, tool);
+			exit(127);
+		}
+		free_argv(env);
+	}
+}
 
 void	do_child_process(char **argv, t_var **list, t_tool *tool, t_fd saved_fd)
 {
@@ -50,7 +68,8 @@ void	do_child_process(char **argv, t_var **list, t_tool *tool, t_fd saved_fd)
 		put_error_message(argv[0], "command not found", tool);
 		exit(127);
 	}
-	argv[0] = search_path(argv[0]);
+	validate_path(argv, list, tool);
+	argv[0] = search_path(argv[0], list);
 	env = list_to_environ(list);
 	execve(argv[0], argv, env);
 	free_argv(env);
@@ -80,14 +99,14 @@ void	do_path_command(char **argv, t_var **list, t_tool *tool, t_fd saved_fd)
 	}
 }
 
-char	*search_path(const char *line)
+char	*search_path(const char *line, t_var **list)
 {
 	char	path[PATH_MAX];
 	char	*value;
 	char	*end;
 	char	*dup;
 
-	value = getenv("PATH");
+	value = ft_getenv(list, "PATH");
 	while (*value)
 	{
 		ft_bzero(path, PATH_MAX);
