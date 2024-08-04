@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 14:05:16 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/03 21:24:32 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/04 15:04:28 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ char	*ft_strjoinendl(char *s1, char const *s2);
 size_t	ft_strlen_nocrash(const char *s);
 int		ft_isspace(int c);
 char	*ft_strchr(const char *str, int c);
+void	dup_and_put_error(char **dup,char *src);
 
 // free.c
 void	free_token_lexer(t_token *head);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 20:55:09 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/03 19:35:44 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/04 13:43:08 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ int	check_dash_tilde(char **argv, t_var **list, t_tool *tool)
 {
 	char	*tmp;
 
-	if (argv[1][0] == '~' && argv[1][1] == '/')
+	if ((argv[1][0] == '~' && argv[1][1] == '\0') 
+		|| (argv[1][0] == '~' && argv[1][1] == '/'))
 	{
 		tmp = *(argv + 1);
 		*(argv + 1) = ft_strjoin(tool->home, *(argv + 1) + 1);
