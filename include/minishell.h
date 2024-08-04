@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:19:56 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/04 15:22:13 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/04 19:00:43 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int								check_syntaxerror(t_token *token, int *status);
 void							handle_signal(int signal);
 void							setup_signal_handler(void);
 char							*rl_input(t_tool *tool, t_var **list);
-char							*search_path(const char *line);
+char							*search_path(const char *line, t_var **list);
 void							interpret(char **argv, t_var **list,
 									t_tool *tool, t_parser *parser);
 void							do_child_process(char **argv, t_var **list,
@@ -65,4 +65,6 @@ int								check_heredoc_token(t_token *token,
 									t_var **list, int *status, t_tool *tool);
 void							wait_for_all_process(int count);
 void							free_argv(char **argv);
+void							init_tool(t_var **list, t_tool *tool);
+
 #endif

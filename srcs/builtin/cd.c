@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 20:55:09 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/04 15:23:22 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/04 19:05:55 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ int	check_dash_tilde(char **argv, t_var **list, t_tool *tool)
 		tmp = *(argv + 1);
 		*(argv + 1) = ft_strjoin(ft_getenv(list, "OLDPWD"), *(argv + 1) + 1);
 		free(tmp);
+		ft_printf_fd(1, "%s\n", *(argv + 1));
 	}
 	return (0);
 }
