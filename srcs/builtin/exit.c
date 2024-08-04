@@ -3,19 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 19:33:16 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/03 19:21:30 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/04 16:38:33 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-int		ft_atol_for_status(char *num);
-int		is_long_over_flow(int synbol, int result, int next);
-void	get_symbol(char c, int *symbol, int *i);
-void	put_numeric_error(char *argv);
 
 void	exec_exit(char **argv, int *status, t_tool *tool)
 {
