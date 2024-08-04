@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   interpret.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 16:33:23 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/04 15:02:39 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/04 15:24:04 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ char	*search_path(const char *line)
 		ft_strlcat(path, "/", PATH_MAX);
 		ft_strlcat(path, line, PATH_MAX);
 		if (access(path, X_OK) == 0)
-			return (dup_and_put_error(&dup,path),dup);
+			return (dup_and_put_error(&dup, path), dup);
 		if (end == NULL)
 			return ((char *)line);
 		value = end + 1;
@@ -64,14 +64,14 @@ void	do_child_process(char **argv, t_var **list, t_tool *tool, t_fd saved_fd)
 	char	*tmp;
 
 	signal(SIGINT, handle_signal);
-	if ((argv[0][0] == '~' && argv[0][1] == '\0') 
-		|| (argv[0][0] == '~' && argv[0][1] == '/'))
+	if ((argv[0][0] == '~' && argv[0][1] == '\0') || (argv[0][0] == '~'
+			&& argv[0][1] == '/'))
 	{
 		tmp = *(argv);
 		*(argv) = ft_strjoin(tool->home, *argv + 1);
 		free(tmp);
 	}
-	do_path_command(argv,list,tool,saved_fd);
+	do_path_command(argv, list, tool, saved_fd);
 	if (argv[0][0] == '\0')
 	{
 		put_error_message(argv[0], "command not found", tool);
@@ -85,9 +85,9 @@ void	do_child_process(char **argv, t_var **list, t_tool *tool, t_fd saved_fd)
 	exit(127);
 }
 
-void do_path_command(char **argv, t_var **list, t_tool *tool, t_fd saved_fd)
+void	do_path_command(char **argv, t_var **list, t_tool *tool, t_fd saved_fd)
 {
-	char **env;
+	char	**env;
 
 	if (ft_strchr(argv[0], '/'))
 	{
@@ -114,15 +114,15 @@ void	read_file(char *file, t_tool *tool, t_fd saved_fd, t_var **list)
 	int		bytes;
 
 	fd = open(file, O_RDONLY);
-	if (fd == -1 && errno == EISDIR) 
+	if (fd == -1 && errno == EISDIR)
 	{
-    	put_error_message(file,NULL,tool);
+		put_error_message(file, NULL, tool);
 		exit(126);
 	}
 	bytes = read(fd, buf, PATH_MAX);
 	if (bytes == -1)
 	{
-    	put_error_message(file,NULL,tool);
+		put_error_message(file, NULL, tool);
 		close(fd);
 		exit(126);
 	}
@@ -130,17 +130,4 @@ void	read_file(char *file, t_tool *tool, t_fd saved_fd, t_var **list)
 	tool->filename = file;
 	lex_and_parse(buf, tool, saved_fd, list);
 	close(fd);
-}
-
-void	wait_for_all_process(int count)
-{
-	int	i;
-
-	i = 0;
-	while (i < count)
-	{
-		waitpid(-1, NULL, 0);
-		i++;
-	}
-	setup_signal_handler();
 }

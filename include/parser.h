@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 13:04:47 by yoshiminaok       #+#    #+#             */
-/*   Updated: 2024/08/04 15:04:53 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/04 15:23:06 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,5 +63,8 @@ int			expand_file(t_token **ptr, t_tool *tool, t_var **list);
 void		pipe_close_and_dup(int *pipefd);
 void		pipe_and_execute(char **cmd, int *count, t_parser *parser,
 				t_tool *tool);
+
+// interpret
+void		read_file(char *file, t_tool *tool, t_fd saved_fd, t_var **list);
 
 #endif

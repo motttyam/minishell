@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 16:50:06 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/04 14:56:43 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/04 15:25:56 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ char	**list_to_environ(t_var **list)
 	char	**top;
 	char	*tmp;
 
-	allocate_env(&env,list);
+	allocate_env(&env, list);
 	top = env;
 	head = *list;
 	while (head)
@@ -79,7 +79,8 @@ char	**list_to_environ(t_var **list)
 	*env = NULL;
 	return (top);
 }
-void allocate_env(char ***env,t_var **list)
+
+void	allocate_env(char ***env, t_var **list)
 {
 	t_var	*head;
 	int		i;
