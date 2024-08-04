@@ -6,17 +6,11 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 16:43:42 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/03 20:12:22 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/04 14:33:13 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-char	*get_keyname(char *token, int *i);
-void	expand_opt_env(char **argv, char *key_name, t_var **varlist,
-			int *status);
-void	not_expand(char **argv);
-void	get_status(char **argv, int *status);
 
 char	*get_expanded_argv(char *token, t_var **varlist, int *status)
 {
