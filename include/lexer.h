@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 09:26:24 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/03 21:32:47 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/04 14:15:38 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,18 +94,20 @@ void				get_token(t_token_lexer *lexer, char *line);
 void				get_tokenchar(t_token_lexer *lexer, char *line,
 						char *token);
 void				ft_lstadd_new_token(t_token_lexer *lexer);
+int					check_last_token(t_token_lexer *lexer, t_tool *tool,
+						char *line);
 
 // token
 void				get_pipe_token(t_token_lexer *lexer, char *line);
 void				get_newline_token(t_token_lexer *lexer, char *line);
 void				get_redirect_token(t_token_lexer *lexer, char *line);
 void				get_word_token(t_token_lexer *lexer, char *line);
+int					process_word_token(t_token_lexer *lexer, char *line);
 void				get_doublequote_token(t_token_lexer *lexer, char *line);
 void				get_singlequote_token(t_token_lexer *lexer, char *line);
 void				get_redirect_fd_token(t_token_lexer *lexer, char *line);
 
 // syntax
-int					check_last_token(t_token_lexer *lexer, t_tool *tool);
 int					validate_syntax(t_token_lexer *lexer, t_tool *tool);
 void				put_syntax_error(char *token, t_tool *tool);
 
