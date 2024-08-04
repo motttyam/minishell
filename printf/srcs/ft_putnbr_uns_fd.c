@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 20:49:03 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/07/28 17:59:51 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/03 21:39:14 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 void	putnbr_uns_recursive(unsigned int n, int fd, int *count)
 {
 	char	c;
+
 	if (n >= 10)
 	{
 		(*count)++;
@@ -27,7 +28,7 @@ void	putnbr_uns_recursive(unsigned int n, int fd, int *count)
 int	ft_putnbr_uns_fd(unsigned int n, int fd)
 {
 	int	count;
-	
+
 	count = 0;
 	putnbr_uns_recursive(n, fd, &count);
 	return (count + 1);

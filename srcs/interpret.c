@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   interpret.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 16:33:23 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/03 18:21:41 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/03 21:44:37 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,44 +89,25 @@ char	*search_path(const char *line)
 
 int	exec_builtin(char **argv, t_var **list, t_tool *tool, int count)
 {
-	if (ft_strncmp(argv[0], "echo", 5) == 0)
-	{
-		exec_echo(argv);
+	if (argv[0] == NULL)
 		return (0);
-	}
-	else if (ft_strncmp(argv[0], "cd", 3) == 0)
+	if (!count)
 	{
-		if (!count)
-			exec_cd(argv, list, tool);
-		return (0);
+		if (ft_strncmp(argv[0], "cd", 3) == 0)
+			return (exec_cd(argv, list, tool), 0);
+		else if (ft_strncmp(argv[0], "unset", 6) == 0)
+			return (exec_unset(argv, list), 0);
+		else if (ft_strncmp(argv[0], "exit", 5) == 0)
+			return (exec_exit(argv, &(tool->status), tool), 0);
 	}
+	else if (ft_strncmp(argv[0], "echo", 5) == 0)
+		return (exec_echo(argv), 0);
 	else if (ft_strncmp(argv[0], "pwd", 4) == 0)
-	{
-		exec_pwd(list, tool->pwd);
-		return (0);
-	}
+		return (exec_pwd(list, tool->pwd), 0);
 	else if (ft_strncmp(argv[0], "export", 7) == 0)
-	{
-		exec_export(list, argv, count);
-		return (0);
-	}
-	else if (ft_strncmp(argv[0], "unset", 6) == 0)
-	{
-		if (!count)
-			exec_unset(argv, list);
-		return (0);
-	}
+		return (exec_export(list, argv, count), 0);
 	else if (ft_strncmp(argv[0], "env", 4) == 0)
-	{
-		exec_env(argv, list);
-		return (0);
-	}
-	else if (ft_strncmp(argv[0], "exit", 5) == 0)
-	{
-		if (!count)
-			exec_exit(argv, &(tool->status), tool);
-		return (0);
-	}
+		return (exec_env(argv, list), 0);
 	return (-1);
 }
 
@@ -148,6 +129,7 @@ void	interpret(char **argv, t_var **list, t_tool *tool, t_parser *parser)
 		waitpid(pid, &tool->status, 0);
 	}
 }
+
 void	read_file(char *file, t_tool *tool, t_fd saved_fd, t_var **list)
 {
 	char	buf[PATH_MAX];
@@ -165,7 +147,8 @@ void	read_file(char *file, t_tool *tool, t_fd saved_fd, t_var **list)
 
 void	do_child_process(char **argv, t_var **list, t_tool *tool, t_fd saved_fd)
 {
-	char **env;
+	char	**env;
+
 	signal(SIGINT, handle_signal);
 	if (ft_strchr(argv[0], '/'))
 	{
@@ -201,7 +184,7 @@ void	do_child_process(char **argv, t_var **list, t_tool *tool, t_fd saved_fd)
 
 void	wait_for_all_process(int count)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < count)

@@ -6,18 +6,11 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 21:25:10 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/03 15:48:29 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/03 20:36:45 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-void	get_heredoc_input(t_token *delimiter, t_var **list, int *status,
-			t_tool *tool);
-char	*get_input_noexpand(t_token *delimiter, t_tool *tool);
-char	*get_input_expand(t_token *delimiter, t_var **list, int *status,
-			t_tool *tool);
-void	put_heredoc_error(char *delimiter, t_tool *tool);
 
 int	check_heredoc_token(t_token *token, t_var **list, int *status, t_tool *tool)
 {
@@ -90,12 +83,25 @@ char	*get_input_noexpand(t_token *delimiter, t_tool *tool)
 	return (buf);
 }
 
+void	expand_and_append_line(t_var **list, int *status, char *line, char *buf)
+{
+	char	*tmp;
+
+	if (ft_strchr(line, '$'))
+	{
+		tmp = line;
+		line = get_expanded_argv(line, list, status);
+		free(tmp);
+	}
+	buf = ft_strjoinendl(buf, line);
+	free(line);
+}
+
 char	*get_input_expand(t_token *delimiter, t_var **list, int *status,
 		t_tool *tool)
 {
 	char	*line;
 	char	*buf;
-	char	*tmp;
 
 	buf = NULL;
 	while (1)
@@ -111,25 +117,7 @@ char	*get_input_expand(t_token *delimiter, t_var **list, int *status,
 		if (!ft_strncmp(line, delimiter->token, ft_strlen(delimiter->token)
 				+ 1))
 			break ;
-		if (ft_strchr(line, '$'))
-		{
-			tmp = line;
-			line = get_expanded_argv(line, list, status);
-			free(tmp);
-		}
-		buf = ft_strjoinendl(buf, line);
-		free(line);
+		expand_and_append_line(list, status, line, buf);
 	}
 	return (buf);
-}
-void	put_heredoc_error(char *delimiter, t_tool *tool)
-{
-	if (tool->filename)
-	{
-		ft_printf_fd(2, "%s: line %d:", tool->filename, tool->line_count);
-	}
-	else ft_putstr_fd("minishell: ", 2);
-	ft_printf_fd(2,
-		"warning: here-document delimited by end-of-file (wanted `%s')\n",
-		delimiter);
 }

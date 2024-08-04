@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_envlist.c                                      :+:      :+:    :+:   */
+/*   var.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 23:38:42 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/07/28 13:53:22 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/03 20:10:52 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ t_var	*get_new_var(int i, char **environ)
 	t_var	*new;
 	int		j;
 	int		value_start;
-	
+
 	j = 0;
 	new = (t_var *)malloc(sizeof(t_var));
 	while (environ[i][j] != '=')
@@ -62,10 +62,9 @@ t_var	*get_new_var(int i, char **environ)
 
 void	add_last_newvar(t_var *first, t_var *new)
 {
-	t_var *tmp;
+	t_var	*tmp;
 
 	tmp = first;
-
 	while (tmp->next != NULL)
 		tmp = tmp->next;
 	tmp->next = new;

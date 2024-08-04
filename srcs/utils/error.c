@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 23:12:26 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/01 08:21:51 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/03 20:36:54 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,17 +30,30 @@ void	quote_error(void)
 	exit(1);
 }
 
-void	put_error_message(char *argv, char *message,t_tool *tool)
+void	put_error_message(char *argv, char *message, t_tool *tool)
 {
 	if (tool->filename)
 	{
-		ft_printf_fd(2,"%s: line %d:",tool->filename,tool->line_count);
+		ft_printf_fd(2, "%s: line %d:", tool->filename, tool->line_count);
 	}
 	else
-		ft_putstr_fd("minishell: ",2);
-	ft_printf_fd(2,"%s: ",argv);
+		ft_putstr_fd("minishell: ", 2);
+	ft_printf_fd(2, "%s: ", argv);
 	if (message)
-		ft_putendl_fd(message,2);
+		ft_putendl_fd(message, 2);
 	else
 		perror("");
+}
+
+void	put_heredoc_error(char *delimiter, t_tool *tool)
+{
+	if (tool->filename)
+	{
+		ft_printf_fd(2, "%s: line %d:", tool->filename, tool->line_count);
+	}
+	else
+		ft_putstr_fd("minishell: ", 2);
+	ft_printf_fd(2,
+		"warning: here-document delimited by end-of-file (wanted `%s')\n",
+		delimiter);
 }

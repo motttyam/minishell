@@ -6,15 +6,11 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/09 21:22:38 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/07/28 18:00:32 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/03 21:38:14 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../ft_printf.h"
-
-//memo 
-// 4294967396
-// 4294967196
 
 int	ft_puthex(long int num, int flag, int fd)
 {
@@ -34,7 +30,8 @@ int	ft_puthex(long int num, int flag, int fd)
 
 void	ft_puthex_recursive(long int num, int *count, int flag, int fd)
 {
-	char c;
+	char	c;
+
 	if (num >= 16)
 	{
 		ft_puthex_recursive(num / 16, count, flag, fd);

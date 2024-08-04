@@ -1,37 +1,52 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signal.c                                           :+:      :+:    :+:   */
+/*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 13:46:01 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/03 20:10:13 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/03 21:45:23 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	handle_signal(int signal)
+void	free_token_lexer(t_token *head)
 {
-	if (signal == SIGINT && g_signal.is_heredoc == 1)
+	t_token	*current;
+
+	while (head)
 	{
-		write(STDOUT_FILENO, "\n", 1);
-		close(STDIN_FILENO);
-		g_signal.is_heredoc = 2;
-	}
-	else if (signal == SIGINT)
-	{
-		g_signal.sigint = 1;
-		rl_on_new_line();
-		write(STDOUT_FILENO, "\n", 1);
-		rl_replace_line("", 0);
-		rl_redisplay();
+		current = head;
+		head = head->next;
+		free(current);
 	}
 }
 
-void	setup_signal_handler(void)
+void	free_envlist(t_var *head)
 {
-	signal(SIGINT, handle_signal);
-	signal(SIGQUIT, SIG_IGN);
+	t_var	*current;
+
+	while (head)
+	{
+		current = head;
+		head = head->next;
+		free(current->key);
+		free(current->value);
+		free(current);
+	}
+}
+
+void	free_argv(char **argv)
+{
+	int	i;
+
+	i = 0;
+	while (argv[i])
+	{
+		free(argv[i]);
+		i++;
+	}
+	free(argv);
 }
