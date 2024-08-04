@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 16:31:39 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/04 20:51:52 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/04 21:31:35 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	exec_export(t_var **list, char **argv, int count, t_tool *tool)
 	{
 		while (argv[i])
 		{
-			export_arg(argv[i], list,tool);
+			export_arg(argv[i], list, tool);
 			i++;
 		}
 	}
@@ -87,7 +87,7 @@ void	put_env(t_var *save)
 		ft_putstr_fd("\n", 1);
 }
 
-void	put_export_error(char *arg,t_tool *tool)
+void	put_export_error(char *arg, t_tool *tool)
 {
 	tool->status = 1;
 	ft_putstr_fd("expert: '", 2);
