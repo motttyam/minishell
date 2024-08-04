@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 16:50:06 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/04 20:57:00 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/04 20:36:16 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,6 @@ int	ft_argvlen(char **argv)
 	return (i);
 }
 
-void	put_error_env(t_tool *tool)
-{
-	tool->status = 127;
-	ft_printf_fd(2, "env: '%s' No such file or directory\n");
-}
-
 void	exec_env(char **argv, t_var **list, t_tool *tool)
 {
 	int		i;
@@ -40,10 +34,13 @@ void	exec_env(char **argv, t_var **list, t_tool *tool)
 
 	i = 1;
 	if (ft_argvlen(argv) >= 2)
-		return (put_error_env(tool));
+	{
+		ft_printf_fd(2, "env: '%s' No such file or directory\n");
+		return ;
+	}
 	env = list_to_environ(list);
 	if (env == NULL)
-		return (put_error_env(tool));
+		return ;
 	i = 0;
 	while (env[i])
 	{
@@ -54,7 +51,7 @@ void	exec_env(char **argv, t_var **list, t_tool *tool)
 	while (env[i])
 		free(env[i++]);
 	free(env);
-	tool->status = 0;
+	return ;
 }
 
 char	**list_to_environ(t_var **list)

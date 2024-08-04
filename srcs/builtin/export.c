@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 16:31:39 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/04 20:34:50 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/04 20:51:52 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,14 @@ void	exec_export(t_var **list, char **argv, int count, t_tool *tool)
 	int	i;
 
 	i = 1;
+	tool->status = 0;
 	if (ft_argvlen(argv) == 1)
 		sort_and_put_env(list);
 	else if (!count)
 	{
 		while (argv[i])
 		{
-			export_arg(argv[i], list);
+			export_arg(argv[i], list,tool);
 			i++;
 		}
 	}
@@ -86,8 +87,9 @@ void	put_env(t_var *save)
 		ft_putstr_fd("\n", 1);
 }
 
-void	put_export_error(char *arg)
+void	put_export_error(char *arg,t_tool *tool)
 {
+	tool->status = 1;
 	ft_putstr_fd("expert: '", 2);
 	ft_putstr_fd(arg, 2);
 	ft_putendl_fd("': not a valid identifier", 2);

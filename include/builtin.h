@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 14:05:38 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/04 21:10:14 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/04 21:16:31 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,12 @@ void	init_oldpwd(t_tool *tool, t_var **list, char *tmp2, char *path);
 
 // export
 void	exec_export(t_var **list, char **argv, int count, t_tool *tool);
-void	export_arg(char *arg, t_var **list);
+void	export_arg(char *arg, t_var **list, t_tool *tool);
 void	ft_getenv_node(t_var **list, char *key_name, t_var **opt);
-int		get_env_keyname(char *arg, char **key_name);
+int		get_env_keyname(char *arg, char **key_name, t_tool *tool);
 char	*get_value(char *arg);
 t_var	*export_new_var(char *newkey, char *newvalue);
-void	put_export_error(char *arg);
+void	put_export_error(char *arg, t_tool *tool);
 void	sort_and_put_env(t_var **list);
 void	put_env(t_var *save);
 void	save_opt_env(t_var *current, t_var **save, char *pre_save,

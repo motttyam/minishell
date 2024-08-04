@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 00:15:41 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/04 20:36:32 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/04 20:41:54 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ void	exec_echo(char **argv, t_tool *tool)
 	}
 	if (!option_flg)
 		ft_putchar_fd('\n', 1);
+	tool->status = 0;
 }
 
 int	check_option(char *argv)

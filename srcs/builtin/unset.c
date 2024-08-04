@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 18:47:57 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/04 20:50:55 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/04 20:35:45 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ void	exec_unset(char **argv, t_var **list, t_tool *tool)
 	int	i;
 
 	i = 1;
-	tool->status = 130;
 	if (!argv || !argv[0])
 		return ;
 	while (argv[i])

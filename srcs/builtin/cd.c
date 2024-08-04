@@ -6,17 +6,11 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 20:55:09 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/04 21:09:27 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/04 19:05:55 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-void	fatal_error_strdup(char *str)
-{
-	if (!str)
-		fatal_error("malloc");
-}
 
 void	change_directory(char *argv, t_var **list, t_tool *tool)
 {
@@ -31,13 +25,13 @@ void	change_directory(char *argv, t_var **list, t_tool *tool)
 	{
 		if (getcwd(path, sizeof(path)) == NULL)
 			return (perror("minishell: cd:"));
-		tool->status = 0;
 		ft_getenv_node(list, "PWD", &current);
 		if (current != NULL)
 		{
 			tmp = current->value;
 			current->value = ft_strdup(path);
-			fatal_error(current->value);
+			if (!current->value)
+				fatal_error("malloc");
 			return (save_tool_pwd(tool, tmp2, path), save_oldpwd(list, tmp));
 		}
 		else
@@ -64,7 +58,6 @@ int	check_dash_tilde(char **argv, t_var **list, t_tool *tool)
 		{
 			ft_printf_fd(2, "bash: cd: %c%c: invalid option\n", argv[1][0],
 				argv[1][1]);
-			tool->status = 2;
 			return (-1);
 		}
 		tmp = *(argv + 1);
@@ -79,7 +72,6 @@ void	exec_cd(char **argv, t_var **list, t_tool *tool)
 {
 	struct stat	info;
 
-	tool->status = 1;
 	if (ft_argvlen(argv) >= 3)
 		return ((void)ft_printf_fd(2, "minishell: cd: too many arguments\n"));
 	else if (ft_argvlen(argv) == 1)
