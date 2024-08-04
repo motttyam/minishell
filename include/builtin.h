@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 14:05:38 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/03 19:54:54 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/04 12:50:06 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define BUILTIN_H
 
 int		exec_builtin(char **argv, t_var **list, t_tool *tool, int count);
+int	exec_builtin_based_on_pipe(char **argv, t_var **list, t_tool *tool, int count);
 void	exec_echo(char **argv);
 void	exec_env(char **argv, t_var **list);
 void	exec_exit(char **argv, int *status, t_tool *tool);

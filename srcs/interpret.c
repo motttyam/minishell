@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   interpret.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 16:33:23 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/03 21:44:37 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/04 12:54:18 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,16 +91,7 @@ int	exec_builtin(char **argv, t_var **list, t_tool *tool, int count)
 {
 	if (argv[0] == NULL)
 		return (0);
-	if (!count)
-	{
-		if (ft_strncmp(argv[0], "cd", 3) == 0)
-			return (exec_cd(argv, list, tool), 0);
-		else if (ft_strncmp(argv[0], "unset", 6) == 0)
-			return (exec_unset(argv, list), 0);
-		else if (ft_strncmp(argv[0], "exit", 5) == 0)
-			return (exec_exit(argv, &(tool->status), tool), 0);
-	}
-	else if (ft_strncmp(argv[0], "echo", 5) == 0)
+	if (ft_strncmp(argv[0], "echo", 5) == 0)
 		return (exec_echo(argv), 0);
 	else if (ft_strncmp(argv[0], "pwd", 4) == 0)
 		return (exec_pwd(list, tool->pwd), 0);
@@ -108,6 +99,29 @@ int	exec_builtin(char **argv, t_var **list, t_tool *tool, int count)
 		return (exec_export(list, argv, count), 0);
 	else if (ft_strncmp(argv[0], "env", 4) == 0)
 		return (exec_env(argv, list), 0);
+	return (exec_builtin_based_on_pipe(argv,list,tool,count));
+}
+
+int	exec_builtin_based_on_pipe(char **argv, t_var **list, t_tool *tool, int count)
+{
+	if (ft_strncmp(argv[0], "cd", 3) == 0)
+	{
+		if(!count)
+			exec_cd(argv, list, tool);
+		return (0);
+	}
+	else if (ft_strncmp(argv[0], "unset", 6) == 0)
+	{
+		if(!count)
+			exec_unset(argv, list);
+		return (0);
+	}
+	else if (ft_strncmp(argv[0], "exit", 5) == 0)
+	{
+		if(!count)
+			exec_exit(argv, &(tool->status), tool);
+		return (0);
+	}
 	return (-1);
 }
 

@@ -6,7 +6,7 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 16:31:39 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/01 04:17:52 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/04 12:53:42 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,18 +124,6 @@ void	export_arg(char *arg, t_var **list)
 	}
 	else
 		add_last_newvar(*list, export_new_var(keyname, newvalue));
-}
-
-void	ft_getenv_node(t_var **list, char *key_name, t_var **opt)
-{
-	*opt = *list;
-	while (*opt)
-	{
-		if (!ft_strncmp((*opt)->key, key_name, ft_strlen((*opt)->key) + 1))
-			return ;
-		*opt = (*opt)->next;
-	}
-	return ;
 }
 
 int	get_env_keyname(char *arg, char **key_name)
