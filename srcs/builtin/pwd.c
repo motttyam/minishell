@@ -6,13 +6,13 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 19:38:44 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/04 16:54:19 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/04 20:33:41 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	exec_pwd(t_var **list, char *pwd)
+void	exec_pwd(t_var **list, t_tool *tool)
 {
 	char	*dir;
 	char	path[PATH_MAX];
@@ -20,8 +20,8 @@ void	exec_pwd(t_var **list, char *pwd)
 	dir = ft_getenv(list, "PWD");
 	if (dir)
 		ft_putendl_fd(dir, 1);
-	else if (pwd)
-		ft_putendl_fd(pwd, 1);
+	else if (tool->pwd)
+		ft_putendl_fd(tool->pwd, 1);
 	else
 		ft_putendl_fd(getcwd(path, sizeof(path)), 1);
 }

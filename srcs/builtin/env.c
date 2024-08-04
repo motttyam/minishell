@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 16:50:06 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/04 15:25:56 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/04 20:36:16 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	ft_argvlen(char **argv)
 	return (i);
 }
 
-void	exec_env(char **argv, t_var **list)
+void	exec_env(char **argv, t_var **list, t_tool *tool)
 {
 	int		i;
 	char	**env;
