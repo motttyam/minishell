@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 16:31:39 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/04 16:42:15 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/04 16:47:40 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	sort_and_put_env(t_var **list)
 	pre_save = NULL;
 	while (1)
 	{
-		save_opt_env(current,&save,pre_save,&save_flg);	
+		save_opt_env(current, &save, pre_save, &save_flg);
 		if (current->next == NULL)
 		{
 			if (save_flg)
@@ -57,12 +57,13 @@ void	sort_and_put_env(t_var **list)
 	}
 }
 
-void	save_opt_env(t_var *current, t_var **save, char *pre_save, int *save_flg)
+void	save_opt_env(t_var *current, t_var **save, char *pre_save,
+		int *save_flg)
 {
 	if ((!pre_save || (pre_save && ft_strncmp(pre_save, current->key,
-				ft_strlen(pre_save) + 1) < 0)) && ((*save)->key == pre_save
-		|| (ft_strncmp((*save)->key, current->key, ft_strlen((*save)->key)
-				+ 1) > 0)))
+					ft_strlen(pre_save) + 1) < 0)) && ((*save)->key == pre_save
+			|| (ft_strncmp((*save)->key, current->key, ft_strlen((*save)->key)
+					+ 1) > 0)))
 	{
 		(*save) = current;
 		*save_flg = 1;

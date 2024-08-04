@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_arg.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 16:41:29 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/04 16:42:09 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/04 16:48:20 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,22 +26,23 @@ void	export_arg(char *arg, t_var **list)
 	newvalue = get_value(arg);
 	if (opt)
 	{
-		update_env_var(opt,append_flg,newvalue);
+		update_env_var(opt, append_flg, newvalue);
 		free(keyname);
 	}
 	else
 		add_last_newvar(*list, export_new_var(keyname, newvalue));
 }
-void update_env_var(t_var *opt,int append_flg,char *newvalue)
+
+void	update_env_var(t_var *opt, int append_flg, char *newvalue)
 {
-	char *tmp;
+	char	*tmp;
 
 	if (append_flg == 0)
 	{
 		if (newvalue)
 		{
 			free(opt->value);
-			opt->value = newvalue;	
+			opt->value = newvalue;
 		}
 	}
 	else
@@ -77,7 +78,6 @@ int	get_env_keyname(char *arg, char **key_name)
 		i++;
 		if (arg[i] != '=')
 			put_export_error(arg);
-		// free(key_name);
 		append_flg = 1;
 	}
 	return (append_flg);

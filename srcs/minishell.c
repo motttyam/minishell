@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:06:27 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/03 21:48:35 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/04 16:53:01 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,20 @@ void	lex_and_parse(char *line, t_tool *tool, t_fd saved_fd, t_var **list)
 
 void	init_tool(t_tool *tool, t_var *first)
 {
+	char	*home;
+	char	*pwd;
+
 	tool->status = 0;
 	tool->filename = NULL;
 	tool->line_count = 1;
 	tool->ps1 = NULL;
 	tool->ps2 = NULL;
-	tool->home = ft_strdup(ft_getenv(&first, "HOME"));
-	tool->pwd = ft_strdup(ft_getenv(&first, "PWD"));
+	home = ft_getenv(&first, "HOME");
+	if (home)
+		tool->home = ft_strdup(home);
+	pwd = ft_getenv(&first, "PWD");
+	if (pwd)
+		tool->pwd = ft_strdup(pwd);
 }
 
 void	reinit_tool_and_signal(t_tool *tool)
