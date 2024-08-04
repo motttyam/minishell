@@ -6,38 +6,11 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 16:33:23 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/04 15:24:04 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/04 16:42:55 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-char	*search_path(const char *line)
-{
-	char	path[PATH_MAX];
-	char	*value;
-	char	*end;
-	char	*dup;
-
-	value = getenv("PATH");
-	while (*value)
-	{
-		ft_bzero(path, PATH_MAX);
-		end = ft_strchr(value, ':');
-		if (end)
-			ft_strlcpy(path, value, end - value + 1);
-		else
-			ft_bzero(path, PATH_MAX);
-		ft_strlcat(path, "/", PATH_MAX);
-		ft_strlcat(path, line, PATH_MAX);
-		if (access(path, X_OK) == 0)
-			return (dup_and_put_error(&dup, path), dup);
-		if (end == NULL)
-			return ((char *)line);
-		value = end + 1;
-	}
-	return ((char *)line);
-}
 
 void	interpret(char **argv, t_var **list, t_tool *tool, t_parser *parser)
 {
@@ -105,6 +78,33 @@ void	do_path_command(char **argv, t_var **list, t_tool *tool, t_fd saved_fd)
 			exit(0);
 		}
 	}
+}
+
+char	*search_path(const char *line)
+{
+	char	path[PATH_MAX];
+	char	*value;
+	char	*end;
+	char	*dup;
+
+	value = getenv("PATH");
+	while (*value)
+	{
+		ft_bzero(path, PATH_MAX);
+		end = ft_strchr(value, ':');
+		if (end)
+			ft_strlcpy(path, value, end - value + 1);
+		else
+			ft_bzero(path, PATH_MAX);
+		ft_strlcat(path, "/", PATH_MAX);
+		ft_strlcat(path, line, PATH_MAX);
+		if (access(path, X_OK) == 0)
+			return (dup_and_put_error(&dup, path), dup);
+		if (end == NULL)
+			return ((char *)line);
+		value = end + 1;
+	}
+	return ((char *)line);
 }
 
 void	read_file(char *file, t_tool *tool, t_fd saved_fd, t_var **list)
