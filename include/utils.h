@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 14:05:16 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/04 16:41:15 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/04 20:10:22 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ t_var	*get_new_var(int i, char **environ);
 void	add_last_newvar(t_var *first, t_var *new);
 
 // error.c
-void	fatal_error(const char *msg) __attribute__((noreturn));
-void	handle_malloc_error(void);
+void	fatal_error(const char *msg);
 void	quote_error(void);
+void	validate_path(char **argv, t_var **list, t_tool *tool);
 void	put_error_message(char *argv, char *message, t_tool *tool);
 
 // support.c

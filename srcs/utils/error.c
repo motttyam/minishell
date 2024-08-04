@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 23:12:26 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/03 20:36:54 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/04 20:08:40 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,23 @@ void	fatal_error(const char *msg)
 	exit(1);
 }
 
-void	handle_malloc_error(void)
+void	validate_path(char **argv, t_var **list, t_tool *tool)
 {
-	perror("malloc failed");
-	exit(1);
+	char	*value;
+	char	**env;
+
+	value = ft_getenv(list, "PATH");
+	if (!value)
+	{
+		env = list_to_environ(list);
+		if (execve(argv[0], argv, env) == -1)
+		{
+			free_argv(env);
+			put_error_message(argv[0], NULL, tool);
+			exit(127);
+		}
+		free_argv(env);
+	}
 }
 
 void	quote_error(void)
