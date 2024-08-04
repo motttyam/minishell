@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_arg.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 16:41:29 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/04 16:48:20 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/04 18:39:52 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ void	update_env_var(t_var *opt, int append_flg, char *newvalue)
 		if (!opt->value)
 			fatal_error("malloc");
 		free(tmp);
+		free(newvalue);
 	}
 }
 
