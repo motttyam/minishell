@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 08:53:11 by yoshiminaok       #+#    #+#             */
-/*   Updated: 2024/08/04 15:05:29 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/04 20:08:35 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ void	parse_command(t_token **ptr, t_parser *parser, t_tool *tool)
 	i = 0;
 	parser->argv = (char **)malloc(sizeof(char *) * (size + 1));
 	if (!parser->argv)
-		handle_malloc_error();
+		fatal_error("malloc");
 	while (i < size)
 	{
 		parse_command_without_redirect(ptr, parser, tool, &i);

@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 16:33:23 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/04 18:52:49 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/04 20:07:18 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,24 +28,6 @@ void	interpret(char **argv, t_var **list, t_tool *tool, t_parser *parser)
 	{
 		close(STDIN_FILENO);
 		waitpid(pid, &tool->status, 0);
-	}
-}
-void	validate_path(char **argv, t_var **list, t_tool *tool)
-{
-	char	*value;
-	char	**env;
-
-	value = ft_getenv(list, "PATH");
-	if (!value)
-	{
-		env = list_to_environ(list);
-		if (execve(argv[0], argv, env) == -1)
-		{
-			free_argv(env);
-			put_error_message(argv[0], NULL, tool);
-			exit(127);
-		}
-		free_argv(env);
 	}
 }
 

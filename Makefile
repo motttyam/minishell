@@ -1,16 +1,44 @@
 NAME = minishell
 CC = cc 
 CFLAGS = -Wall -Wextra -Werror
- CFLAGS += -g -fsanitize=address
+#  CFLAGS += -g -fsanitize=address
 LDFLAGS = -L$(LIBFT_DIR) -L$(PRINTF_DIR) -lreadline -lft -lftprintf
 
 SRC_DIR = srcs
 BUILTIN_DIR = srcs/builtin
 UTILS_DIR = srcs/utils
 
-SRC = $(wildcard $(SRC_DIR)/*.c)
-SRC += $(wildcard $(BUILTIN_DIR)/*.c)
-SRC += $(wildcard $(UTILS_DIR)/*.c)
+SRC = $(BUILTIN_DIR)/cd_utils.c \
+      $(BUILTIN_DIR)/cd.c \
+      $(BUILTIN_DIR)/echo.c \
+      $(BUILTIN_DIR)/env.c \
+      $(BUILTIN_DIR)/exec_buitin.c \
+      $(BUILTIN_DIR)/exit.c \
+      $(BUILTIN_DIR)/export_arg.c \
+      $(BUILTIN_DIR)/export.c \
+      $(BUILTIN_DIR)/pwd.c \
+      $(BUILTIN_DIR)/unset.c \
+      $(UTILS_DIR)/error.c \
+      $(UTILS_DIR)/fd.c \
+      $(UTILS_DIR)/free.c \
+      $(UTILS_DIR)/support.c \
+      $(UTILS_DIR)/var.c \
+      $(SRC_DIR)/expand.c \
+      $(SRC_DIR)/heredoc.c \
+      $(SRC_DIR)/interpret.c \
+      $(SRC_DIR)/lexer_get_token.c \
+      $(SRC_DIR)/lexer_get_token2.c \
+      $(SRC_DIR)/lexer_syntax.c \
+      $(SRC_DIR)/lexer_utils.c \
+      $(SRC_DIR)/lexer.c \
+      $(SRC_DIR)/minishell.c \
+      $(SRC_DIR)/parser_utils.c \
+      $(SRC_DIR)/parser.c \
+      $(SRC_DIR)/pipe.c \
+      $(SRC_DIR)/readline.c \
+      $(SRC_DIR)/redirect_utils.c \
+      $(SRC_DIR)/redirect.c \
+      $(SRC_DIR)/signal.c
 
 LIBFT_DIR = ./libft
 LIBFT = $(LIBFT_DIR)/libft.a

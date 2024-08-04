@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 14:00:20 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/04 14:14:49 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/04 20:08:24 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	ft_lstadd_new_token(t_token_lexer *lexer)
 
 	new = (t_token *)malloc(sizeof(t_token));
 	if (!new)
-		handle_malloc_error();
+		fatal_error("malloc");
 	if (lexer->first == NULL)
 	{
 		new->pre = NULL;

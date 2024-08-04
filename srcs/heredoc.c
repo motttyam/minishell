@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 21:25:10 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/03 20:36:45 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/04 20:02:23 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	check_heredoc_token(t_token *token, t_var **list, int *status, t_tool *tool)
 			get_heredoc_input(token, list, status, tool);
 			if (g_signal.is_heredoc == 2)
 			{
-				g_signal.is_child = 0;
+				g_signal.is_heredoc = 0;
 				*status = 130;
 				return (-1);
 			}
