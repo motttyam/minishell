@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:19:56 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/04 19:00:43 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/10 15:59:18 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,7 @@
 # include "builtin.h"
 # include "utils.h"
 
-typedef struct s_signal_state
-{
-	int							is_child;
-	int							is_heredoc;
-	int							sigint;
-}								t_signal_state;
-
-extern volatile t_signal_state	g_signal;
+extern volatile sig_atomic_t	g_sig;
 
 # define PROMPT "minishell $ "
 
@@ -49,7 +42,6 @@ void							lex_and_parse(char *line, t_tool *tool,
 									t_fd saved_fd, t_var **list);
 int								check_syntaxerror(t_token *token, int *status);
 void							handle_signal(int signal);
-void							setup_signal_handler(void);
 char							*rl_input(t_tool *tool, t_var **list);
 char							*search_path(const char *line, t_var **list);
 void							interpret(char **argv, t_var **list,
@@ -66,5 +58,20 @@ int								check_heredoc_token(t_token *token,
 void							wait_for_all_process(int count);
 void							free_argv(char **argv);
 void							init_tool(t_var **list, t_tool *tool);
+
+typedef enum e_signal_state
+{
+	SIG_NORMAL,
+	SIG_HEREDOC,
+}	t_signal_state;
+
+// signal
+void							setup_signal_handler(void);
+void 							heredoc_signal_handler(void);
+void							ignore_signal_handler(void);
+void							handle_interactive(int signal);
+void 							handle_heredoc(int signal);
+int	save_sig_status(int flag);
+
 
 #endif

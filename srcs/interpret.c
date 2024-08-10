@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 16:33:23 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/04 20:07:18 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/10 15:13:37 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	interpret(char **argv, t_var **list, t_tool *tool, t_parser *parser)
 
 	if (exec_builtin(argv, list, tool, parser->count) != -1)
 		return ;
-	signal(SIGINT, SIG_IGN);
+	ignore_signal_handler();
 	pid = fork();
 	if (pid < 0)
 		fatal_error("fork");
@@ -36,7 +36,7 @@ void	do_child_process(char **argv, t_var **list, t_tool *tool, t_fd saved_fd)
 	char	**env;
 	char	*tmp;
 
-	signal(SIGINT, handle_signal);
+	signal(SIGINT, handle_interactive);
 	if ((argv[0][0] == '~' && argv[0][1] == '\0') || (argv[0][0] == '~'
 			&& argv[0][1] == '/'))
 	{
