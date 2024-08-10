@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 16:43:42 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/10 15:02:11 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/10 16:44:16 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,19 +17,21 @@ char	*get_expanded_argv(char *token, t_var **varlist, int *status)
 	int		i;
 	char	*argv;
 	char	*key_name;
+	int		start;
 
 	i = 0;
+	start = 0;
 	argv = NULL;
 	while (token[i])
 	{
 		while (token[i] == '$')
 		{
-			if (argv == NULL)
-				argv = ft_substr(token, 0, i);
+			join_noexpand_str(&argv,i,start,token);
 			i++;
 			key_name = get_keyname(token, &i);
 			expand_opt_env(&argv, key_name, varlist, status);
 			free(key_name);
+			start = i;
 			i--;
 		}
 		i++;
@@ -43,8 +45,14 @@ char	*get_keyname(char *token, int *i)
 	int		start;
 
 	start = *i;
-	while (token[*i] && token[*i] != '$')
+	while (1)
+	{
+		if (*i == start && ft_isdigit(token[*i]))
+			break;
+		if (!ft_isalnum(token[*i]) && token[*i] != '_')
+			break;
 		(*i)++;
+	}
 	if (start == *i)
 		return ((*i)++, NULL);
 	key_name = ft_substr(token, start, *i - start);

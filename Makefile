@@ -1,7 +1,7 @@
 NAME = minishell
 CC = cc 
 CFLAGS = -Wall -Wextra -Werror
-#  CFLAGS += -g -fsanitize=address
+ CFLAGS += -g -fsanitize=address
 LDFLAGS = -L$(LIBFT_DIR) -L$(PRINTF_DIR) -lreadline -lft -lftprintf
 
 SRC_DIR = srcs
@@ -23,6 +23,7 @@ SRC = $(BUILTIN_DIR)/cd_utils.c \
       $(UTILS_DIR)/free.c \
       $(UTILS_DIR)/support.c \
       $(UTILS_DIR)/var.c \
+      $(SRC_DIR)/expand_utils.c \
       $(SRC_DIR)/expand.c \
       $(SRC_DIR)/heredoc.c \
       $(SRC_DIR)/interpret.c \

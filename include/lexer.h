@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 09:26:24 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/04 14:15:38 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/10 16:11:48 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,6 @@ char				*get_input_expand(t_token *delimiter, t_var **list,
 						int *status, t_tool *tool);
 void				put_heredoc_error(char *delimiter, t_tool *tool);
 void				expand_and_append_line(t_var **list, int *status,
-						char *line, char *buf);
+						char *line, char **buf);
 
 #endif

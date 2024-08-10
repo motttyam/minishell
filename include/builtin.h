@@ -6,7 +6,7 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 14:05:38 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/04 21:16:31 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/10 12:20:18 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	update_env_var(t_var *opt, int append_flg, char *newvalue);
 // exit
 void	exec_exit(char **argv, int *status, t_tool *tool);
 int		ft_atol_for_status(char *num);
-int		is_long_over_flow(int synbol, int result, int next);
+int		is_long_over_flow(int synbol, long result, int next);
 void	get_symbol(char c, int *symbol, int *i);
 void	put_numeric_error(char *argv);
 #endif
