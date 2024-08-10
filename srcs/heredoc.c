@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 21:25:10 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/04 20:02:23 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/10 16:12:36 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ char	*get_input_noexpand(t_token *delimiter, t_tool *tool)
 	return (buf);
 }
 
-void	expand_and_append_line(t_var **list, int *status, char *line, char *buf)
+void	expand_and_append_line(t_var **list, int *status, char *line, char **buf)
 {
 	char	*tmp;
 
@@ -93,7 +93,7 @@ void	expand_and_append_line(t_var **list, int *status, char *line, char *buf)
 		line = get_expanded_argv(line, list, status);
 		free(tmp);
 	}
-	buf = ft_strjoinendl(buf, line);
+	*buf = ft_strjoinendl(*buf, line);
 	free(line);
 }
 
@@ -117,7 +117,7 @@ char	*get_input_expand(t_token *delimiter, t_var **list, int *status,
 		if (!ft_strncmp(line, delimiter->token, ft_strlen(delimiter->token)
 				+ 1))
 			break ;
-		expand_and_append_line(list, status, line, buf);
+		expand_and_append_line(list, status, line, &buf);
 	}
 	return (buf);
 }
