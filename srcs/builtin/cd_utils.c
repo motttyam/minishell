@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 19:35:58 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/03 20:08:58 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/10 21:48:08 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,10 @@ void	init_oldpwd(t_tool *tool, t_var **list, char *tmp2, char *path)
 
 	save_tool_pwd(tool, tmp2, path);
 	ft_getenv_node(list, "OLDPWD", &current);
-	if (current != NULL && current->value[0] != '\0')
+	if (current != NULL && current->value != NULL)
 	{
 		free(current->value);
-		current->value = (char *)malloc(sizeof(char) * 1);
-		if (!current->value)
-			fatal_error("malloc");
-		current->value[0] = '\0';
+		current->value = NULL;
 	}
 }
 

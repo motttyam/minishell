@@ -7,6 +7,9 @@ LDFLAGS = -L$(LIBFT_DIR) -L$(PRINTF_DIR) -lreadline -lft -lftprintf
 SRC_DIR = srcs
 BUILTIN_DIR = srcs/builtin
 UTILS_DIR = srcs/utils
+GNL_DIR = get_next_line
+
+
 
 SRC = $(BUILTIN_DIR)/cd_utils.c \
       $(BUILTIN_DIR)/cd.c \
@@ -40,15 +43,17 @@ SRC = $(BUILTIN_DIR)/cd_utils.c \
       $(SRC_DIR)/redirect_utils.c \
       $(SRC_DIR)/redirect.c \
       $(SRC_DIR)/signal.c \
-      $(SRC_DIR)/signal_heredoc.c
+      $(SRC_DIR)/signal_heredoc.c \
+      $(GNL_DIR)/get_next_line_utils.c \
+      $(GNL_DIR)/get_next_line.c \
 
 LIBFT_DIR = ./libft
 LIBFT = $(LIBFT_DIR)/libft.a
-
 PRINTF_DIR = ./printf
 PRINTF = $(PRINTF_DIR)/libftprintf.a
 READLINE_DIR = $(shell brew --prefix readline)
-INCLUDES = -I$(LIBFT_DIR) -I$(PRINTF_DIR) -I $(RLDIR)/include
+
+INCLUDES = -I$(LIBFT_DIR) -I$(PRINTF_DIR) -I$(GNL_DIR) -I $(RLDIR)/include
 OBJ = $(SRC:.c=.o)
 
 RM = rm -rf

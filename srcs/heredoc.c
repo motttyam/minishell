@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 21:25:10 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/10 19:48:00 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/10 22:03:15 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	get_heredoc_input(t_token *delimiter, t_var **list, int *status,
 		|| delimiter->type == QUOTE_EXPANDED)
 		buf = get_input_noexpand(delimiter, tool);
 	else
-		buf = get_input_expand(delimiter, list, status, tool); 
+		buf = get_input_expand(delimiter, list, status, tool);
 	ft_bzero(delimiter->token, ft_strlen(delimiter->token));
 	delimiter->type = WORD;
 	if (g_sig == SIGINT && save_sig_status(-1) == SIG_HEREDOC)
@@ -66,9 +66,10 @@ char	*get_input_noexpand(t_token *delimiter, t_tool *tool)
 	while (1)
 	{
 		if (tool->ps2)
-			line = readline(tool->ps2);
+			ft_printf_fd(1, "%s", tool->ps2);
 		else
-			line = readline("> ");
+			ft_printf_fd(1, "%s", "> ");
+		line = get_next_line(STDIN_FILENO);
 		if (g_sig == SIGINT && save_sig_status(-1) == SIG_HEREDOC)
 		{
 			return (free(line), buf);
@@ -109,9 +110,10 @@ char	*get_input_expand(t_token *delimiter, t_var **list, int *status,
 	while (1)
 	{
 		if (tool->ps2)
-			line = readline(tool->ps2);
+			ft_printf_fd(1, "%s", tool->ps2);
 		else
-			line = readline("> ");
+			ft_printf_fd(1, "%s", "> ");
+		line = get_next_line(STDIN_FILENO);
 		if (g_sig == SIGINT && save_sig_status(-1) == SIG_HEREDOC)
 			return (free(line), buf);
 		if (!line)
