@@ -6,13 +6,13 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:06:27 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/04 19:04:12 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/10 16:38:55 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-volatile t_signal_state	g_signal = {0, 0, 0};
+volatile sig_atomic_t	g_sig;
 
 void	lex_and_parse(char *line, t_tool *tool, t_fd saved_fd, t_var **list)
 {
@@ -24,7 +24,10 @@ void	lex_and_parse(char *line, t_tool *tool, t_fd saved_fd, t_var **list)
 		return ;
 	}
 	if (check_heredoc_token(lexer.first, list, &tool->status, tool) != -1)
+	{
+		printf("debug\n");	
 		parse_token(lexer.first, saved_fd, list, tool);
+	}
 	free_token_lexer(lexer.first);
 	reinit_fd(saved_fd);
 }
@@ -51,8 +54,6 @@ void	init_tool(t_var **list, t_tool *tool)
 
 void	reinit_tool_and_signal(t_tool *tool)
 {
-	g_signal.sigint = 0;
-	g_signal.is_child = 0;
 	tool->input = NULL;
 }
 
@@ -66,8 +67,6 @@ void	fin_tool(t_tool *tool)
 		free(tool->ps1);
 	if (tool->ps2)
 		free(tool->ps2);
-	if (g_signal.sigint == 1)
-		tool->status = 130;
 }
 
 int	main(void)

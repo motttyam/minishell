@@ -39,7 +39,8 @@ SRC = $(BUILTIN_DIR)/cd_utils.c \
       $(SRC_DIR)/readline.c \
       $(SRC_DIR)/redirect_utils.c \
       $(SRC_DIR)/redirect.c \
-      $(SRC_DIR)/signal.c
+      $(SRC_DIR)/signal.c \
+      $(SRC_DIR)/signal_heredoc.c
 
 LIBFT_DIR = ./libft
 LIBFT = $(LIBFT_DIR)/libft.a

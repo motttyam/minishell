@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 19:33:16 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/10 12:19:34 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/10 16:44:31 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ void	exec_exit(char **argv, int *status, t_tool *tool)
 	ft_putendl_fd("exit", 1);
 	if (ft_argvlen(argv) == 1)
 	{
-		if (g_signal.sigint == 1)
-			*status = 130;
+		// if (g_signal.sigint == 1)
+		// 	*status = 130;
 		exit(*status);
 	}
 	else

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 16:43:42 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/10 15:11:16 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/10 16:44:16 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,17 +104,17 @@ void	get_status(char **argv, int *status)
 	char	*status_str;
 
 	tmp = *argv;
-	if (g_signal.sigint != 1)
-	{
+	// if (g_signal.sigint != 1)
+	// {
 		if (*status > 256)
 			status_str = ft_itoa(*status / 256);
 		else
 			status_str = ft_itoa(*status);
 		*argv = ft_strjoin(*argv, status_str);
 		free(status_str);
-	}
-	else
-		*argv = ft_strjoin(*argv, "130");
+	// }
+	// else
+	// 	*argv = ft_strjoin(*argv, "130");
 	if (!*argv)
 		fatal_error("malloc");
 	free(tmp);
