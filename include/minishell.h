@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:19:56 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/10 17:55:14 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/10 20:36:58 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,15 +55,16 @@ void							pipe_and_execute(char **cmd, int *count,
 void							reinit_fd(t_fd saved_fd);
 int								check_heredoc_token(t_token *token,
 									t_var **list, int *status, t_tool *tool);
-void							wait_for_all_process(int count);
+void							wait_for_all_process(int count, t_tool *tool);
 void							free_argv(char **argv);
 void							init_tool(t_var **list, t_tool *tool);
 
 typedef enum e_signal_state
 {
+	SIG_INIT,
 	SIG_NORMAL,
 	SIG_HEREDOC,
-	SIG_HEREDOC_DOUBLE,
+	SIG_CHILD,
 }	t_signal_state;
 
 // signal
@@ -72,7 +73,8 @@ void 							heredoc_signal_handler(void);
 void							ignore_signal_handler(void);
 void							handle_interactive(int signal);
 void 							handle_heredoc(int signal);
-int	save_sig_status(int flag);
+void							execve_signal_handler(void);
+int								save_sig_status(int flag);
 
 
 #endif

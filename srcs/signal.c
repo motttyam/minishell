@@ -6,11 +6,29 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 13:46:01 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/10 19:47:01 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/10 20:12:46 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+void	handle_execve(int signal)
+{
+	if (signal == SIGINT)
+	{
+		ft_printf_fd(1, "\n");
+	}
+	else if (signal == SIGQUIT)
+	{
+		ft_printf_fd(2, "Quit (core dumped)\n");
+	}
+}
+
+void	execve_signal_handler(void)
+{
+	signal(SIGINT, handle_execve);
+	signal(SIGQUIT, handle_execve);
+}
 
 void	handle_heredoc(int signal)
 {
@@ -33,7 +51,12 @@ int	save_sig_status(int flag)
 {
 	static int	i = 0;
 
-	if (flag == SIG_NORMAL)
+	if (flag == SIG_INIT)
+	{
+		i = SIG_INIT;
+		return (0);
+	}
+	else if (flag == SIG_NORMAL)
 	{
 		i = SIG_NORMAL;
 		return (0);
@@ -41,6 +64,11 @@ int	save_sig_status(int flag)
 	else if (flag == SIG_HEREDOC)
 	{
 		i = SIG_HEREDOC;
+		return (0);
+	}
+	else if (flag == SIG_CHILD)
+	{
+		i = SIG_CHILD;
 		return (0);
 	}
 	else if (flag == -1)

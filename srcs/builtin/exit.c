@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 19:33:16 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/10 16:44:31 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/10 20:28:56 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ void	exec_exit(char **argv, int *status, t_tool *tool)
 	ft_putendl_fd("exit", 1);
 	if (ft_argvlen(argv) == 1)
 	{
-		// if (g_signal.sigint == 1)
-		// 	*status = 130;
+		if (save_sig_status(-1) == SIG_NORMAL)
+			*status = 130;
 		exit(*status);
 	}
 	else
