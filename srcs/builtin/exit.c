@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 19:33:16 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/04 20:06:43 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/10 12:19:34 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	get_symbol(char c, int *symbol, int *i)
 	}
 }
 
-int	is_long_over_flow(int synbol, int result, int next)
+int	is_long_over_flow(int synbol, long result, int next)
 {
 	if (synbol == 1)
 	{
