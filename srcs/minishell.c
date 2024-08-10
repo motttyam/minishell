@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:06:27 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/10 17:58:14 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/10 20:35:37 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,7 @@ void	lex_and_parse(char *line, t_tool *tool, t_fd saved_fd, t_var **list)
 		return ;
 	}
 	if (check_heredoc_token(lexer.first, list, &tool->status, tool) != -1)
-	{
-		printf("debug\n");	
 		parse_token(lexer.first, saved_fd, list, tool);
-	}
 	free_token_lexer(lexer.first);
 	reinit_fd(saved_fd);
 }
@@ -38,6 +35,7 @@ void	init_tool(t_var **list, t_tool *tool)
 	char	*pwd;
 
 	tool->status = 0;
+	tool->last_status = 0;
 	tool->filename = NULL;
 	tool->line_count = 1;
 	tool->home = NULL;
@@ -55,6 +53,8 @@ void	init_tool(t_var **list, t_tool *tool)
 void	reinit_tool_and_signal(t_tool *tool)
 {
 	tool->input = NULL;
+	setup_signal_handler();
+	save_sig_status(SIG_INIT);
 }
 
 void	fin_tool(t_tool *tool)
@@ -79,7 +79,6 @@ int	main(void)
 	first = NULL;
 	get_envlist(&first);
 	init_tool(&first, &tool);
-	setup_signal_handler();
 	while (1)
 	{
 		reinit_tool_and_signal(&tool);
@@ -91,6 +90,8 @@ int	main(void)
 	close_fd(saved_fd);
 	free_envlist(first);
 	fin_tool(&tool);
+	if (save_sig_status(-1) == SIG_NORMAL)
+		tool.status = 130;
 	ft_putendl_fd("exit", 2);
 	exit(tool.status);
 	return (0);

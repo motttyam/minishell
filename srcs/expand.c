@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 16:43:42 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/10 16:44:16 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/10 20:27:47 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	*get_expanded_argv(char *token, t_var **varlist, int *status)
 	{
 		while (token[i] == '$')
 		{
-			join_noexpand_str(&argv,i,start,token);
+			join_noexpand_str(&argv, i, start, token);
 			i++;
 			key_name = get_keyname(token, &i);
 			expand_opt_env(&argv, key_name, varlist, status);
@@ -47,10 +47,10 @@ char	*get_keyname(char *token, int *i)
 	start = *i;
 	while (1)
 	{
-		if (*i == start && ft_isdigit(token[*i]))
-			break;
-		if (!ft_isalnum(token[*i]) && token[*i] != '_')
-			break;
+		if (*i == start && ft_isdigit(token[*i]) && token[*i] != '?')
+			break ;
+		if (*i != start && !ft_isalnum(token[*i]) && token[*i] != '_')
+			break ;
 		(*i)++;
 	}
 	if (start == *i)
@@ -104,17 +104,17 @@ void	get_status(char **argv, int *status)
 	char	*status_str;
 
 	tmp = *argv;
-	// if (g_signal.sigint != 1)
-	// {
+	if (save_sig_status(-1) != SIG_NORMAL)
+	{
 		if (*status > 256)
 			status_str = ft_itoa(*status / 256);
 		else
 			status_str = ft_itoa(*status);
 		*argv = ft_strjoin(*argv, status_str);
 		free(status_str);
-	// }
-	// else
-	// 	*argv = ft_strjoin(*argv, "130");
+	}
+	else
+		*argv = ft_strjoin(*argv, "130");
 	if (!*argv)
 		fatal_error("malloc");
 	free(tmp);
