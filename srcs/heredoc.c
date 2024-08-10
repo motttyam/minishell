@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 21:25:10 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/10 16:44:22 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/10 19:48:00 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,14 @@ int	check_heredoc_token(t_token *token, t_var **list, int *status, t_tool *tool)
 		if (token->type == HEREDOCUMENT)
 		{
 			token = token->next;
-			// heredoc_signal_handler();
+			heredoc_signal_handler();
 			get_heredoc_input(token, list, status, tool);
-			if(save_sig_status(-1) == SIG_HEREDOC)
+			if (save_sig_status(-1) == SIG_HEREDOC)
+			{
+				*status = 130;
+				setup_signal_handler();
 				return (-1);
+			}
 		}
 		token = token->next;
 	}
@@ -38,7 +42,7 @@ void	get_heredoc_input(t_token *delimiter, t_var **list, int *status,
 		|| delimiter->type == QUOTE_EXPANDED)
 		buf = get_input_noexpand(delimiter, tool);
 	else
-		buf = get_input_expand(delimiter, list, status, tool);
+		buf = get_input_expand(delimiter, list, status, tool); 
 	ft_bzero(delimiter->token, ft_strlen(delimiter->token));
 	delimiter->type = WORD;
 	if (g_sig == SIGINT && save_sig_status(-1) == SIG_HEREDOC)
@@ -66,9 +70,11 @@ char	*get_input_noexpand(t_token *delimiter, t_tool *tool)
 		else
 			line = readline("> ");
 		if (g_sig == SIGINT && save_sig_status(-1) == SIG_HEREDOC)
-			return (buf);
+		{
+			return (free(line), buf);
+		}
 		if (!line)
-			return (put_heredoc_error(delimiter->token, tool), buf);
+			return (free(line), put_heredoc_error(delimiter->token, tool), buf);
 		if (!ft_strncmp(line, delimiter->token, ft_strlen(delimiter->token)
 				+ 1))
 			break ;
@@ -78,7 +84,8 @@ char	*get_input_noexpand(t_token *delimiter, t_tool *tool)
 	return (buf);
 }
 
-void	expand_and_append_line(t_var **list, int *status, char *line, char **buf)
+void	expand_and_append_line(t_var **list, int *status, char *line,
+		char **buf)
 {
 	char	*tmp;
 
@@ -106,9 +113,9 @@ char	*get_input_expand(t_token *delimiter, t_var **list, int *status,
 		else
 			line = readline("> ");
 		if (g_sig == SIGINT && save_sig_status(-1) == SIG_HEREDOC)
-			return (buf);
+			return (free(line), buf);
 		if (!line)
-			return (put_heredoc_error(delimiter->token, tool), buf);
+			return (free(line), put_heredoc_error(delimiter->token, tool), buf);
 		if (!ft_strncmp(line, delimiter->token, ft_strlen(delimiter->token)
 				+ 1))
 			break ;

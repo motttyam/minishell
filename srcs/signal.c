@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 13:46:01 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/10 16:32:48 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/10 19:47:01 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ void	handle_heredoc(int signal)
 	if (signal == SIGINT)
 	{
 		g_sig = SIGINT;
-		save_sig_status(SIG_HEREDOC);
 		ft_printf_fd(1, "\n");
+		save_sig_status(SIG_HEREDOC);
 		close(STDIN_FILENO);
 	}
 }
@@ -53,15 +53,14 @@ int	save_sig_status(int flag)
 
 void	handle_interactive(int signal)
 {
-	// interactive modeの signal
 	if (signal == SIGINT)
 	{
 		g_sig = SIGINT;
-		save_sig_status(SIG_NORMAL);
 		rl_on_new_line();
 		ft_printf_fd(1, "\n");
 		rl_replace_line("", 0);
 		rl_redisplay();
+		save_sig_status(SIG_NORMAL);
 	}
 }
 

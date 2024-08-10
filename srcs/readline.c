@@ -18,7 +18,6 @@ char	*rl_input(t_tool *tool, t_var **list)
 
 	tool->ps1 = ft_getenv(list, "PS1");
 	tool->ps2 = ft_getenv(list, "PS2");
-	rl_outstream = stderr;
 	line = NULL;
 	if (tool->ps1)
 		line = readline(tool->ps1);

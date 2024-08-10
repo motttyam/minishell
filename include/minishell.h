@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:19:56 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/10 15:59:18 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/10 17:55:14 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ typedef enum e_signal_state
 {
 	SIG_NORMAL,
 	SIG_HEREDOC,
+	SIG_HEREDOC_DOUBLE,
 }	t_signal_state;
 
 // signal
