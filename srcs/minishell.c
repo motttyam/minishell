@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:06:27 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/10 16:38:55 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/10 17:58:14 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,10 +76,10 @@ int	main(void)
 	t_tool	tool;
 
 	save_fd(&saved_fd);
-	setup_signal_handler();
 	first = NULL;
 	get_envlist(&first);
 	init_tool(&first, &tool);
+	setup_signal_handler();
 	while (1)
 	{
 		reinit_tool_and_signal(&tool);
