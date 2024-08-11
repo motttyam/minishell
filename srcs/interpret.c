@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   interpret.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 16:33:23 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/10 20:35:25 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/11 16:04:39 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void	interpret(char **argv, t_var **list, t_tool *tool, t_parser *parser)
 		ignore_signal_handler();
 	else
 		execve_signal_handler();
+	tool->execve_flg = 1;
 	pid = fork();
 	if (pid < 0)
 		fatal_error("fork");

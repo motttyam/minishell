@@ -6,7 +6,7 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:06:27 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/11 14:28:15 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/11 16:03:50 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ void	init_tool(t_var **list, t_tool *tool)
 
 	tool->status = 0;
 	tool->last_status = 0;
+	tool->execve_flg = 0;
 	tool->filename = NULL;
 	tool->line_count = 1;
 	tool->home = NULL;
@@ -54,6 +55,7 @@ void	init_tool(t_var **list, t_tool *tool)
 void	reinit_tool_and_signal(t_tool *tool)
 {
 	tool->input = NULL;
+	tool->execve_flg = 0;
 	setup_signal_handler();
 	save_sig_status(SIG_INIT);
 }

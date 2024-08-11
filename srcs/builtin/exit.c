@@ -6,7 +6,7 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 19:33:16 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/11 15:19:11 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/11 15:28:06 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	exec_exit(char **argv, int *status, t_tool *tool)
 		else if (ft_argvlen(argv) > 2)
 		{
 			put_error_message("exit", "too many arguments", tool);
+			tool->status = 1;
 			return ;
 		}
 		else
