@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 14:31:29 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/10 20:51:16 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/11 16:05:21 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,10 +77,13 @@ void	wait_for_all_process(int count, t_tool *tool)
 		waitpid(-1, &tool->status, 0);
 		i++;
 	}
-	tool->status = tool->last_status;
-	if (WIFEXITED(tool->status))
-		tool->status = WEXITSTATUS(tool->status);
-	else if (WIFSIGNALED(tool->status))
-		tool->status = 128 + WTERMSIG(tool->status);
+	if (tool->execve_flg)
+	{
+		tool->status = tool->last_status;
+		if (WIFEXITED(tool->status))
+			tool->status = WEXITSTATUS(tool->status);
+		else if (WIFSIGNALED(tool->status))
+			tool->status = 128 + WTERMSIG(tool->status);
+	}
 	setup_signal_handler();
 }

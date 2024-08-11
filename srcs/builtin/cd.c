@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 20:55:09 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/10 14:31:16 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/11 15:47:01 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,12 +63,12 @@ int	check_dash_tilde(char **argv, t_var **list, t_tool *tool)
 		if (argv[1][1] != '\0')
 		{
 			tool->status = 2;
-			return (ft_printf_fd(2, "bash: cd: %c%c: invalid option\n",
+			return (ft_printf_fd(2, "minishell: cd: %c%c: invalid option\n",
 					argv[1][0], argv[1][1]), -1);
 		}
 		else if (ft_getenv(list, "OLDPWD") == NULL)
 			return (tool->status = 1, (void)ft_printf_fd(2,
-					"bash: cd: OLDPWD not set\n"), -1);
+					"minishell: cd: OLDPWD not set\n"), -1);
 		tmp = *(argv + 1);
 		*(argv + 1) = ft_strjoin(ft_getenv(list, "OLDPWD"), *(argv + 1) + 1);
 		return (free(tmp), (void)ft_printf_fd(1, "%s\n", *(argv + 1)), 0);

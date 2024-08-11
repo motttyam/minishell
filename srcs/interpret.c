@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 16:33:23 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/10 20:35:25 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/11 18:45:35 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,11 @@ void	interpret(char **argv, t_var **list, t_tool *tool, t_parser *parser)
 
 	if (exec_builtin(argv, list, tool, parser->count) != -1)
 		return ;
-	if(strncmp(argv[0], "./minishell", ft_strlen(argv[0])) == 0)
+	if (strncmp(argv[0], "./minishell", ft_strlen(argv[0])) == 0)
 		ignore_signal_handler();
 	else
 		execve_signal_handler();
+	tool->execve_flg = 1;
 	pid = fork();
 	if (pid < 0)
 		fatal_error("fork");

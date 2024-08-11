@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 13:04:47 by yoshiminaok       #+#    #+#             */
-/*   Updated: 2024/08/10 15:11:34 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/11 18:42:45 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void		expand_opt_env(char **argv, char *key_name, t_var **varlist,
 				int *status);
 void		not_expand(char **argv);
 void		get_status(char **argv, int *status);
-void		join_noexpand_str(char **argv,int i,int start,char *token);
+void		join_noexpand_str(char **argv, int i, int start, char *token);
 
 // redirect
 int			redirect(t_token **ptr, t_tool *tool, t_parser *parser);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_get_token.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 09:53:36 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/04 14:07:22 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/11 14:38:43 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int	process_word_token(t_token_lexer *lexer, char *line)
 	else if (lexer->in_quote == NORMAL && line[lexer->line_i] == '\\')
 	{
 		lexer->line_i++;
-		return (0);
+		return (-1);
 	}
 	else if (lexer->in_quote == NORMAL && line[lexer->line_i] == '$')
 	{
