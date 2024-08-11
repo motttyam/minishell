@@ -6,7 +6,7 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 19:44:59 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/11 12:10:41 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/11 17:54:17 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,14 +49,18 @@ char	*read_file_gnl(int fd, char *str)
 	char	*temp;
 
 	buf = (char *)malloc(BUFFER_SIZE + 1);
-	if (!buf)
-		return (NULL);
+	buf[0] = '\0';
 	byte = 1;
 	while (byte > 0 && check_newline(str))
 	{
 		byte = read(fd, buf, BUFFER_SIZE);
 		if (byte == -1)
 			return (free(buf), free(str), NULL);
+		if (byte == 0 && buf[0] != '\0')
+		{
+			byte = 1;
+			continue ;
+		}
 		buf[byte] = '\0';
 		temp = str;
 		str = ft_strjoin(str, buf);
@@ -64,8 +68,7 @@ char	*read_file_gnl(int fd, char *str)
 		if (!str)
 			break ;
 	}
-	free(buf);
-	return (str);
+	return (free(buf),str);
 }
 
 size_t	line_len(char *str)

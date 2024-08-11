@@ -6,7 +6,7 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 21:49:17 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/11 11:47:59 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/11 16:27:29 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,7 @@ size_t	ft_strlen_nocrash(const char *s)
 
 int	ft_isspace(int c)
 {
-	if (c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\f'
-		|| c == '\r')
+	if (c == ' ' || c == '\t')
 		return (1);
 	else
 		return (0);
