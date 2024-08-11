@@ -43,6 +43,7 @@ SRC = $(BUILTIN_DIR)/cd_utils.c \
       $(SRC_DIR)/readline.c \
       $(SRC_DIR)/redirect_utils.c \
       $(SRC_DIR)/redirect.c \
+      $(SRC_DIR)/shlvl.c \
       $(SRC_DIR)/signal.c \
       $(SRC_DIR)/signal_heredoc.c \
       $(GNL_DIR)/get_next_line_utils.c \

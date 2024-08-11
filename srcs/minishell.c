@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:06:27 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/10 20:35:37 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/11 14:28:15 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void	lex_and_parse(char *line, t_tool *tool, t_fd saved_fd, t_var **list)
 		parse_token(lexer.first, saved_fd, list, tool);
 	free_token_lexer(lexer.first);
 	reinit_fd(saved_fd);
+	validate_shlvl(list);
 }
 
 void	init_tool(t_var **list, t_tool *tool)
@@ -78,6 +79,7 @@ int	main(void)
 	save_fd(&saved_fd);
 	first = NULL;
 	get_envlist(&first);
+	set_shlvl(&first);
 	init_tool(&first, &tool);
 	while (1)
 	{

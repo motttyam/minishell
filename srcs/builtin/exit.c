@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 19:33:16 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/10 20:28:56 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/11 15:19:11 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	ft_atol_for_status(char *num)
 		i++;
 	if (num[i] != '\0')
 		return (-1);
-	return ((unsigned int)((symbol * result) % 256));
+	return (((symbol * result) & 255));
 }
 
 void	get_symbol(char c, int *symbol, int *i)
