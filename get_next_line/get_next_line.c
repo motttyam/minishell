@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 19:44:59 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/11 17:54:17 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/11 18:52:05 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ char	*read_file_gnl(int fd, char *str)
 		if (!str)
 			break ;
 	}
-	return (free(buf),str);
+	return (free(buf), str);
 }
 
 size_t	line_len(char *str)

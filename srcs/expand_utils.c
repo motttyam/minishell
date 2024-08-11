@@ -3,21 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/10 15:10:29 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/10 15:10:53 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/11 18:45:50 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	join_noexpand_str(char **argv,int i,int start,char *token)
+void	join_noexpand_str(char **argv, int i, int start, char *token)
 {
-	char *str;
-	char *tmp;
-	
-	if(start == 0)
+	char	*str;
+	char	*tmp;
+
+	if (start == 0)
 	{
 		*argv = ft_substr(token, start, i);
 		if (!argv)
@@ -29,7 +29,7 @@ void	join_noexpand_str(char **argv,int i,int start,char *token)
 		if (!str)
 			fatal_error("malloc");
 		tmp = *argv;
-		*argv = ft_strjoin(*argv,str);
+		*argv = ft_strjoin(*argv, str);
 		if (!*argv)
 			fatal_error("malloc");
 		free(str);

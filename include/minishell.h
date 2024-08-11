@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:19:56 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/11 14:28:05 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/11 18:50:32 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,9 +76,10 @@ void							handle_interactive(int signal);
 void							handle_heredoc(int signal);
 void							execve_signal_handler(void);
 int								save_sig_status(int flag);
+void							handle_execve(int signal);
 
-//shlvl
-void set_shlvl(t_var **list);
-void reset_shlvl(t_var **list);
-void validate_shlvl(t_var **list);
+// shlvl
+void							set_shlvl(t_var **list);
+void							reset_shlvl(t_var **list);
+void							validate_shlvl(t_var **list);
 #endif

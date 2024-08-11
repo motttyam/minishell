@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   support2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 11:47:25 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/11 11:55:30 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/11 18:51:46 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int ft_strncmp_newline(const char *s1, const char *s2, size_t n)
+int	ft_strncmp_newline(const char *s1, const char *s2, size_t n)
 {
 	size_t	i;
 	int		result;
