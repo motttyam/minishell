@@ -25,6 +25,7 @@ SRC = $(BUILTIN_DIR)/cd_utils.c \
       $(UTILS_DIR)/fd.c \
       $(UTILS_DIR)/free.c \
       $(UTILS_DIR)/support.c \
+      $(UTILS_DIR)/support2.c \
       $(UTILS_DIR)/var.c \
       $(SRC_DIR)/expand_utils.c \
       $(SRC_DIR)/expand.c \

@@ -3,77 +3,78 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/28 12:28:24 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/05/04 16:34:21 by ktsukamo         ###   ########.fr       */
+/*   Created: 2024/04/26 20:46:36 by nyoshimi          #+#    #+#             */
+/*   Updated: 2024/04/29 18:53:35 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*ft_realloc(void *src, size_t newsize, int flag)
+size_t	ft_strlen(const char *str)
 {
-	void	*new;
+	size_t	count;
 
-	if (!newsize)
-	{
-		free(src);
-		return (NULL);
-	}
-	if (!src)
-	{
-		new = (char *)malloc(sizeof(char) * newsize);
-		if (!new)
-			return (NULL);
-		return (new);
-	}
-	new = (char *)malloc(sizeof(char) * (newsize));
-	if (!new)
-		return (NULL);
-	ft_memmove((void *)new, (const void *)src, newsize - 1 - flag);
-	return (new);
+	count = 0;
+	if (str == NULL)
+		return (0);
+	while (str[count])
+		count++;
+	return (count);
 }
 
-void	*ft_memmove(void *dst, const void *src, size_t len)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
-	unsigned char	*p_dst;
-	unsigned char	*p_src;
-	size_t			i;
+	char	*r;
+	int		i;
+	int		j;
 
-	p_dst = (unsigned char *)dst;
-	p_src = (unsigned char *)src;
-	if (dst == src)
-		return (dst);
-	if (p_dst >= p_src && p_dst < p_src + len)
-	{
-		i = len;
-		while (i > 0)
-		{
-			i--;
-			p_dst[i] = p_src[i];
-		}
-	}
-	else
-	{
-		i = 0;
-		while (i++ < len)
-			p_dst[i - 1] = p_src[i - 1];
-	}
-	return (dst);
-}
-
-void	ft_bzero(void *s, size_t n)
-{
-	unsigned char	*ptr;
-	size_t			i;
-
-	ptr = (unsigned char *)s;
 	i = 0;
-	while (i < n)
+	j = 0;
+	r = (char *)malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
+	if (r == NULL)
+		return (NULL);
+	while (s1 && s1[i])
 	{
-		ptr[i] = '\0';
+		r[i] = s1[i];
 		i++;
 	}
-	return ;
+	while (s2[j])
+	{
+		r[i + j] = s2[j];
+		j++;
+	}
+	r[i + j] = '\0';
+	return (r);
+}
+
+void	*ft_memset(void *buf, int c, size_t n)
+{
+	unsigned char	*ptr;
+
+	ptr = (unsigned char *)buf;
+	while (n > 0)
+	{
+		*ptr = c;
+		++ptr;
+		n--;
+	}
+	return (buf);
+}
+
+int	check_newline(char *s)
+{
+	size_t	i;
+
+	i = 0;
+	if (!s)
+		return (1);
+	while (s[i])
+	{
+		if (s[i] == '\n')
+			return (0);
+		i++;
+	}
+	return (1);
 }

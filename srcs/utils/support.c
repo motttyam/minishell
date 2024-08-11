@@ -6,13 +6,13 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 21:49:17 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/10 16:03:21 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/11 11:47:59 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-char	*ft_strjoinendl(char *s1, char const *s2)
+char	*ft_strjoin_and_free(char *s1, char const *s2)
 {
 	int		i;
 	int		len_s1;
@@ -22,7 +22,7 @@ char	*ft_strjoinendl(char *s1, char const *s2)
 
 	len_s1 = ft_strlen_nocrash(s1);
 	len_s2 = ft_strlen_nocrash(s2);
-	dest = (char *)malloc(sizeof(char) * (len_s1 + len_s2) + 2);
+	dest = (char *)malloc(sizeof(char) * (len_s1 + len_s2) + 1);
 	temp = dest;
 	if (!dest)
 		fatal_error("malloc");
@@ -32,8 +32,7 @@ char	*ft_strjoinendl(char *s1, char const *s2)
 	i = 0;
 	while (s2[i])
 		*dest++ = s2[i++];
-	*dest = '\n';
-	*(dest + 1) = '\0';
+	*dest = '\0';
 	free(s1);
 	return (temp);
 }

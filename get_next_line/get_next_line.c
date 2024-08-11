@@ -3,108 +3,145 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/28 13:14:05 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/05/04 21:17:16 by ktsukamo         ###   ########.fr       */
+/*   Created: 2024/04/26 19:44:59 by nyoshimi          #+#    #+#             */
+/*   Updated: 2024/08/11 12:10:41 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
+// __attribute__((destructor))
+// static void destructor() {
+//     system("leaks -q a.out");
+// }
+
 char	*get_next_line(int fd)
 {
-	char	*dest;
-	int		c;
-	int		dest_size;
-	int		new_size;
+	static char	save[BUFFER_SIZE] = {};
+	char		*result;
+	char		*str;
 
-	dest = NULL;
-	dest_size = 0;
-	new_size = 0;
-	c = ft_getchar(fd);
-	if (c != EOF)
-		dest = ft_getstr(fd, c, dest_size, new_size);
-	if (!dest)
+	if (fd < 0 || BUFFER_SIZE <= 0 || BUFFER_SIZE >= 2147483647)
 		return (NULL);
-	else
-		return (dest);
+	str = NULL;
+	str = ft_strjoin(str, save);
+	if (str == NULL)
+		return (NULL);
+	str = read_file_gnl(fd, str);
+	if (str == NULL)
+	{
+		ft_memset(save, 0, ft_strlen(save));
+		free(str);
+		return (NULL);
+	}
+	result = get_oneline(str);
+	ft_save(str, save);
+	free(str);
+	return (result);
 }
 
-char	*ft_getstr(int fd, int c, int dest_size, int new_size)
+char	*read_file_gnl(int fd, char *str)
 {
+	int		byte;
+	char	*buf;
 	char	*temp;
-	char	*dest;
 
-	dest = NULL;
-	while (c > 0)
+	buf = (char *)malloc(BUFFER_SIZE + 1);
+	if (!buf)
+		return (NULL);
+	byte = 1;
+	while (byte > 0 && check_newline(str))
 	{
-		if (c == '\n')
-			return (ft_nl_terminate(c, temp, dest, dest_size));
-		if (dest_size == new_size)
-		{
-			temp = ft_realloc(dest, new_size + 1000, 999);
-			if (!temp)
-				return (free(dest), NULL);
-			free(dest);
-			dest = temp;
-			new_size += 1000;
-		}
-		dest[dest_size++] = c;
-		c = ft_getchar(fd);
+		byte = read(fd, buf, BUFFER_SIZE);
+		if (byte == -1)
+			return (free(buf), free(str), NULL);
+		buf[byte] = '\0';
+		temp = str;
+		str = ft_strjoin(str, buf);
+		free(temp);
+		if (!str)
+			break ;
 	}
-	if (c == EOF && dest_size > 0)
-		return (ft_terminate(temp, dest, dest_size));
-	return (free(dest), NULL);
+	free(buf);
+	return (str);
 }
 
-int	ft_getchar(int fd)
+size_t	line_len(char *str)
 {
-	static char	buf[BUFFER_SIZE];
-	static char	*bufp = NULL;
-	static int	n = 0;
+	size_t	count;
 
-	if (n == 0)
+	count = 0;
+	while (str[count] != '\n' && str[count])
+		count++;
+	if (str[count] == '\n')
+		count++;
+	return (count);
+}
+
+char	*get_oneline(char *str)
+{
+	char	*r;
+	size_t	i;
+
+	i = 0;
+	if (str[0] == '\0')
+		return (NULL);
+	r = (char *)malloc(line_len(str) + 1);
+	if (!r)
+		return (NULL);
+	i = 0;
+	while (str[i] != '\n' && str[i])
 	{
-		n = read(fd, buf, BUFFER_SIZE);
-		bufp = buf;
-		if (n == 0)
-			return (EOF);
-		else if (n == -1)
-		{
-			n = 0;
-			ft_bzero(buf, BUFFER_SIZE);
-			return (-2);
-		}
+		r[i] = str[i];
+		i++;
 	}
-	if (n > 0)
+	if (str[i] == '\n')
 	{
-		n--;
-		return ((unsigned char)*bufp++);
+		r[i] = '\n';
+		r[i + 1] = '\0';
 	}
 	else
-		return (EOF);
+		r[i] = '\0';
+	return (r);
 }
 
-char	*ft_terminate(char *temp, char *dest, int dest_size)
+void	ft_save(char *str, char *save)
 {
-	temp = ft_realloc(dest, dest_size + 1, 0);
-	if (!temp)
-		return (free(dest), NULL);
-	free(dest);
-	dest = temp;
-	dest[dest_size] = '\0';
-	return (dest);
+	size_t	i;
+	size_t	j;
+
+	i = 0;
+	j = 0;
+	while (str[i] != '\n' && str[i] != '\0')
+		i++;
+	if (str[i] == '\n')
+	{
+		i++;
+		while (str[i + j] != '\0')
+		{
+			save[j] = str[i + j];
+			j++;
+		}
+		save[j] = '\0';
+	}
+	else
+		save[0] = '\0';
 }
 
-char	*ft_nl_terminate(int c, char *temp, char *dest, int dest_size)
-{
-	temp = ft_realloc(dest, dest_size + 2, 1);
-	if (!temp)
-		return (free(dest), NULL);
-	free(dest);
-	dest = temp;
-	dest[dest_size] = c;
-	dest[dest_size + 1] = '\0';
-	return (dest);
-}
+// #include <fcntl.h>
+// #include <stdio.h>
+
+// int	main(void)
+// {
+// 	int fd = open("test.txt", O_RDONLY);
+// 	char *line = "";
+// 	while (line)
+// 	{
+// 		line = get_next_line(fd);
+// 		printf("fd-line:%s", line);
+// 		free(line);
+// 	}
+// 	return (0);
+// }

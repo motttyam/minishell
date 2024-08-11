@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 18:47:57 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/04 21:29:16 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/11 12:31:15 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,9 @@ void	exec_unset(char **argv, t_var **list, t_tool *tool)
 		return ;
 	while (argv[i])
 	{
-		ft_list_remove_if(list, argv[i], ft_strncmp);
+		if (ft_strncmp(argv[i], "SHLVL", ft_strlen(argv[i]) != 0)
+		&& ft_strncmp(argv[i], "_", ft_strlen(argv[i]) != 0))
+			ft_list_remove_if(list, argv[i], ft_strncmp);
 		i++;
 	}
 }
