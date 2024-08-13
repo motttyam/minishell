@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 08:53:11 by yoshiminaok       #+#    #+#             */
-/*   Updated: 2024/08/10 20:36:18 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/13 14:29:04 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	parse_token(t_token *ptr, t_fd saved_fd, t_var **varlist, t_tool *tool)
 		if (parser.redirect_flag != FILE_ERROR)
 		{
 			interpret(parser.argv, parser.list, tool, &parser);
+			close(STDIN_FILENO);
 		}
 		free_argv(parser.argv);
 		wait_for_all_process(parser.count, tool);
@@ -55,9 +56,7 @@ void	parse_newline(t_token **ptr, t_parser *parser, t_tool *tool)
 				parser->argv = NULL;
 			}
 			if ((*ptr) != NULL)
-			{
 				parse_pipe(ptr, parser, tool);
-			}
 		}
 		else
 			break ;

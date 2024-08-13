@@ -6,7 +6,7 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 14:05:38 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/10 12:20:18 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/13 17:48:45 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,7 @@ t_var	*export_new_var(char *newkey, char *newvalue);
 void	put_export_error(char *arg, t_tool *tool);
 void	sort_and_put_env(t_var **list);
 void	put_env(t_var *save);
-void	save_opt_env(t_var *current, t_var **save, char *pre_save,
-			int *save_flg);
+void	save_opt_env(t_var *current, t_var **save, char *pre_save);
 void	update_env_var(t_var *opt, int append_flg, char *newvalue);
 
 // exit

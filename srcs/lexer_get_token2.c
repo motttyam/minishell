@@ -6,11 +6,12 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 21:28:36 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/10 12:46:44 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/13 15:02:49 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
 
 void	get_doublequote_token(t_token_lexer *lexer, char *line)
 {
@@ -20,12 +21,11 @@ void	get_doublequote_token(t_token_lexer *lexer, char *line)
 	while (line[lexer->line_i])
 	{
 		while (line[lexer->line_i] == '"')
+			change_quote_flg(lexer);
+		if (lexer->in_quote == NORMAL && line[lexer->line_i] == '\'')
 		{
-			lexer->line_i++;
-			if (lexer->in_quote == DOUBLE_QUOTED)
-				lexer->in_quote = NORMAL;
-			else
-				lexer->in_quote = DOUBLE_QUOTED;
+			get_singlequote_token(lexer,line);
+			break;
 		}
 		if (line[lexer->line_i] == '\\')
 		{
@@ -41,6 +41,15 @@ void	get_doublequote_token(t_token_lexer *lexer, char *line)
 	}
 }
 
+void change_quote_flg(t_token_lexer *lexer)
+{
+	lexer->line_i++;
+	if (lexer->in_quote == DOUBLE_QUOTED)
+		lexer->in_quote = NORMAL;
+	else
+		lexer->in_quote = DOUBLE_QUOTED;
+}
+
 void	get_singlequote_token(t_token_lexer *lexer, char *line)
 {
 	lexer->in_quote = SINGLE_QUOTED;
@@ -54,7 +63,12 @@ void	get_singlequote_token(t_token_lexer *lexer, char *line)
 			if (lexer->in_quote == SINGLE_QUOTED)
 				lexer->in_quote = NORMAL;
 			else
-				lexer->in_quote = SINGLE_QUOTE;
+				lexer->in_quote = SINGLE_QUOTED;
+		}
+		if (lexer->in_quote == NORMAL && line[lexer->line_i] == '"')
+		{
+			get_doublequote_token(lexer,line);
+			break;
 		}
 		if (lexer->in_quote == NORMAL && ft_strchr("|<>\n \t",
 				line[lexer->line_i]))

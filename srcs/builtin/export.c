@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 16:31:39 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/04 21:31:35 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/13 17:46:18 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,37 +29,49 @@ void	exec_export(t_var **list, char **argv, int count, t_tool *tool)
 		}
 	}
 }
+int get_envlist_size(t_var **list)
+{
+	t_var *tmp;
+	int size;
+
+	tmp = *list;
+	size = 0;
+	while(tmp)
+	{
+		tmp = tmp->next;
+		size++;
+	}
+	return (size);
+}
 
 void	sort_and_put_env(t_var **list)
 {
 	t_var	*current;
 	t_var	*save;
 	char	*pre_save;
-	int		save_flg;
+	int		size;
 
 	current = *list;
 	save = current;
-	save_flg = 0;
 	pre_save = NULL;
+	size = get_envlist_size(list);
 	while (1)
 	{
-		save_opt_env(current, &save, pre_save, &save_flg);
+		save_opt_env(current, &save, pre_save);
 		if (current->next == NULL)
 		{
-			if (save_flg)
-				put_env(save);
-			else
-				return ;
+			put_env(save);
 			current = *list;
-			save_flg = 0;
 			pre_save = save->key;
+			size--;
+			if (!size)
+				return ;
 		}
 		current = current->next;
 	}
 }
 
-void	save_opt_env(t_var *current, t_var **save, char *pre_save,
-		int *save_flg)
+void	save_opt_env(t_var *current, t_var **save, char *pre_save)
 {
 	if ((!pre_save || (pre_save && ft_strncmp(pre_save, current->key,
 					ft_strlen(pre_save) + 1) < 0)) && ((*save)->key == pre_save
@@ -67,7 +79,6 @@ void	save_opt_env(t_var *current, t_var **save, char *pre_save,
 					+ 1) > 0)))
 	{
 		(*save) = current;
-		*save_flg = 1;
 	}
 }
 
