@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 16:43:42 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/17 15:23:55 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/17 22:59:57 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,13 @@ char	*get_expanded_argv(char *token, t_var **varlist, int *status)
 			join_noexpand_str(&argv, i, start, token);
 			i++;
 			key_name = get_keyname(token, &i);
+			if (key_name == NULL)
+			{
+				not_expand(&argv,token,&i);
+				start = i;
+				i--;
+				break;
+			}
 			expand_opt_env(&argv, key_name, varlist, status);
 			free(key_name);
 			start = i;
@@ -36,6 +43,7 @@ char	*get_expanded_argv(char *token, t_var **varlist, int *status)
 		}
 		i++;
 	}
+	join_noexpand_str(&argv, i, start, token);
 	return (argv);
 }
 
@@ -47,14 +55,19 @@ char	*get_keyname(char *token, int *i)
 	start = *i;
 	while (1)
 	{
-		if (*i == start && ft_isdigit(token[*i]) && token[*i] != '?')
+		if (*i == start && token[*i] == '?')
+		{
+			(*i)++;
+			break;
+		}
+		if (*i == start && !ft_isalpha(token[*i]))
 			break ;
 		if (*i != start && !ft_isalnum(token[*i]) && token[*i] != '_')
 			break ;
 		(*i)++;
 	}
 	if (start == *i)
-		return ((*i)++, NULL);
+		return (NULL);
 	key_name = ft_substr(token, start, *i - start);
 	if (!key_name)
 		fatal_error("malloc");
@@ -68,8 +81,6 @@ void	expand_opt_env(char **argv, char *key_name, t_var **varlist,
 	char	*tmp;
 
 	opt = *varlist;
-	if (key_name == NULL)
-		return (not_expand(argv));
 	if (key_name[0] == '?')
 		return (get_status(argv, status));
 	while (opt)
@@ -87,15 +98,24 @@ void	expand_opt_env(char **argv, char *key_name, t_var **varlist,
 	free(tmp);
 }
 
-void	not_expand(char **argv)
+void	not_expand(char **argv,char *token, int *i)
 {
+	char	*no_expand;
 	char	*tmp;
+	int		start;
 
+	start = *i;
+	while(token[*i] != '$' && token[*i] != '\0')
+		(*i)++;
+	no_expand = ft_substr(token,start-1,*i - start +1);
+	if (!no_expand)
+		fatal_error("malloc");
 	tmp = *argv;
-	*argv = ft_strjoin(*argv, "$");
+	*argv = ft_strjoin(*argv,no_expand);
 	if (!*argv)
 		fatal_error("malloc");
 	free(tmp);
+	free(no_expand);
 }
 
 void	get_status(char **argv, int *status)
