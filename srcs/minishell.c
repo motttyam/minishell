@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:06:27 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/13 18:55:21 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/17 15:17:41 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,8 @@ void	fin_tool(t_tool *tool)
 		free(tool->ps1);
 	if (tool->ps2)
 		free(tool->ps2);
+	if (save_sig_status(-1) == SIG_NORMAL)
+		tool->status = 130;
 }
 
 int	main(void)
@@ -82,7 +84,7 @@ int	main(void)
 	first = NULL;
 	get_envlist(&first);
 	init_tool(&first, &tool);
-	set_shlvl(&first,&tool);
+	set_shlvl(&first, &tool);
 	while (1)
 	{
 		reinit_tool_and_signal(&tool);
@@ -94,8 +96,6 @@ int	main(void)
 	close_fd(saved_fd);
 	free_envlist(first);
 	fin_tool(&tool);
-	if (save_sig_status(-1) == SIG_NORMAL)
-		tool.status = 130;
 	ft_putendl_fd("exit", 2);
 	exit(tool.status);
 	return (0);

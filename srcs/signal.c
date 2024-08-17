@@ -6,17 +6,11 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 13:46:01 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/11 18:46:49 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/17 15:18:53 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-void	execve_signal_handler(void)
-{
-	signal(SIGINT, handle_execve);
-	signal(SIGQUIT, handle_execve);
-}
 
 void	handle_interactive(int signal)
 {
@@ -62,8 +56,11 @@ int	save_sig_status(int flag)
 		i = SIG_HEREDOC;
 		return (0);
 	}
+	else if (flag == SIG_CHILD_QUIT)
+	{
+		i = SIG_CHILD_QUIT;
+	}
 	else if (flag == -1)
 		return (i);
-	ft_printf_fd(2, "sig_status Error\nflag:%d\n", flag);
-	return (-1);
+	return (0);
 }

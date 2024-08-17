@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:19:56 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/13 15:59:10 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/17 14:51:14 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ typedef enum e_signal_state
 	SIG_INIT,
 	SIG_NORMAL,
 	SIG_HEREDOC,
-	SIG_CHILD,
+	SIG_CHILD_QUIT,
 }								t_signal_state;
 
 // signal
@@ -77,6 +77,7 @@ void							handle_heredoc(int signal);
 void							execve_signal_handler(void);
 int								save_sig_status(int flag);
 void							handle_execve(int signal);
+void							default_signal_handler(void);
 
 // shlvl
 void							set_shlvl(t_var **list,t_tool *tool);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_arg.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 16:41:29 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/10 13:50:50 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/17 13:50:08 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,9 +107,7 @@ char	*get_value(char *arg)
 t_var	*export_new_var(char *newkey, char *newvalue)
 {
 	t_var	*new;
-	int		j;
-
-	j = 0;
+	
 	new = (t_var *)malloc(sizeof(t_var));
 	if (!new)
 	{
