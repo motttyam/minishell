@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 14:05:38 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/13 17:48:45 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/17 23:03:25 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void	exec_unset(char **argv, t_var **list, t_tool *tool);
 void	exec_env(char **argv, t_var **list, t_tool *tool);
 char	*ft_getenv(t_var **list, char *key_name);
 char	**list_to_environ(t_var **list);
+void	put_error_env(t_tool *tool, char *argv);
 
 // echo
 void	exec_echo(char **argv, t_tool *tool);
