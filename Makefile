@@ -75,10 +75,12 @@ $(PRINTF):
 all: $(NAME)
 
 clean:
-	$(RM) $(SRC:.c=.o) cmp out *.txt tmp*
+	$(RM) $(SRC:.c=.o)
+	$(MAKE) clean -j4 -C $(LIBFT_DIR)
+	$(MAKE) clean -j4 -C $(PRINTF_DIR)
 
 fclean: clean
-	$(RM) $(NAME)
+	$(RM) $(NAME) $(LIBFT) $(PRINTF)
 
 test: all
 	./tests/test.sh assert

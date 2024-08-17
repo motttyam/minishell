@@ -16,18 +16,14 @@ SOURCES += srcs/printf_strlen.c
 
 OBJECTS = $(SOURCES:.c=.o)
 
-# デフォルトターゲット
 all: $(NAME)
 
-# 静的ライブラリを作成
 $(NAME): $(OBJECTS)
 	ar rcs $@ $(OBJECTS)
 
-# ソースファイルからオブジェクトファイルをコンパイル
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# 'make clean' を実行した時に掃除する
 clean:
 	rm -f $(SOURCES:.c=.o)
 
@@ -36,5 +32,4 @@ fclean: clean
 
 re: fclean all
 
-# ダミーターゲット
 .PHONY: all clean fclean re

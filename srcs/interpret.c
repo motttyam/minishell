@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   interpret.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 16:33:23 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/11 18:45:35 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/13 18:57:19 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ void	interpret(char **argv, t_var **list, t_tool *tool, t_parser *parser)
 		do_child_process(argv, list, tool, parser->fd);
 	else
 	{
-		close(STDIN_FILENO);
 		waitpid(pid, &tool->status, 0);
 		tool->last_status = tool->status;
 	}
@@ -72,7 +71,10 @@ void	do_path_command(char **argv, t_var **list, t_tool *tool, t_fd saved_fd)
 		if (access(argv[0], X_OK) == -1)
 		{
 			put_error_message(argv[0], NULL, tool);
-			exit(126);
+			if(errno == EACCES)
+				exit(126);
+			else
+				exit(127);
 		}
 		else
 		{

@@ -57,18 +57,14 @@ endif
 
 OBJECTS = $(SOURCES:.c=.o)
 
-# デフォルトターゲット
 all: $(LIBNAME)
 
-# 静的ライブラリを作成
 $(LIBNAME): $(OBJECTS)
 	ar rcs $@ $(OBJECTS)
 
-# ソースファイルからオブジェクトファイルをコンパイル
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# 'make clean' を実行した時に掃除する
 clean:
 	rm -f $(BASIC_SOURCES:.c=.o) $(BONUSES:.c=.o)
 
@@ -77,9 +73,7 @@ fclean: clean
 
 re: fclean all
 
-# ボーナスターゲット
 bonus:
 	$(MAKE) all BONUS_FLAG=yes
 
-# ダミーターゲット
 .PHONY: all clean fclean re bonus

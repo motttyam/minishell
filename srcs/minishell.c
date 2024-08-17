@@ -6,7 +6,7 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:06:27 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/11 16:03:50 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/13 18:55:21 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,8 @@ int	main(void)
 	save_fd(&saved_fd);
 	first = NULL;
 	get_envlist(&first);
-	set_shlvl(&first);
 	init_tool(&first, &tool);
+	set_shlvl(&first,&tool);
 	while (1)
 	{
 		reinit_tool_and_signal(&tool);

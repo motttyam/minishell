@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:19:56 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/11 18:50:32 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/13 15:59:10 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int								save_sig_status(int flag);
 void							handle_execve(int signal);
 
 // shlvl
-void							set_shlvl(t_var **list);
+void							set_shlvl(t_var **list,t_tool *tool);
 void							reset_shlvl(t_var **list);
 void							validate_shlvl(t_var **list);
 #endif
