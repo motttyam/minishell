@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 12:15:25 by yoshiminaok       #+#    #+#             */
-/*   Updated: 2024/08/03 21:02:07 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/17 14:36:24 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	pipe_and_execute(char **cmd, int *count, t_parser *parser, t_tool *tool)
 	(*count)++;
 	if (pipe(pipefd) == -1)
 		fatal_error("pipe");
+	default_signal_handler();
 	pid = fork();
 	if (pid == -1)
 		fatal_error("fork");

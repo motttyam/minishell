@@ -9,8 +9,6 @@ BUILTIN_DIR = srcs/builtin
 UTILS_DIR = srcs/utils
 GNL_DIR = get_next_line
 
-
-
 SRC = $(BUILTIN_DIR)/cd_utils.c \
       $(BUILTIN_DIR)/cd.c \
       $(BUILTIN_DIR)/echo.c \
