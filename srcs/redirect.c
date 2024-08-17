@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 22:31:54 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/17 18:57:18 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/17 21:59:24 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ int	redirect(t_token **ptr, t_tool *tool, t_parser *parser)
 	int	flag;
 
 	flag = 0;
+	// if (parser->redirect_flag == FILE_ERROR)
+	// 	return(FILE_ERROR);
 	if ((*ptr)->type == INPUT_REDIRECTION)
 	{
 		flag = input_redirect(ptr, tool, parser->list);

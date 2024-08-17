@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_get_token.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 09:53:36 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/11 14:38:43 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/17 19:35:23 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	get_word_token(t_token_lexer *lexer, char *line)
 		get_tokenchar(lexer, line, lexer->current->token);
 	}
 	if (lexer->in_quote != NORMAL)
-		quote_error();
+		fatal_error("Quotation mark not closed.");
 }
 
 int	process_word_token(t_token_lexer *lexer, char *line)
