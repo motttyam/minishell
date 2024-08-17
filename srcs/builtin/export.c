@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 16:31:39 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/17 15:22:45 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/17 19:33:09 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,12 +97,4 @@ void	put_env(t_var *save)
 	}
 	else
 		ft_putstr_fd("\n", 1);
-}
-
-void	put_export_error(char *arg, t_tool *tool)
-{
-	tool->status = 1;
-	ft_putstr_fd("expert: '", 2);
-	ft_putstr_fd(arg, 2);
-	ft_putendl_fd("': not a valid identifier", 2);
 }

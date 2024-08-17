@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 23:12:26 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/04 20:08:40 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/17 20:55:00 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,17 @@ void	validate_path(char **argv, t_var **list, t_tool *tool)
 	}
 }
 
-void	quote_error(void)
+void	put_export_error(char *arg, t_tool *tool)
 {
-	ft_putendl_fd("Quotation mark not closed.", 2);
-	exit(1);
+	tool->status = 1;
+	ft_putstr_fd("expert: '", 2);
+	ft_putstr_fd(arg, 2);
+	ft_putendl_fd("': not a valid identifier", 2);
 }
 
 void	put_error_message(char *argv, char *message, t_tool *tool)
 {
+	tool->status = 1;
 	if (tool->filename)
 	{
 		ft_printf_fd(2, "%s: line %d:", tool->filename, tool->line_count);
