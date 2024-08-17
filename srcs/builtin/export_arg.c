@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_arg.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 16:41:29 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/17 15:21:57 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/17 23:08:50 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ void	export_arg(char *arg, t_var **list, t_tool *tool)
 	keyname = NULL;
 	opt = NULL;
 	append_flg = get_env_keyname(arg, &keyname, tool);
+	if (append_flg == -1)
+		return ;
 	ft_getenv_node(list, keyname, &opt);
 	newvalue = get_value(arg);
 	if (opt)
@@ -63,6 +65,8 @@ int	get_env_keyname(char *arg, char **key_name, t_tool *tool)
 
 	i = 0;
 	append_flg = 0;
+	if (arg[0] == '=' || arg[0] == '+')
+		return(put_export_error(arg, tool),-1);
 	while (arg[i] != '=' && arg[i] != '+' && arg[i])
 	{
 		if (i == 0 && ft_isdigit(arg[i]))
@@ -76,8 +80,7 @@ int	get_env_keyname(char *arg, char **key_name, t_tool *tool)
 		fatal_error("malloc");
 	if (arg[i] == '+')
 	{
-		i++;
-		if (arg[i] != '=')
+		if (arg[++i] != '=')
 			put_export_error(arg, tool);
 		append_flg = 1;
 	}
