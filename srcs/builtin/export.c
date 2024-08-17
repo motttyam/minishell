@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 16:31:39 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/13 17:46:18 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/17 15:22:45 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,15 @@ void	exec_export(t_var **list, char **argv, int count, t_tool *tool)
 		}
 	}
 }
-int get_envlist_size(t_var **list)
+
+int	get_envlist_size(t_var **list)
 {
-	t_var *tmp;
-	int size;
+	t_var	*tmp;
+	int		size;
 
 	tmp = *list;
 	size = 0;
-	while(tmp)
+	while (tmp)
 	{
 		tmp = tmp->next;
 		size++;

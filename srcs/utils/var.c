@@ -3,15 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   var.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 23:38:42 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/13 18:55:00 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/17 15:22:19 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-t_var *set_new_envlist();
+
+t_var	*set_new_envlist(void);
+
 void	get_envlist(t_var **list)
 {
 	int			i;
@@ -67,12 +69,13 @@ void	add_last_newvar(t_var *first, t_var *new)
 		tmp = tmp->next;
 	tmp->next = new;
 }
-t_var *set_new_envlist()
+
+t_var	*set_new_envlist(void)
 {
 	t_var	*oldpwd_var;
 	t_var	*pwd_var;
 	char	path[PATH_MAX];
-	
+
 	oldpwd_var = (t_var *)malloc(sizeof(t_var));
 	oldpwd_var->key = ft_strdup("OLDPWD");
 	if (!oldpwd_var->key)
@@ -82,11 +85,11 @@ t_var *set_new_envlist()
 	oldpwd_var->next = pwd_var;
 	pwd_var->next = NULL;
 	pwd_var->key = ft_strdup("PWD");
-	if(!pwd_var->key)
+	if (!pwd_var->key)
 		fatal_error("malloc");
-	getcwd(path,sizeof(path));
+	getcwd(path, sizeof(path));
 	pwd_var->value = ft_strdup(path);
-	if(!pwd_var->value)
+	if (!pwd_var->value)
 		fatal_error("malloc");
-	return(oldpwd_var);
+	return (oldpwd_var);
 }

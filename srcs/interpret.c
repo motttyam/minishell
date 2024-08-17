@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   interpret.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 16:33:23 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/13 18:57:19 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/17 15:23:22 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	do_path_command(char **argv, t_var **list, t_tool *tool, t_fd saved_fd)
 		if (access(argv[0], X_OK) == -1)
 		{
 			put_error_message(argv[0], NULL, tool);
-			if(errno == EACCES)
+			if (errno == EACCES)
 				exit(126);
 			else
 				exit(127);

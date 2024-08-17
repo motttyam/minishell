@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   shlvl.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 13:53:12 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/13 17:54:02 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/17 15:22:57 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	set_shlvl(t_var **list,t_tool *tool)
+void	set_shlvl(t_var **list, t_tool *tool)
 {
 	t_var	*shlvl_node;
 	int		shlvl;
@@ -21,7 +21,7 @@ void	set_shlvl(t_var **list,t_tool *tool)
 	ft_getenv_node(list, "SHLVL", &shlvl_node);
 	if (!shlvl_node)
 	{
-		export_arg("SHLVL=1",list,tool);
+		export_arg("SHLVL=1", list, tool);
 		return ;
 	}
 	shlvl = ft_atoi(shlvl_node->value);

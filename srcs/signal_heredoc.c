@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 13:46:01 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/17 14:53:01 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/17 15:23:31 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	execve_signal_handler(void)
 	signal(SIGQUIT, handle_execve);
 }
 
-void default_signal_handler(void)
+void	default_signal_handler(void)
 {
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);

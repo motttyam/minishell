@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:19:56 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/17 14:51:14 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/17 15:24:10 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void							handle_execve(int signal);
 void							default_signal_handler(void);
 
 // shlvl
-void							set_shlvl(t_var **list,t_tool *tool);
+void							set_shlvl(t_var **list, t_tool *tool);
 void							reset_shlvl(t_var **list);
 void							validate_shlvl(t_var **list);
 #endif

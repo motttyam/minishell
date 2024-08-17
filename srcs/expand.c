@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 16:43:42 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/17 15:19:30 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/17 15:23:55 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ void	get_status(char **argv, int *status)
 	tmp = *argv;
 	if (save_sig_status(-1) == SIG_NORMAL)
 		*argv = ft_strjoin(*argv, "130");
-	else	
+	else
 	{
 		if (*status > 256)
 			status_str = ft_itoa(*status / 256);
