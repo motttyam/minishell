@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:06:27 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/17 15:17:41 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/17 16:05:38 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void	lex_and_parse(char *line, t_tool *tool, t_fd saved_fd, t_var **list)
 	if (lex_token(&lexer, line, tool, 0))
 	{
 		check_heredoc_token(lexer.first, list, &tool->status, tool);
+		free_token_lexer(lexer.first);
 		return ;
 	}
 	if (check_heredoc_token(lexer.first, list, &tool->status, tool) != -1)
@@ -92,6 +93,7 @@ int	main(void)
 		if (!tool.input)
 			break ;
 		lex_and_parse(tool.input, &tool, saved_fd, &first);
+		free(tool.input);
 	}
 	close_fd(saved_fd);
 	free_envlist(first);

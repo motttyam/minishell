@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 22:31:54 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/03 20:53:35 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/17 18:57:18 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	redirect(t_token **ptr, t_tool *tool, t_parser *parser)
 		flag = output_append(ptr, tool, parser->list);
 	}
 	else
-		fatal_error("予期しないエラー: redirectではない");
+		fatal_error("no redirection");
 	return (flag);
 }
 
