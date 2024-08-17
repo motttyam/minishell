@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 22:31:54 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/17 21:59:24 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/18 01:06:55 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,11 @@ int	redirect(t_token **ptr, t_tool *tool, t_parser *parser)
 	int	flag;
 
 	flag = 0;
-	// if (parser->redirect_flag == FILE_ERROR)
-	// 	return(FILE_ERROR);
+	if (parser->redirect_flag == FILE_ERROR)
+	{
+		(*ptr) = (*ptr)->next->next;
+		return(FILE_ERROR);
+	}
 	if ((*ptr)->type == INPUT_REDIRECTION)
 	{
 		flag = input_redirect(ptr, tool, parser->list);
@@ -97,6 +100,7 @@ int	output_redirect(t_token **ptr, t_tool *tool, t_var **list)
 		if (errno == EACCES)
 		{
 			put_error_message((*ptr)->token, NULL, tool);
+			(*ptr) = (*ptr)->next;
 			return (FILE_ERROR);
 		}
 		fd = open((*ptr)->token, O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR);
@@ -120,6 +124,7 @@ int	output_append(t_token **ptr, t_tool *tool, t_var **list)
 		if (errno == EACCES)
 		{
 			put_error_message((*ptr)->token, NULL, tool);
+			(*ptr) = (*ptr)->next;
 			return (FILE_ERROR);
 		}
 		fd = open((*ptr)->token, O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR);

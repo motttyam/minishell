@@ -6,7 +6,7 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 08:53:11 by yoshiminaok       #+#    #+#             */
-/*   Updated: 2024/08/13 14:29:04 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/18 01:05:47 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,12 @@ void	parse_token(t_token *ptr, t_fd saved_fd, t_var **varlist, t_tool *tool)
 			interpret(parser.argv, parser.list, tool, &parser);
 			close(STDIN_FILENO);
 		}
+		else
+			tool->last_status = tool->status;
 		free_argv(parser.argv);
 		wait_for_all_process(parser.count, tool);
+		if (parser.redirect_flag == FILE_ERROR)
+			tool->status = tool->last_status;
 	}
 }
 
@@ -65,6 +69,8 @@ void	parse_newline(t_token **ptr, t_parser *parser, t_tool *tool)
 
 void	parse_pipe(t_token **ptr, t_parser *parser, t_tool *tool)
 {
+	int fd;
+	
 	parse_command(ptr, parser, tool);
 	while (*ptr)
 	{
@@ -79,7 +85,13 @@ void	parse_pipe(t_token **ptr, t_parser *parser, t_tool *tool)
 				dup2(parser->fd.saved_stdout, STDOUT_FILENO);
 			}
 			else if (parser->redirect_flag == FILE_ERROR)
+			{
+				dup2(parser->fd.saved_stdout, STDOUT_FILENO);
+				fd = open("/dev/null", O_RDONLY);
+				dup2(fd, STDIN_FILENO);
+				close(fd);
 				parser->redirect_flag = PIPE_AND_EXECVE;
+			}
 			free_argv(parser->argv);
 			*ptr = (*ptr)->next;
 			parse_command(ptr, parser, tool);
