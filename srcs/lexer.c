@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 09:53:36 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/04 14:17:59 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/18 01:18:21 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,19 @@ int	lex_token(t_token_lexer *lexer, char *line, t_tool *tool, int apenddflg)
 		{
 			get_token(lexer, line);
 			if (validate_syntax(lexer, tool))
+			{
+				tool->status = 2;
 				return (1);
+			}
 		}
 		else
 			lexer->line_i++;
 	}
 	if (lexer->current == NULL || check_last_token(lexer, tool, tmp))
+	{
+		tool->status = 2;
 		return (1);
+	}
 	return (0);
 }
 
