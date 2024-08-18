@@ -6,45 +6,42 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 16:43:42 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/17 22:59:57 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/18 16:07:00 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
+
+
+
 char	*get_expanded_argv(char *token, t_var **varlist, int *status)
 {
-	int		i;
-	char	*argv;
-	char	*key_name;
-	int		start;
+	t_expand	expand;
 
-	i = 0;
-	start = 0;
-	argv = NULL;
-	while (token[i])
+	initialize_expand_struct(&expand);
+	while (token[expand.i])
 	{
-		while (token[i] == '$')
+		while (token[expand.i] == '$')
 		{
-			join_noexpand_str(&argv, i, start, token);
-			i++;
-			key_name = get_keyname(token, &i);
-			if (key_name == NULL)
+			join_noexpand_str(&(expand.argv), expand.i, expand.start, token);
+			(expand.i)++;
+			expand.key_name = get_keyname(token, &(expand.i));
+			if (expand.key_name == NULL)
 			{
-				not_expand(&argv,token,&i);
-				start = i;
-				i--;
+				not_expand(&(expand.argv),token,&(expand.i));
+				expand.start = (expand.i)--;
 				break;
 			}
-			expand_opt_env(&argv, key_name, varlist, status);
-			free(key_name);
-			start = i;
-			i--;
+			expand_opt_env(&(expand.argv), expand.key_name, varlist, status);
+			free(expand.key_name);
+			expand.start = (expand.i);
+			(expand.i)--;
 		}
-		i++;
+		(expand.i)++;
 	}
-	join_noexpand_str(&argv, i, start, token);
-	return (argv);
+	join_noexpand_str(&(expand.argv), expand.i, expand.start, token);
+	return (expand.argv);
 }
 
 char	*get_keyname(char *token, int *i)
