@@ -6,7 +6,7 @@
 /*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 14:31:29 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/11 16:05:21 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/18 15:43:14 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,4 +86,18 @@ void	wait_for_all_process(int count, t_tool *tool)
 			tool->status = 128 + WTERMSIG(tool->status);
 	}
 	setup_signal_handler();
+}
+
+void handle_file_error(t_parser *parser)
+{
+	int fd;
+	
+	if (parser->redirect_flag == FILE_ERROR)
+	{
+		dup2(parser->fd.saved_stdout, STDOUT_FILENO);
+		fd = open("/dev/null", O_RDONLY);
+		dup2(fd, STDIN_FILENO);
+		close(fd);
+		parser->redirect_flag = PIPE_AND_EXECVE;
+	}
 }
