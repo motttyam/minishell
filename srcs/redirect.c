@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 22:31:54 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/18 01:06:55 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/18 15:45:50 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,10 @@ int	redirect(t_token **ptr, t_tool *tool, t_parser *parser)
 	if (parser->redirect_flag == FILE_ERROR)
 	{
 		(*ptr) = (*ptr)->next->next;
-		return(FILE_ERROR);
+		return (FILE_ERROR);
 	}
 	if ((*ptr)->type == INPUT_REDIRECTION)
-	{
 		flag = input_redirect(ptr, tool, parser->list);
-	}
 	else if ((*ptr)->type == HEREDOCUMENT)
 	{
 		(*ptr) = (*ptr)->next;
@@ -33,13 +31,9 @@ int	redirect(t_token **ptr, t_tool *tool, t_parser *parser)
 		(*ptr) = (*ptr)->next;
 	}
 	else if ((*ptr)->type == OUTPUT_REDIRECTION)
-	{
 		flag = output_redirect(ptr, tool, parser->list);
-	}
 	else if ((*ptr)->type == OUTPUT_APPENDING)
-	{
 		flag = output_append(ptr, tool, parser->list);
-	}
 	else
 		fatal_error("no redirection");
 	return (flag);
