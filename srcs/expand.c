@@ -3,17 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 16:43:42 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/18 16:07:00 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/18 16:11:48 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-
-
 
 char	*get_expanded_argv(char *token, t_var **varlist, int *status)
 {
@@ -29,9 +26,9 @@ char	*get_expanded_argv(char *token, t_var **varlist, int *status)
 			expand.key_name = get_keyname(token, &(expand.i));
 			if (expand.key_name == NULL)
 			{
-				not_expand(&(expand.argv),token,&(expand.i));
+				not_expand(&(expand.argv), token, &(expand.i));
 				expand.start = (expand.i)--;
-				break;
+				break ;
 			}
 			expand_opt_env(&(expand.argv), expand.key_name, varlist, status);
 			free(expand.key_name);
@@ -55,7 +52,7 @@ char	*get_keyname(char *token, int *i)
 		if (*i == start && token[*i] == '?')
 		{
 			(*i)++;
-			break;
+			break ;
 		}
 		if (*i == start && !ft_isalpha(token[*i]))
 			break ;
@@ -95,20 +92,20 @@ void	expand_opt_env(char **argv, char *key_name, t_var **varlist,
 	free(tmp);
 }
 
-void	not_expand(char **argv,char *token, int *i)
+void	not_expand(char **argv, char *token, int *i)
 {
 	char	*no_expand;
 	char	*tmp;
 	int		start;
 
 	start = *i;
-	while(token[*i] != '$' && token[*i] != '\0')
+	while (token[*i] != '$' && token[*i] != '\0')
 		(*i)++;
-	no_expand = ft_substr(token,start-1,*i - start +1);
+	no_expand = ft_substr(token, start - 1, *i - start + 1);
 	if (!no_expand)
 		fatal_error("malloc");
 	tmp = *argv;
-	*argv = ft_strjoin(*argv,no_expand);
+	*argv = ft_strjoin(*argv, no_expand);
 	if (!*argv)
 		fatal_error("malloc");
 	free(tmp);

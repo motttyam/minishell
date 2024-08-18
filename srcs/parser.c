@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 08:53:11 by yoshiminaok       #+#    #+#             */
-/*   Updated: 2024/08/18 15:43:11 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/18 16:12:01 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,6 @@ void	parse_newline(t_token **ptr, t_parser *parser, t_tool *tool)
 			break ;
 	}
 }
-
-
 
 void	parse_pipe(t_token **ptr, t_parser *parser, t_tool *tool)
 {
