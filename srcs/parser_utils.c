@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 14:31:29 by ktsukamo          #+#    #+#             */
-/*   Updated: 2024/08/18 15:43:14 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/18 16:12:04 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,10 +88,10 @@ void	wait_for_all_process(int count, t_tool *tool)
 	setup_signal_handler();
 }
 
-void handle_file_error(t_parser *parser)
+void	handle_file_error(t_parser *parser)
 {
-	int fd;
-	
+	int	fd;
+
 	if (parser->redirect_flag == FILE_ERROR)
 	{
 		dup2(parser->fd.saved_stdout, STDOUT_FILENO);
