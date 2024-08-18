@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
+/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/10 15:10:29 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/11 18:45:50 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/18 16:06:32 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,4 +35,10 @@ void	join_noexpand_str(char **argv, int i, int start, char *token)
 		free(str);
 		free(tmp);
 	}
+}
+void	initialize_expand_struct(t_expand	*expand)
+{
+	expand->argv = NULL;
+	expand->i = 0;
+	expand->start = 0;
 }

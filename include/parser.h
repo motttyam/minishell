@@ -6,7 +6,7 @@
 /*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 13:04:47 by yoshiminaok       #+#    #+#             */
-/*   Updated: 2024/08/18 15:34:13 by ktsukamo         ###   ########.fr       */
+/*   Updated: 2024/08/18 16:07:06 by nyoshimi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,14 @@ typedef struct s_parser
 	t_var	**list;
 	t_fd	fd;
 }			t_parser;
+
+typedef struct s_expand
+{
+	int		i;
+	int		start;
+	char	*key_name;
+	char	*argv;
+}			t_expand;
 
 typedef enum e_parser_state
 {
@@ -41,6 +49,7 @@ void		parse_command_without_redirect(t_token **ptr, t_parser *parser,
 void		parse_command_redirect(t_token **ptr, t_parser *parser,
 				t_tool *tool);
 int			get_argsize(t_token *ptr);
+void		handle_file_error(t_parser *parser);
 
 // expand
 char		*get_expanded_argv(char *token, t_var **varlist, int *status);
@@ -50,6 +59,7 @@ void		expand_opt_env(char **argv, char *key_name, t_var **varlist,
 void		not_expand(char **argv, char *token, int *i);
 void		get_status(char **argv, int *status);
 void		join_noexpand_str(char **argv, int i, int start, char *token);
+void	initialize_expand_struct(t_expand	*expand);
 
 // redirect
 int			redirect(t_token **ptr, t_tool *tool, t_parser *parser);
