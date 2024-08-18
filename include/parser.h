@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 13:04:47 by yoshiminaok       #+#    #+#             */
-/*   Updated: 2024/08/17 21:48:40 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/18 15:34:13 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ char		*get_expanded_argv(char *token, t_var **varlist, int *status);
 char		*get_keyname(char *token, int *i);
 void		expand_opt_env(char **argv, char *key_name, t_var **varlist,
 				int *status);
-void	not_expand(char **argv,char *token, int *i);
+void		not_expand(char **argv, char *token, int *i);
 void		get_status(char **argv, int *status);
 void		join_noexpand_str(char **argv, int i, int start, char *token);
 

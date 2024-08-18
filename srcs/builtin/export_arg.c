@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_arg.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nyoshimi <nyoshimi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ktsukamo <ktsukamo@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 16:41:29 by nyoshimi          #+#    #+#             */
-/*   Updated: 2024/08/17 23:08:50 by nyoshimi         ###   ########.fr       */
+/*   Updated: 2024/08/18 15:36:24 by ktsukamo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	get_env_keyname(char *arg, char **key_name, t_tool *tool)
 	i = 0;
 	append_flg = 0;
 	if (arg[0] == '=' || arg[0] == '+')
-		return(put_export_error(arg, tool),-1);
+		return (put_export_error(arg, tool), -1);
 	while (arg[i] != '=' && arg[i] != '+' && arg[i])
 	{
 		if (i == 0 && ft_isdigit(arg[i]))
